@@ -3,7 +3,7 @@ const app = express();
 const http = require("http").Server(app);
 const bodyParser = require('body-parser');
 
-const PORT = 8000;
+const PORT = 3000;
 
 app.use(require("express-session")({
     secret:"Kimberly&Ximena1117",
