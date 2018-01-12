@@ -1,9 +1,18 @@
+const fs = require("fs");
 const express = require('express');
 const app = express();
+
+const options = {
+    key: fs.readFileSync("certificates/ev-server.key"),
+    cert: fs.readFileSync("certificates/ev-server.crt")
+};
+
+const https = require("https").Server(options, app);
 const http = require("http").Server(app);
 const bodyParser = require('body-parser');
 
-const PORT = 3000;
+const PORT = 3080
+const PORTSSL = 3443;
 
 app.use(require("express-session")({
     secret:"Kimberly&Ximena1117",
@@ -31,7 +40,7 @@ app
 /****************** API HTTP END *****************************/
 
 /***********************START SOCKET *************************/
-const io = require("socket.io")(http);
+const io = require("socket.io")(https);
 
 io.of("/leads").use((socket, next) => {
     console.log("This middleware is for leads");
@@ -48,6 +57,7 @@ require("./socket/tlacrm/leads.socket")(io);
 
 /********************* SOCKET END ****************************/
 
-
-http.listen(PORT, err => err ? console.log(err)
-                : console.log("Server running on port " + PORT))
+http.listen(PORT , err => err ? console.log(err)
+		: console.log("Server running on port " + PORT));
+https.listen(PORTSSL, err => err ? console.log(err)
+                : console.log("Server running on port secure " + PORTSSL));
