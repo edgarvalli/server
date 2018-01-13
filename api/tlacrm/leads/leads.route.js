@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const lead = require('./leads.class');
-const { isAuth } = require('../../../func');
+const { isAuth } = require('../../../lib/func');
 
 router
     .get('/fetch/:page',lead.fetch)

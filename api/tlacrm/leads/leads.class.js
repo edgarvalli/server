@@ -1,6 +1,6 @@
-const mongo = require('../../../mongo.client');
+const mongo = require("../../../lib/mongo.client")("tlacrm");
+const { nextPage, formatDate } = require('../../../lib/func');
 const db = "leads";
-const { nextPage, formatDate } = require('../../../func');
 
 class Lead {
 

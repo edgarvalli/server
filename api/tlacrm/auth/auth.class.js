@@ -1,4 +1,4 @@
-const { createToken } = require('../../../func');
+const { createToken } = require('../../../lib/func');
 const moment = require("moment");
 
 class Auth {

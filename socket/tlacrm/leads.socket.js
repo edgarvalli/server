@@ -1,5 +1,5 @@
-const mongo = require("../../mongo.client");
-const { nextPage, formatDate } = require("../../func");
+const mongo = require("../../lib/mongo.client")("tlacrm");
+const { nextPage, formatDate } = require("../../lib/func");
 const db = "leads";
 
 module.exports = io => io.of("/leads").on("connection", socket => {

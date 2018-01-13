@@ -21,7 +21,7 @@ app.use(require("express-session")({
 }))
 
 /***************** API HTTP **********************************/
-const headers = require('./headers');
+const headers = require('./lib/headers');
 const leadRouter = require('./api/tlacrm/leads/leads.route');
 const clientRouter = require('./api/tlacrm/clients/clients.route');
 const authRouter = require('./api/tlacrm/auth/auth.route');

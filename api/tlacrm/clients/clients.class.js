@@ -1,5 +1,6 @@
-const mongo = require('../../../mongo.client')('clients');
-const { nextPage, formatDate } = require('../../../func');
+const mongo = require("../../../lib/mongo.client")("tlacrm");
+const { nextPage, formatDate } = require('../../../lib/func');
+const db = "clients"
 
 class Client {
 
@@ -11,11 +12,11 @@ class Client {
             limit
         }
 
-        mongo.count((err, total) => {
+        mongo(db).count((err, total) => {
             if (err) throw console.log(err)
             const pages = Math.ceil(total/limit);
             if(pages < page) return res.send({complete: true})
-            mongo.find(querys, (err,data) => err ? console.log(err)
+            mongo(db).find(querys, (err,data) => err ? console.log(err)
             : res.send(data))
         })
     }
@@ -25,31 +26,31 @@ class Client {
         data.date = new Date();
         data.update = new Date();
         data.jobs = [{}];
-        mongo.insert(data, err => err ? console.log(err)
+        mongo(db).insert(data, err => err ? console.log(err)
                         : res.send('success'))
     }
 
     update(req,res) {
         const data = req.body.data;
-        const id = mongo.id(data._id);
+        const id = mongo(db).id(data._id);
         data.update = new Date();
         delete data._id;
-        mongo.update({_id:id}, data, err => {
+        mongo(db).update({_id:id}, data, err => {
             if(err) return console.log(err);
             res.send({sc: true})
         })
     }
 
     getOne(req,res) {
-        const id = mongo.id(req.params.id);
-        mongo.findOne({_id: id}, (err, data) => {
+        const id = mongo(db).id(req.params.id);
+        mongo(db).findOne({_id: id}, (err, data) => {
             res.send(data)
         })
     }
 
     remove(req,res) {
-        const id = mongo.id(req.params.id);
-        mongo.remove({_id: id}, err => err ? console.log(err) : res.send('success'))
+        const id = mongo(db).id(req.params.id);
+        mongo(db).remove({_id: id}, err => err ? console.log(err) : res.send('success'))
     }
 
     search(req,res) {
@@ -65,11 +66,11 @@ class Client {
             },
             limit: 20
         }
-        mongo.find(querys, (err,data) => res.send(data))
+        mongo(db).find(querys, (err,data) => res.send(data))
     }
 
     addNewFields(req,res) {
-        mongo.find({}, (err, leads) => {
+        mongo(db).find({}, (err, leads) => {
             leads.map( lead => {
                 lead.date = new Date()
                 lead.visited = false

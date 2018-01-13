@@ -1,4 +1,4 @@
-const mongo = require("../mongo.client");
+const mongo = require("../lib/mongo.client")("tlacrm");
 
 module.exports = io => io.on("connection", socket => {
     console.log("User connected with id: " + socket.id)
