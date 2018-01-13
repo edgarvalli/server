@@ -76,8 +76,6 @@ module.exports = io => io.of("/leads").on("connection", socket => {
             mongo(db).find(querys, (err,data) => err ? console.log(err)
             : socket.emit("fetch-response", data))
         })
-
-        mongo(db).find(querys, (err, leads) => socket.emit("fetch-response", leads))
     })
 
     socket.on("disconnect", () => console.log(`User disconnected with id: ${socket.id}`))
