@@ -4,7 +4,8 @@ const app = express();
 
 const options = {
     key: fs.readFileSync("certificates/ev-server.key"),
-    cert: fs.readFileSync("certificates/ev-server.crt")
+    cert: fs.readFileSync("certificates/ev-server.crt"),
+    ca: fs.readFileSync("certificates/ev-server.csr"),
 };
 
 const https = require("https").Server(options, app);
