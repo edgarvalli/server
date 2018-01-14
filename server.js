@@ -41,7 +41,7 @@ app
 /****************** API HTTP END *****************************/
 
 /***********************START SOCKET *************************/
-const io = require("socket.io")(http);
+const io = require("socket.io")(https);
 
 io.of("/leads").use((socket, next) => {
     console.log("This middleware is for leads");
