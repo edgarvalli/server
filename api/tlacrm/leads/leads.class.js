@@ -1,5 +1,5 @@
 const mongo = require("../../../lib/mongo.client")("tlacrm");
-const { nextPage, formatDate } = require('../../../lib/func');
+const { nextPage, formatDate } = require("../../../lib/func");
 const db = "leads";
 
 class Lead {
@@ -67,7 +67,7 @@ class Lead {
             },
             limit: 20
         }
-        mongo(db).find(querys, (err,data) => res.send(data))
+        mongo(db).find(querys, (err,data) => err ? res.send([err]) : res.send(data))
     }
 
     addNewFields(req,res) {
