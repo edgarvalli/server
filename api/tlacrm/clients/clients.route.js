@@ -8,7 +8,7 @@ router.use( (req,res,next) => {
 })
 
 router
-    .get('/fetch/limit=:limit&page=:page', client.fetch)
+    .get('/fetch/:page', client.fetch)
     .post('/add', client.add)
     .post('/update',client.update)
     .get('/remove/:id',client.remove)

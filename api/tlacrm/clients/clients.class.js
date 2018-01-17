@@ -6,10 +6,11 @@ class Client {
 
     fetch(req, res) {
         const page = parseInt(req.params.page);
-        const limit = parseInt(req.params.limit)
+        const limit = 50;
         const querys = {
             skip: nextPage(page,limit),
-            limit
+            limit,
+            sort: { update: -1 }
         }
 
         mongo(db).count((err, total) => {
