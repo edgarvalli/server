@@ -1,7 +1,7 @@
 const { createToken } = require('../../../lib/func');
 const moment = require("moment");
 
-class Auth {
+module.exports = {
 
     login(req, res) {
 
@@ -17,5 +17,3 @@ class Auth {
     }
 
 }
-
-module.exports = new Auth();

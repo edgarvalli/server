@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const lead = require('./leads.class');
+const lead = require('./leads.methods');
 const { isAuth } = require('../../../lib/func');
 
 router

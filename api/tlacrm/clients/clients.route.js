@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const client = require('./clients.class');
+const client = require('./clients.methods');
 
 router.use( (req,res,next) => {
     // console.log('client router works');

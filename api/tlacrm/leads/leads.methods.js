@@ -1,8 +1,8 @@
 const mongo = require("../../../lib/mongo.client")("tlacrm");
-const { nextPage, formatDate } = require('../../../lib/func');
-const db = "clients"
+const { nextPage, formatDate } = require("../../../lib/func");
+const db = "leads";
 
-class Client {
+module.exports = {
 
     fetch(req, res) {
         const page = parseInt(req.params.page);
@@ -12,24 +12,22 @@ class Client {
             limit,
             sort: { update: -1 }
         }
-
         mongo(db).count((err, total) => {
             if (err) throw console.log(err)
             const pages = Math.ceil(total/limit);
             if(pages < page) return res.send({complete: true})
             mongo(db).find(querys, (err,data) => err ? console.log(err)
-            : res.send(data))
+            : res.send({data, complete: false}))
         })
-    }
+    },
 
     add(req,res) {
         const data = req.body.data;
         data.date = new Date();
         data.update = new Date();
-        data.jobs = [{}];
         mongo(db).insert(data, err => err ? console.log(err)
-                        : res.send('success'))
-    }
+                        : res.json({sc: true}))
+    },
 
     update(req,res) {
         const data = req.body.data;
@@ -40,19 +38,20 @@ class Client {
             if(err) return console.log(err);
             res.send({sc: true})
         })
-    }
+    },
 
     getOne(req,res) {
         const id = mongo(db).id(req.params.id);
         mongo(db).findOne({_id: id}, (err, data) => {
+            // data.date = formatDate(data.date)
             res.send(data)
         })
-    }
+    },
 
     remove(req,res) {
         const id = mongo(db).id(req.params.id);
-        mongo(db).remove({_id: id}, err => err ? console.log(err) : res.send('success'))
-    }
+        mongo(db).remove({_id: id}, err => err ? console.log(err) : res.json({sc: true}))
+    },
 
     search(req,res) {
         const value = req.params.value;
@@ -67,8 +66,8 @@ class Client {
             },
             limit: 20
         }
-        mongo(db).find(querys, (err,data) => res.send(data))
-    }
+        mongo(db).find(querys, (err,data) => err ? res.send([err]) : res.send(data))
+    },
 
     addNewFields(req,res) {
         mongo(db).find({}, (err, leads) => {
@@ -80,8 +79,6 @@ class Client {
             })
             res.send("works")
         })
-    }
+    },
 
 }
-
-module.exports = new Client();
