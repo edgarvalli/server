@@ -17,8 +17,17 @@ module.exports = {
             if (err) throw console.log(err)
             const pages = Math.ceil(total/limit);
             if(pages < page) return res.send({complete: true})
-            mongo(db).find(querys, (err,data) => err ? res.json({error: true, msg: err})
-            : res.json({error: false, data}))
+            mongo(db).find(querys, (err,data) => {
+                if(err) {
+                    res.json({error: true, msg: err})
+                } else {
+                    if(data.length > 0) {
+                        res.json({error: false, data})
+                    } else {
+                        res.json({error: false, data: []})
+                    }
+                }
+            }
         })
     },
 
