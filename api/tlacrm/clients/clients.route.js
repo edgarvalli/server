@@ -1,20 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const client = require('./clients.methods');
-
-router.use( (req,res,next) => {
-    // console.log('client router works');
-    next();
-})
+const { isAuth } = require("../../../lib/func");
 
 router
-    .get('/fetch/:page', client.fetch)
-    .post('/add', client.add)
-    .post('/update',client.update)
-    .get('/remove/:id',client.remove)
-    .get('/getone/:id',client.getOne)
-    .get('/search/:value', client.search)
-
-    // .get('/m', client.addNewFields)
+    .get('/fetch/:page',isAuth,client.fetch)
+    .post('/add',isAuth,client.add)
+    .post('/update',isAuth,client.update)
+    .get('/remove/:id',isAuth,client.remove)
+    .get('/getone/:id',isAuth,client.getOne)
+    .get('/search/:value',isAuth,client.search)
+    .post("/convert",isAuth,client.convertToClient)
 
 module.exports = router;

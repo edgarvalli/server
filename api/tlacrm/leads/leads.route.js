@@ -4,12 +4,12 @@ const lead = require('./leads.methods');
 const { isAuth } = require('../../../lib/func');
 
 router
-    .get('/fetch/:page',lead.fetch)
-    .post('/add', lead.add)
-    .post('/update',lead.update)
-    .get('/remove/:id',lead.remove)
-    .get('/getone/:id',lead.getOne)
-    .get('/search/:value', lead.search)
+    .get('/fetch/:page',isAuth,lead.fetch)
+    .post('/add',isAuth,lead.add)
+    .post('/update',isAuth,lead.update)
+    .get('/remove/:id',isAuth,lead.remove)
+    .get('/getone/:id',isAuth,lead.getOne)
+    .get('/search/:value',isAuth,lead.search)
 
     // .get('/m', lead.addNewFields)
 

@@ -1,5 +1,5 @@
 const mongo = require("../../../lib/mongo.client")("tlacrm");
-const { nextPage, formatDate } = require("../../../lib/func");
+const { nextPage, now } = require("../../../lib/func");
 const db = "leads";
 
 module.exports = {
@@ -8,9 +8,10 @@ module.exports = {
         const page = parseInt(req.params.page);
         const limit = 50;
         const querys = {
+            query: { visited: false },
             skip: nextPage(page,limit),
             limit,
-            sort: { update: -1 }
+            sort: { update_date: -1 }
         }
         mongo(db).count((err, total) => {
             if (err) throw console.log(err)
@@ -23,20 +24,22 @@ module.exports = {
 
     add(req,res) {
         const data = req.body.data;
-        data.date = new Date();
-        data.update = new Date();
-        mongo(db).insert(data, err => err ? console.log(err)
-                        : res.json({sc: true}))
+        const today = { date: now().date, time: now().time };
+        data.create_date = today;
+        data.update_date = today;
+        mongo(db).insert(data, err => err ? res.json({error: true, msg: "Error al agregar prospecto"})
+                        : res.json({error: false}))
     },
 
     update(req,res) {
         const data = req.body.data;
         const id = mongo(db).id(data._id);
-        data.update = new Date();
+        const today = { date: now().date, time: now().time };
+        data.update_date = today;
         delete data._id;
         mongo(db).update({_id:id}, data, err => {
-            if(err) return console.log(err);
-            res.send({sc: true})
+            err ? res.json({error: true, msg: "Error al actualizar"})
+                : res.json({error: false})
         })
     },
 
@@ -44,13 +47,15 @@ module.exports = {
         const id = mongo(db).id(req.params.id);
         mongo(db).findOne({_id: id}, (err, data) => {
             // data.date = formatDate(data.date)
-            res.send(data)
+            if(err) res.json({error: true, msg: "Error al buscar uno"})
+            res.send({error: false, data})
         })
     },
 
     remove(req,res) {
         const id = mongo(db).id(req.params.id);
-        mongo(db).remove({_id: id}, err => err ? console.log(err) : res.json({sc: true}))
+        mongo(db).remove({_id: id}, err => err ? res.json({error: true, msg: "Error al eliminar"})
+            : res.json({error: false}))
     },
 
     search(req,res) {
@@ -72,7 +77,7 @@ module.exports = {
     addNewFields(req,res) {
         mongo(db).find({}, (err, leads) => {
             leads.map( lead => {
-                lead.date = new Date()
+                lead.create_date = new Date()
                 lead.visited = false
                 const id = mongo.id(lead._id)
                 mongo.update({_id: id}, lead, err => console.log('updated'))

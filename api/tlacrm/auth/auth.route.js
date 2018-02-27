@@ -4,6 +4,6 @@ const auth = require('./auth.methods');
 const { isAuth } = require('../../../lib/func');
 
 router
-    .get('/login', auth.login)
+    .post("/login", auth.login)
 
 module.exports = router;

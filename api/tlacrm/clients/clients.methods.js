@@ -10,7 +10,7 @@ module.exports = {
         const querys = {
             skip: nextPage(page,limit),
             limit,
-            sort: { update: -1 }
+            sort: { update_date: -1 }
         }
 
         mongo(db).count((err, total) => {
@@ -24,8 +24,8 @@ module.exports = {
 
     add(req,res) {
         const data = req.body.data;
-        data.date = new Date();
-        data.update = new Date();
+        data.create_date = new Date();
+        data.update_date = new Date();
         mongo(db).insert(data, err => err ? res.json({error: true, msg: "Ocurrio un error al guardar los datos"})
             : res.json({error: false, msg:"success"}))
     },
@@ -33,7 +33,7 @@ module.exports = {
     update(req,res) {
         const data = req.body.data;
         const id = mongo(db).id(data._id);
-        data.update = new Date();
+        data.update_date = new Date();
         delete data._id;
         mongo(db).update({_id:id}, data, err => {
             if(err) return console.log(err);
@@ -44,13 +44,14 @@ module.exports = {
     getOne(req,res) {
         const id = mongo(db).id(req.params.id);
         mongo(db).findOne({_id: id}, (err, data) => {
-            res.send(data)
+            res.send({error: false, data})
         })
     },
 
     remove(req,res) {
         const id = mongo(db).id(req.params.id);
-        mongo(db).remove({_id: id}, err => err ? console.log(err) : res.send('success'))
+        mongo(db).remove({_id: id}, err => err ? res.json({error: true, msg: "Ocurrio un error al eliminar", msgError: err})
+            : res.json({error: false, msg: "Registro eliminado"}))
     },
 
     search(req,res) {
@@ -67,6 +68,20 @@ module.exports = {
             limit: 50
         }
         mongo(db).find(querys, (err,data) => res.send(data))
+    },
+
+    convertToClient(req, res) {
+        const { id, values } = req.body.data;
+        values.update_date = new Date();
+        values.create_date = new Date();
+        mongo(db).insert(values, err => {
+            if(err) {
+                res.json({error: true, msg: "Error al convertir prospecto a cliente"})
+            } else {
+                const _id =  mongo().id(id);
+                mongo("leads").remove({_id}, err => res.json({error: false}))
+            }
+        })
     },
 
     addNewFields(req,res) {
