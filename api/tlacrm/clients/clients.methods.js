@@ -27,7 +27,7 @@ module.exports = {
                         res.json({error: false, data: []})
                     }
                 }
-            }
+            })
         })
     },
 
