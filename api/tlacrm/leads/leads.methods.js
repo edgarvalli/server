@@ -16,7 +16,7 @@ module.exports = {
         mongo(db).count((err, total) => {
             if (err) throw console.log(err)
             const pages = Math.ceil(total/limit);
-            if(pages < page) return res.send({complete: true})
+            if(pages < page) return res.send({complete: true, data: [], msg: "No hay elements"})
             mongo(db).find(querys, (err,data) => err ? console.log(err)
             : res.send({data, complete: false}))
         })
