@@ -21,7 +21,7 @@ module.exports = {
                 if(err) {
                     res.json({error: true, msg: err})
                 } else {
-                    if(data.length > 0) {
+                    if(data) {
                         res.json({error: false, data})
                     } else {
                         res.json({error: false, data: []})
