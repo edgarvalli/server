@@ -9,4 +9,9 @@ module.exports = app => {
         .use('/api/tlacrm/clients', clientRouter)
         .use('/api/tlacrm/auth', authRouter)
         .use('/api/tlacrm/jobs',jobRouter)
+
+        .get("/count-records", (req,res) => {
+            const mongo = require("../../lib/mongo.client")("tlacrm");
+            mongo("leads").findAndCount({name: new RegExp("edgar", "i")})
+        })
 }
