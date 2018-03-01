@@ -12,6 +12,6 @@ module.exports = app => {
 
         .get("/count-records", (req,res) => {
             const mongo = require("../../lib/mongo.client")("tlacrm");
-            mongo("leads").findAndCount({name: new RegExp("edgar", "i")})
+            mongo("leads").findAndCount({name: new RegExp("edgar", "i")}, (err, total) => res.json({total}))
         })
 }
