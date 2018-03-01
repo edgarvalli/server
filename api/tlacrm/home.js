@@ -1,4 +1,6 @@
 const mongo = require("../../lib/mongo.client")("tlacrm");
+const jwt = require('jwt-simple');
+const moment = require('moment');
 const db = "leads";
 const dbJob = "jobs";
 
