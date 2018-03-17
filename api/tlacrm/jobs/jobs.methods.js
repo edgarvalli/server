@@ -43,14 +43,13 @@ module.exports = {
                 } else { advances = 0 }
 
                 const total = sumTotal - advances;
-
                 const client = {
                     _id: j._id,
                     client_name: j.client[0].name,
                     total
                 }
                 data.push(client)
-            }).reverse()
+            })
 
             res.json({error: false, data})
         })

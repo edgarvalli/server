@@ -14,7 +14,7 @@ const https = require("https").Server(options, app);
 const http = require("http").Server(app);
 const bodyParser = require('body-parser');
 
-const PORT = 3080
+const PORT = 3080;
 const PORTSSL = 3443;
 
 const headers = require('./lib/headers');
