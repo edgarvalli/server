@@ -1,108 +1,81 @@
 const mongo = require("../../../lib/mongo.client")("tlacrm");
 const { nextPage, formatDate } = require('../../../lib/func');
-const db = "clients"
+const collection = "clients"
 
 module.exports = {
 
-    fetch(req, res) {
+    async fetch(req, res) {
         const page = parseInt(req.params.page);
         const limit = 50;
-        const querys = {
-            skip: nextPage(page,limit),
-            limit,
-            sort: { update_date: -1 }
-        }
+        const skip =  nextPage(page,limit)
+        const sort = { update_date: -1 }
 
-        mongo(db).count((err, total) => {
-            if (err) throw console.log(err)
-            const pages = Math.ceil(total/limit);
-            if(pages < page) return res.send({complete: true, data: [], msg: "No hay elementos"})
-            mongo(db).find(querys, (err,data) => {
-                if(err) {
-                    res.json({error: true, msg: err})
-                } else {
-                    if(data) {
-                        res.json({error: false, data})
-                    } else {
-                        res.json({error: false, data: []})
-                    }
-                }
-            })
-        })
+        const clients = await mongo.collection(collection);
+        const clientsTotal = await clients.find({}).count();
+        const result = await clients.find({}).skip(skip).limit(limit).sort(sort).toArray();
+        const pages = Math.ceil(clientsTotal/limit);
+        if(pages < page) return res.json({complete: true, data: [], msg: "No hay elementos"})
+        res.json({error: false, data: result})
     },
 
-    add(req,res) {
+    async add(req,res) {
         const data = req.body.data;
         data.create_date = new Date();
         data.update_date = new Date();
-        mongo(db).insert(data, err => err ? res.json({error: true, msg: "Ocurrio un error al guardar los datos"})
-            : res.json({error: false, msg:"success"}))
+        const clients = await mongo.collection(collection);
+        const insert = await clients.insert(data);
+        res.json({error: false})
     },
 
-    update(req,res) {
+    async update(req,res) {
         const data = req.body.data;
-        const id = mongo(db).id(data._id);
+        const _id = mongo.id(data._id);
         data.update_date = new Date();
         delete data._id;
-        mongo(db).update({_id:id}, data, err => {
-            if(err) return console.log(err);
-            res.send({sc: true})
-        })
+        const clients = await mongo.collection(collection);
+        const update = await clients.update({_id}, data);
+        res.json({error: false})
     },
 
-    getOne(req,res) {
-        const id = mongo(db).id(req.params.id);
-        mongo(db).findOne({_id: id}, (err, data) => {
-            res.send({error: false, data})
-        })
+    async getOne(req,res) {
+        const _id = mongo.id(req.params.id);
+        const clients = await mongo.collection(collection);
+        const client = await clients.findOne({_id});
+        res.json({error: false, data: client});
     },
 
-    remove(req,res) {
-        const id = mongo(db).id(req.params.id);
-        mongo(db).remove({_id: id}, err => err ? res.json({error: true, msg: "Ocurrio un error al eliminar", msgError: err})
-            : res.json({error: false, msg: "Registro eliminado"}))
+    async remove(req,res) {
+        const _id = mongo.id(req.params.id);
+        const clients = await mongo.collection(collection);
+        const rm = await clients.remove({_id});
+        res.json({error: false})
     },
 
-    search(req,res) {
+    async search(req,res) {
         const value = req.params.value;
-        const querys = {
-            query: {
-                $or: [
-                    {name: new RegExp(value, 'i')},
-                    {phone: new RegExp(value, 'i')},
-                    {cell: new RegExp(value, 'i')},
-                    {address: new RegExp(value, 'i')}
-                ]
-            },
-            limit: 50
+        const query =  {
+            $or: [
+                {name: new RegExp(value, 'i')},
+                {phone: new RegExp(value, 'i')},
+                {cell: new RegExp(value, 'i')},
+                {address: new RegExp(value, 'i')}
+            ]
         }
-        mongo(db).find(querys, (err,data) => res.send(data))
+        const clients = await mongo.collection(collection);
+        const data = await clients.find(query).limit(50).toArray();
+        res.json({error: false, data});
     },
 
-    convertToClient(req, res) {
-        const { id, values } = req.body.data;
+    async convertToClient(req, res) {
+        const values = req.body.data;
+        const _id = mongo.id(values._id);
+        delete values._id;
         values.update_date = new Date();
         values.create_date = new Date();
-        mongo(db).insert(values, err => {
-            if(err) {
-                res.json({error: true, msg: "Error al convertir prospecto a cliente"})
-            } else {
-                const _id =  mongo().id(id);
-                mongo("leads").remove({_id}, err => res.json({error: false}))
-            }
-        })
+        const clients = await mongo.collection(collection);
+        const leads = await mongo.collection("leads");
+        const add = await clients.insert(values);
+        const rm = await leads.remove({_id});
+        res.json({error: false});
     },
-
-    addNewFields(req,res) {
-        mongo(db).find({}, (err, leads) => {
-            leads.map( lead => {
-                lead.date = new Date()
-                lead.visited = false
-                const id = mongo.id(lead._id)
-                mongo.update({_id: id}, lead, err => console.log('updated'))
-            })
-            res.send("works")
-        })
-    }
-
 }

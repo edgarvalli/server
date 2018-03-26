@@ -1,10 +1,9 @@
-const mongodb = require('mongodb').MongoClient;
+const mongo = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
-
-module.exports = database => new Promise((resolve, reject) => {
-    mongodb.connect("mongodb://localhost/tlacrm", (err, client) => {
-        const db = client.db("tlacrm");
-        resolve(db.collection("leads"))
-        client.close();
-    })
-})
+const url = "mongodb://localhost:27017"
+module.exports =  db => async (collection) => {
+    const conn = await mongo.connect(url);
+    const set = conn.db(db);
+    const c = await set.collection(collection);
+    return c;
+}

@@ -6,7 +6,7 @@ const { isAuth } = require("../../../lib/func");
 router
     .get("/fetch/:page",isAuth,jobClass.fetch)
     .get("/getone/:id",isAuth,jobClass.getOne)
-    .get("/paid-out/:id",isAuth,jobClass.makePaidOut)
+    // .get("/paid-out/:id",isAuth,jobClass.makePaidOut)
     .post("/update",isAuth,jobClass.update)
     .post('/add',isAuth,jobClass.add)
 

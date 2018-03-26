@@ -1,13 +1,14 @@
-const mongo = require("../../lib/mongo.client")("tlacrm");
-const db = "leads";
-const dbJob = "jobs";
+const m = require("mongodb");
+const mongo = m.MongoClient;
+const url = "mongodb://localhost:27017";
+const db = "tlacrm";
 
-module.exports = (req, res) => {
-    mongo(db).findAndCount({visited: false}, (err, leads) => {
-        if(err) return res.json({error: true, msg: "Fallo al contar los prospetos"})
-        mongo(dbJob).findAndCount({paid_out: false}, (err, jobs) => {
-            if(err) return res.json({error: true, msg: "Fallo al contar los trabajos"})
-            res.json({error: false, data: { leads, jobs }})
-        })
-    })
+module.exports = async function(req, res) {
+    const conn = await mongo.connect(url);
+    const set = conn.db(db)
+    const leadsC = await set.collection("leads");
+    const jobsC = await set.collection("jobs")
+    const leads = await leadsC.find({visited: false}).count();
+    const jobs = await jobsC.find({payment_out: false}).count()
+    res.json({error: false, data: { leads, jobs } })
 }

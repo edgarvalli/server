@@ -11,5 +11,6 @@ router
     .get('/getone/:id',isAuth,client.getOne)
     .get('/search/:value',isAuth,client.search)
     .post("/convert",isAuth,client.convertToClient)
+    .post("/convert-from-lead", isAuth, client.convertToClient)
 
 module.exports = router;

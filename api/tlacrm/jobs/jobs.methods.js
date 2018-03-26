@@ -1,124 +1,92 @@
 const mongo = require("../../../lib/mongo.client")("tlacrm");
-const db = "jobs";
+const collection = "jobs";
 
 module.exports = {
 
-    fetch(req, res){
-        const { page } = req.params;
-        const querys = {
-            query: [
-                {
-                    $lookup: {
-                        from: "clients",
-                        localField: "client_id",
-                        foreignField: "_id",
-                        as: "client"
-                    },
-                },
-                { $match: { paid_out: false } }
-            ]
-        }
-        mongo(db).aggregate(querys, (err, jobs) => {
-
-            if (err) return res.json({error: true, msg: "Ocurrio un error al buscar los clients", msgError: err})
-
-            const data = [];
-
-            jobs.map((j,i) => {
-
-                const s = [];
-                j.jobs.map((el, i) => {
-                    s.push(parseFloat(el.cant) * parseFloat(el.cost))
-                })
-                let sumTotal = s.reduce((a,b) => a+b);
-                
-                const ad = [];
-                let advances;
-                // if(j.advances.length > 0 ) j.advances.map((el,i) => ad.push(parseFloat(el.advance)))
-                // (ad.length > 0 ) ? advances = ad.reduce((a,b) => a + b) : advances = 0;
-
-                if(j.advances.length > 0) {
-                    j.advances.map((el,i) => ad.push(parseFloat(el.advance)))
-                    advances = ad.reduce((a,b) => a + b) 
-                } else { advances = 0 }
-
-                const total = sumTotal - advances;
-                const client = {
-                    _id: j._id,
-                    client_name: j.client[0].name,
-                    total
+    async fetch(req, res) {
+        const c = await mongo.collection(collection);
+        const result = await c.aggregate([
+            { $lookup: {
+                    from: "clients",
+                    localField: "client_id",
+                    foreignField: "_id",
+                    as: "client"
                 }
-                data.push(client)
-            })
+            }, { $limit: 50 }, { $match: { payment_out: false } },{ $sort: { update_date: -1 } }
+        ]).toArray();
 
-            res.json({error: false, data})
-        })
-    },
-
-    getOne(req, res) {
-        const { id } = req.params;
-        const _id = mongo().id(id);
-        mongo(db).findOne({_id }, (err, data) => {
-            err ? res.json({error: true, msg:"Hello from server"}) : res.json({error: false, data})
-
-        })
-    },
-
-    update(req,res) {
-        const { data } = req.body;
-        const id = data.id;
-        delete data.id;
-        const _id = mongo().id(id);
-
-
-        const s = [];
-        data.jobs.map((el, i) => {
-            s.push(parseFloat(el.cant) * parseFloat(el.cost))
-        })
-        let sumTotal = s.reduce((a,b) => a+b);
+        // Format the result for only necesary fields
         
-        const ad = [];
-        data.advances.map((el,i) => ad.push(parseFloat(el.advance)))
-        const advances = ad.reduce((a,b) => a + b)
+        // Define array of objects
+        const data = [];
 
-        const total = sumTotal - advances;
+        // get all the objects in result
+        result.forEach(r => {
 
-        (total <= 0) ? data.paid_out = true : data.paid_out = false
+            // define jobs array
+            const jobs = [];
 
-        data.update_date = new Date();
+            // Push all the job name in the result array
+            r.jobs.forEach(j => jobs.push(j.name))
 
-        const update = {
-            $set: {
-                jobs: data.jobs,
-                advances: data.advances,
-                tax: data.tax,
-                paid_out: data.paid_out
-            }
-        }
+            // define subtotal and get all objects and sum all
+            let subtotal = r.jobs.map( job => parseInt(job.cant) * parseFloat(job.cost) ).reduce((a,b) => a + b)
+            
+            // If the user set tax as true subtotal sum the .16 tax
+            if(r.tax) subtotal += subtotal * .16;
 
-        mongo(db).update({_id}, update, err => err ? res.json({error: true, msg: "Ocurrio un error"}): res.json({error: false}))
+            // Sum all the payments
+            const payments = r.payments.reduce( (a,b) => parseFloat(a) + parseFloat(b));
+            
+            // Get the rest of the money
+            const total = subtotal - payments;
+            
+            // Finish data formated
+            data.push({
+                name: r.client[0].name,
+                cell: r.client[0].cellphone,
+                jobs,
+                _id: r._id,
+                total
+            })
+        })
+
+        res.json({error: false, data})
     },
 
-    add(req,res) {
+    async add(req, res) {
         const { data } = req.body;
+        data.client_id = mongo.id(data.client_id)
         data.create_date = new Date();
         data.update_date = new Date();
-        data.paid_out =  false;
-        data.client_id = mongo().id(data.client_id);
-
-        mongo(db).insert(data, err => {
-            if(err) {
-                res.send({error: true, msg:"Ocurrio un error al insertar el registro en la base de datos", errorMsg: err})
-            } else {
-                res.json({error: false})
-            }
-        })
+        data.payment_out = false;
+        const c = await mongo.collection(collection);
+        const add = await c.insert(data);
+        res.json({error: false})
     },
 
-    makePaidOut(req, res) {
-        const _id = mongo().id(req.params.id);
-        mongo(db).update({ _id }, { $set: { paid_out: true } }, err => err ? res.json({error: true, msg: "Ocurrio un error al marcar como pagado"})
-            : res.json({error: false}))
+    async getOne(req, res) {
+        const { id } = req.params;
+        const _id = mongo.id(id);
+        const c = await mongo.collection(collection);
+        const result = await c.findOne({_id});
+        if(result === null) return res.json({error: true, msg: "No se encontro registro"})
+        res.json({error: false, data: result})
+    },
+
+    async update(req, res) {
+        const { data } = req.body;
+        const _id = mongo.id(data.id);
+        delete data.id;
+        const payments = data.payments.reduce((a,b) => parseFloat(a) + parseFloat(b))
+        const jobs = data.jobs.map(job => parseInt(job.cant) * parseFloat(job.cost)).reduce((a,b) => a+b);
+        const rest = jobs - payments;
+        (rest <= 0) ? data.payment_out = true : data.payment_out = false
+        data.update_date = new Date();
+        const c = await mongo.collection(collection);
+        const up = await c.update({_id}, { $set: data });
+        if(up === null) return res.json({error: true, msg:"Hello from the server"})
+        res.json({error: false})
     }
 
 }

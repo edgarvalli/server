@@ -1,89 +1,65 @@
 const mongo = require("../../../lib/mongo.client")("tlacrm");
 const { nextPage, now } = require("../../../lib/func");
-const db = "leads";
+const collection = "leads";
 
 module.exports = {
 
-    fetch(req, res) {
+    async fetch(req, res) {
         const page = parseInt(req.params.page);
         const limit = 50;
-        const querys = {
-            query: { visited: false },
-            skip: nextPage(page,limit),
-            limit,
-            sort: { update_date: -1 }
-        }
-        mongo(db).count((err, total) => {
-            if (err) throw console.log(err)
-            const pages = Math.ceil(total/limit);
-            if(pages < page) return res.send({complete: true, data: [], msg: "No hay elements"})
-            mongo(db).find(querys, (err,data) => err ? console.log(err)
-            : res.send({data, complete: false}))
-        })
+        const leads = await mongo.collection(collection);
+        const data = await leads.find({visited: false}).skip(nextPage(page, limit)).limit(limit).sort({update_date: -1}).toArray();
+        const pages = Math.ceil(data.length/limit);
+        if(pages < page) return res.send({complete: true, data: [], msg: "No hay elements"})
+        res.json({error: false, data, complete: false})
     },
 
-    add(req,res) {
+    async add(req,res) {
         const data = req.body.data;
-        const today = { date: now().date, time: now().time };
-        data.create_date = today;
-        data.update_date = today;
-        mongo(db).insert(data, err => err ? res.json({error: true, msg: "Error al agregar prospecto"})
-                        : res.json({error: false}))
+        data.create_date = new Date();
+        data.update_date = new Date();
+        const leads = await mongo.collection(collection);
+        const insert = await leads.insert(data);
+        res.json({error: false});
     },
 
-    update(req,res) {
-        const data = req.body.data;
-        const id = mongo(db).id(data._id);
-        const today = { date: now().date, time: now().time };
-        data.update_date = today;
+    async update(req,res) {
+        const {data} = req.body;
+        const _id = mongo.id(data._id);
+        data.update_date = new Date();
         delete data._id;
-        mongo(db).update({_id:id}, data, err => {
-            err ? res.json({error: true, msg: "Error al actualizar"})
-                : res.json({error: false})
-        })
+        const leads = await mongo.collection(collection);
+        const up = await leads.update({_id}, {$set: data});
+        res.json({error: false})
     },
 
-    getOne(req,res) {
-        const id = mongo(db).id(req.params.id);
-        mongo(db).findOne({_id: id}, (err, data) => {
-            // data.date = formatDate(data.date)
-            if(err) res.json({error: true, msg: "Error al buscar uno"})
-            res.send({error: false, data})
-        })
+    async getOne(req,res) {
+        const _id = mongo.id(req.params.id);
+        const leads = await mongo.collection(collection);
+        const lead = await leads.findOne({_id});
+        res.json({error: false , data: lead});
     },
 
-    remove(req,res) {
-        const id = mongo(db).id(req.params.id);
-        mongo(db).remove({_id: id}, err => err ? res.json({error: true, msg: "Error al eliminar"})
-            : res.json({error: false}))
+    async remove(req,res) {
+        const _id = mongo.id(req.params.id);
+        const leads = await mongo.collection(collection);
+        const rm = await leads.remove({_id});
+        res.json({error: false});
     },
 
-    search(req,res) {
-        const value = req.params.value;
-        const querys = {
-            query: {
-                $or: [
-                    {name: new RegExp(value, 'i')},
-                    {phone: new RegExp(value, 'i')},
-                    {cell: new RegExp(value, 'i')},
-                    {address: new RegExp(value, 'i')}
-                ]
-            },
-            limit: 20
-        }
-        mongo(db).find(querys, (err,data) => err ? res.send([err]) : res.send(data))
-    },
-
-    addNewFields(req,res) {
-        mongo(db).find({}, (err, leads) => {
-            leads.map( lead => {
-                lead.create_date = new Date()
-                lead.visited = false
-                const id = mongo.id(lead._id)
-                mongo.update({_id: id}, lead, err => console.log('updated'))
-            })
-            res.send("works")
-        })
-    },
+    async search(req,res) {
+        const { value } = req.params;
+        const query =  {
+            $or: [
+                {name: new RegExp(value, 'i')},
+                {phone: new RegExp(value, 'i')},
+                {cell: new RegExp(value, 'i')},
+                {address: new RegExp(value, 'i')}
+            ]
+        };
+        const leads = await mongo.collection(collection);
+        const data = await leads.find(query).limit(20).toArray();
+        res.json({error: false, data})
+    }
 
 }

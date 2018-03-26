@@ -22,6 +22,7 @@ app
     .use(bodyParser.urlencoded({ extended: false }))
     .use(bodyParser.json())
     .use(headers)
+    .use(express.static("public"))
     .get('/', (req,res) => res.send("Express Working"))
 
 /***************** Express setup end ***************************/
@@ -35,14 +36,12 @@ require("./api/tlacrm/index")(app);
 /****************** API HTTP END *****************************/
 
 
-const mongo = require("./lib");
+const mongo = require("./lib/mongo.client")("tlacrm");
 
-app.get("/mongo", (req,res) => {
-    mongo()
-    .then(db => db.find({}).toArray((err, data) => {
-        console.log(data)
-        res.json({error: true, msg: err, data})
-    }))
+app.get("/mongo", async (req,res) => {
+    const m = await mongo.collection("leads");
+    const leads = await m.find({}).toArray();
+    res.json(leads)
 })
 
 http.listen(PORT , err => err ? console.log(err)
