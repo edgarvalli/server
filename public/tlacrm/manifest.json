@@ -1,20 +1,20 @@
 {
   "short_name": "TlaCrm",
-  "name": "App for managment clients",
+  "name": "Tapiceria Los Alamos",
   "icons": [
     {
-      "src": "/tlacrm/favicon.ico",
+      "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "/tlacrm/static/img/icon.png",
+      "src": "./static/img/icon.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/png" 
+      "type": "image/png"
     }
   ],
   "start_url": "./index.html",
   "display": "standalone",
-  "theme_color": "#00B8D4",
+  "theme_color": "#000000",
   "background_color": "#ffffff"
 }
