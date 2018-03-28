@@ -3,12 +3,12 @@
   "name": "Tapiceria los alamos",
   "icons": [
     {
-      "src": "tlacrm/favicon.ico",
+      "src": "/tlacrm/favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "tlacrm/static/img/icon.png",
+      "src": "/tlacrm/static/img/icon.png",
       "sizes":"64x64 32x32 24x24 16x16",
       "type": "image/png"
     }
