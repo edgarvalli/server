@@ -1,0 +1,25 @@
+.input-group {
+    padding: .5em;
+}
+
+.input{
+    width: 100%;
+    padding: .5em;
+    border: none;
+    border-bottom: solid 1px grey;
+}
+
+.input:focus {
+    outline: none;
+    border-bottom: solid 2px #00B8D4 
+}
+
+.input::placeholder { color: grey }
+
+.textarea {
+    width: 100%;
+    height: 5em;
+    padding: .5em;
+}
+
+.textarea::placeholder { color: grey }

@@ -1,0 +1,16 @@
+.card {
+    position: relative;
+    margin-top: 1em;
+    border: solid thin lightgray;
+    padding: 0;
+}
+
+.card-item  {
+    position: relative;
+    display: flex;
+    background: #fff;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+    border-bottom: solid thin lightgray;
+}

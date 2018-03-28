@@ -1,0 +1,75 @@
+.job-container { padding: 1em; background: #e2e2e2 }
+.job-content { margin-top: 2em; padding: .5em; overflow: auto}
+.card-job {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5em;
+    cursor: pointer;
+    margin-top: 1em;
+    width: 100%;
+}
+
+.first-child { width: 60% }
+.second-child { width: 30% }
+.icon-trash { width: 10% }
+
+.icon-add {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5em;
+    font-size: 2em;
+    width: 5%;
+    height: .5em;
+    border-radius: 50%;
+    background: black;
+    color: #fff;
+    margin: 0;
+}
+
+.jobs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.jobs > .jobs.card-job { width: 100%; }
+
+.jobs-container {
+    padding: 1em;
+}
+
+.jobs-container span {
+    margin-top: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+
+.form-group input, .form-group button { margin-top: 1em; }
+
+.subtotal, .tax, .total {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+}
+
+.total {
+    padding: .5em;
+    font-size: 2em;
+}
+
+.add-payment {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2em;
+}
+
+.add-payment input { width: 80%; }
