@@ -30,7 +30,7 @@
 }
 
 .btn-primary { background: #2196F3; color: #ffff }
-
+.btn-success { background: #4CAF50; color: #fff }
 @media screen and (min-width: 720px) {
     .float-button { width: 5em; }
     .btn { width: 40%; margin-left: 30%; }
