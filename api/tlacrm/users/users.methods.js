@@ -21,7 +21,6 @@ module.exports = {
                 }
             })
             fs.renameSync(oldDest, newDest)
-            fs.unlinkSync(oldDest)
             const _id = mongo.id(req.user.user._id);
             const users = await mongo.collection("users");
             const up = await users.update({_id}, { $set: { avatar: filename }})
