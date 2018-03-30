@@ -16,7 +16,8 @@ module.exports = {
             delete user[0].password;
             const info = { user: user[0]}
             if(persistent) {
-                info.persistent = true;
+                info.persistent = true
+                info.exp = moment().add(100, "years").unix();
             } else {
                 info.persistent = false;
                 info.exp = moment().add(1, "days").unix();
