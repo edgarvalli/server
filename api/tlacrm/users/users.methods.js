@@ -7,7 +7,9 @@ module.exports = {
     async changeAvatar(req, res) {
         const image = req.files[0];
         const img = image.originalname.split(".");
-        const filename = `${req.user.user._id}.${img[1]}`;
+        let date = new Date();
+        date = `${date.getFullYear()}${date.getMonth()}${date.getDay()}_${date.getHours()}${date.getMinutes()}${date.getSeconds()}`
+        const filename = `${req.user.user._id}_${date}.${img[1]}`;
         const oldDest = path.join(__dirname, `../../../${image.path}`)
         const pathProfile = "../../../public/tlacrm/static/img/profiles"
         const newDest = path.join(__dirname, `${pathProfile}/${filename}`)
