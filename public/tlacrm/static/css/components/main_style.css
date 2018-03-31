@@ -31,10 +31,17 @@ i[class^="icon"]{
 @media screen and (min-width: 720px) {
   body { background: #e2e2e2 } 
   .container {
+    position: relative;
     width: 70%;
     margin: auto;
     background: #fff;
     margin-top: 1em;
     margin-bottom: 1em;
   }
+
+  .no-found {
+    background: #fff;
+    height: 30em;
+  }
+
 }
