@@ -95,8 +95,8 @@ module.exports = {
             let date = r.update_date;
             let day = "0" + date.getDate();
             if(day.length >= 3) day = date.getDate();
-            let month = "0" + date.getMonth();
-            if(month >= 3) month = date.getMonth();
+            let month = "0" + (date.getMonth() + 1);
+            if(month.length >= 3) month = (date.getMonth() + 1);
             date = `${day}/${month}/${date.getFullYear()}`
 
             // define subtotal and get all objects and sum all

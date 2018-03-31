@@ -75,16 +75,16 @@ module.exports = {
         let create_date = result.create_date;
         let day = "0" + create_date.getDate();
         if(day.length >= 3) day = create_date.getDate();
-        let month = "0" + create_date.getMonth();
-        if(month >= 3) month = create_date.getMonth();
+        let month = "0" + (create_date.getMonth() + 1);
+        if(month.length >= 3) month = (create_date.getMonth() + 1);
         create_date = `${day}/${month}/${create_date.getFullYear()}`
 
         // Update date
         let update_date = result.update_date;
-         day = "0" + update_date.getDate();
+        day = "0" + update_date.getDate();
         if(day.length >= 3) day = update_date.getDate();
-        month = "0" + update_date.getMonth();
-        if(month >= 3) month = update_date.getMonth();
+        month = "0" + (update_date.getMonth() + 1);
+        if(month.length >= 3) month = (update_date.getMonth() + 1);
         update_date = `${day}/${month}/${update_date.getFullYear()}`
         result.update_date = update_date;
         result.create_date = create_date;
