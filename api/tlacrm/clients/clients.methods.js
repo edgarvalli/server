@@ -66,6 +66,64 @@ module.exports = {
         res.json({error: false, data});
     },
 
+    async getJobs(req, res) {
+        const { id } = req.params;
+        const _id = mongo.id(id);
+        const c = await mongo.collection("jobs");
+        const result = await c.aggregate([
+            { $lookup: {
+                    from: "clients",
+                    localField: "client_id",
+                    foreignField: "_id",
+                    as: "client"
+                }
+            },{$match: {client_id: _id} }, { $sort: { create_date: -1 } }
+        ]).toArray();
+
+        // Format the result for only necesary fields
+        
+        // Define array of objects
+        const data = [];
+
+        // get all the objects in result
+        result.forEach(r => {
+
+            // define jobs array
+            const jobs = [];
+
+            // Push all the job name in the result array
+            let date = r.update_date;
+            let day = "0" + date.getDate();
+            if(day.length >= 3) day = date.getDate();
+            let month = "0" + date.getMonth();
+            if(month >= 3) month = date.getMonth();
+            date = `${day}/${month}/${date.getFullYear()}`
+
+            // define subtotal and get all objects and sum all
+            let subtotal = r.jobs.map( job => parseInt(job.cant) * parseFloat(job.cost) ).reduce((a,b) => a + b)
+            
+            // If the user set tax as true subtotal sum the .16 tax
+            if(r.tax) subtotal += subtotal * .16;
+
+            // Sum all the payments
+            const payments = r.payments.reduce( (a,b) => parseFloat(a) + parseFloat(b));
+            
+            // Get the rest of the money
+            const total = subtotal - payments;
+            
+            // Finish data formated
+            data.push({
+                name: r.client[0].name,
+                cell: r.client[0].cellphone,
+                date,
+                _id: r._id,
+                total
+            })
+        })
+
+        res.json({error: false, data})
+    },
+
     async convertToClient(req, res) {
         const values = req.body.data;
         const _id = mongo.id(values._id);
