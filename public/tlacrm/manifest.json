@@ -1,15 +1,10 @@
 {
   "short_name": "TlaCrm",
-  "name": "Tapiceria los alamos",
+  "name": "Tapiceria Los Alamos",
   "icons": [
     {
-      "src": "tlacrm/favicon.ico",
+      "src": "static/img/icon.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "tlacrm/static/img/icon.png",
-      "sizes":"64x64 32x32 24x24 16x16",
       "type": "image/png"
     }
   ],

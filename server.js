@@ -1,6 +1,7 @@
 const fs = require("fs");
 const express = require('express');
 const app = express();
+const multer = require("multer");
 
 /***************** Express setup ******************************/
 
@@ -13,7 +14,7 @@ const app = express();
 // const https = require("https").Server(options, app);
 const http = require("http").Server(app);
 const bodyParser = require('body-parser');
-
+const upload = multer({dest: "files/"})
 const PORT = 3080;
 // const PORTSSL = 3443;
 
@@ -22,6 +23,7 @@ app
     .use(bodyParser.urlencoded({ extended: false }))
     .use(bodyParser.json())
     .use(headers)
+    .use(upload.any())
     .use(express.static("public"))
     .get('/', (req,res) => res.send("Express Working"))
 

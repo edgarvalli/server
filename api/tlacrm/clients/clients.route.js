@@ -12,5 +12,6 @@ router
     .get('/search/:value',isAuth,client.search)
     .post("/convert",isAuth,client.convertToClient)
     .post("/convert-from-lead", isAuth, client.convertToClient)
+    .get("/get-jobs/:id", isAuth, client.getJobs)
 
 module.exports = router;

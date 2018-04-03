@@ -1,6 +1,4 @@
 {
-  "main.css": "tlacrm/static/css/main.e6a178d3.css",
-  "main.css.map": "tlacrm/static/css/main.e6a178d3.css.map",
-  "main.js": "tlacrm/static/js/main.63e019ad.js",
-  "main.js.map": "static/js/main.63e019ad.js.map"
+  "main.js": "static/js/bundle.js",
+  "main.js.map": "static/js/bundle.js.map"
 }

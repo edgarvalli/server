@@ -1,0 +1,169 @@
+nav {
+    height: 3em;
+    z-index: 20;
+}
+.navbar {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background: #00B8D4;
+    height: 3em;
+    padding: 0 .5em 0 .5em;
+    z-index: 10;
+}
+.navbar i { color: #fff }
+
+.side-bar {
+    position: fixed;
+    top:0;
+    width: 100%;
+    height: 100%;
+    transition: all .5s;
+    z-index: 20;
+}
+
+
+
+.side-bar-menu {
+    position: relative;
+    width: 70%;
+    height: 100%;
+    background: #fff;
+    z-index: 10;
+}
+
+.profile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 25%;
+    background: url("https://graphicflip.com/wp-content/uploads/2016/02/5-backgrounds.jpg")
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    height: 5em;
+    margin-top: -.5em;
+}
+.profile-info span { margin-top: .5em; color: #fff}
+
+.side-bar-else {
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+    background: rgba(33, 33, 33,.5);
+}
+
+.sb-show { left: 0 }
+.sb-hide { left: -100% }
+.sb-show .side-bar-else { visibility: visible; } 
+.sb-hide .side-bar-else { visibility: hidden; }
+
+.navbar-right-side {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.navbar-center-side { color: #fff; font-weight: bold; font-size: 1.2em }
+
+.avatar {
+    position: relative;
+    width: 25%;
+    height: 100%;
+    border-radius: 50%;
+}
+.list-options a {
+    display: block;
+    text-decoration: none;
+    color: black;
+}
+.list-options i { color: grey }
+.list-options a, .list-options li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: .5em;
+    cursor: pointer;
+}
+.list-options li { background: none }
+
+.list-options a:hover { background: #e2e2e2 }
+
+.search-engine {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    left: 100%;
+    top:0;
+    width: 100%;
+    height: 3em;
+    padding: .5em;
+    background: #fff;
+    box-shadow: 1px 1px 4px grey;
+    color: grey;
+    z-index: 11;
+    transition: all .25s;
+}
+
+.sub-menu {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    width: 50%;
+    padding: .5em;
+    top:1em;
+    transition: all .25s;
+    overflow: hidden;
+    list-style: none;
+    z-index: 20;
+}
+
+.sub-menu li { padding: .5em; }
+
+.hide-sm {
+    width: 0;
+    padding: 0;
+    box-shadow:  0 0 0;
+}
+
+.show-sm {
+    width: 50%;
+    padding: .5em;
+    box-shadow: 2px 2px 2px lightgrey;
+}
+
+.sm-context {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left:0;
+    z-index: 19;
+}
+
+.show-search { left: 0 }
+
+.search-engine input {
+    width: 70%;
+    font-size: 1.2em;
+    border: none;
+}
+
+.search-engine input:focus { outline: none }
+
+@media screen and (min-width: 720px) {
+    .side-bar {
+        width: 35%
+    }
+}

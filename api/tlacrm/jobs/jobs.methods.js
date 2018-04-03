@@ -71,6 +71,23 @@ module.exports = {
         const c = await mongo.collection(collection);
         const result = await c.findOne({_id});
         if(result === null) return res.json({error: true, msg: "No se encontro registro"})
+        // Push all the job name in the result array
+        let create_date = result.create_date;
+        let day = "0" + create_date.getDate();
+        if(day.length >= 3) day = create_date.getDate();
+        let month = "0" + (create_date.getMonth() + 1);
+        if(month.length >= 3) month = (create_date.getMonth() + 1);
+        create_date = `${day}/${month}/${create_date.getFullYear()}`
+
+        // Update date
+        let update_date = result.update_date;
+        day = "0" + update_date.getDate();
+        if(day.length >= 3) day = update_date.getDate();
+        month = "0" + (update_date.getMonth() + 1);
+        if(month.length >= 3) month = (update_date.getMonth() + 1);
+        update_date = `${day}/${month}/${update_date.getFullYear()}`
+        result.update_date = update_date;
+        result.create_date = create_date;
         res.json({error: false, data: result})
     },
 
