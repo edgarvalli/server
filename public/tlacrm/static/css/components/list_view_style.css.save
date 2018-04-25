@@ -1,0 +1,38 @@
+.list-view {
+    position: relative;
+    width: 100%;
+}
+
+.list-item {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-bottom: solid 1px lightgray;
+    padding: 1em;
+    cursor: pointer;
+}
+
+.list-item-content {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    width: 90%;
+    color: grey;
+}
+
+.list-item-second-content { 
+    width: 20%
+}
+
+.lv-title{ color: black }
+
+.list-item-action {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    width: 10%;
+    height: 100%;
+    align-items: center;
+    font-size: 1.3em;
+    color: grey
