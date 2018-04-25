@@ -15,14 +15,14 @@ module.exports = {
             if(err) return res.json({error: true, msg: "Contraseña incorrecta"})
             delete user[0].password;
             const info = { user: user[0]}
+            let token;
             if(persistent) {
                 info.persistent = true
-                info.exp = moment().add(100, "years").unix();
+                token = createToken(info, 100, "years")
             } else {
                 info.persistent = false;
-                info.exp = moment().add(1, "days").unix();
+                token = createToken(info, 1, "days")
             }
-            const token = createToken(info);
             res.json({error: false, user: info.user, token, msg: "Token enviado"})
         })
     }
