@@ -13,6 +13,7 @@ const multer = require("multer");
 
 // const https = require("https").Server(options, app);
 const http = require("http").Server(app);
+const io = require("socket.io")(http);
 const bodyParser = require('body-parser');
 const upload = multer({dest: "files/"})
 const PORT = 3080;
@@ -37,14 +38,12 @@ require("./api/tlacrm/index")(app);
 
 /****************** API HTTP END *****************************/
 
+/***************** SOCKET **********************************/
 
-const mongo = require("./lib/mongo.client")("tlacrm");
+require("./socket/main.socket")(io)
 
-app.get("/mongo", async (req,res) => {
-    const m = await mongo.collection("leads");
-    const leads = await m.find({}).toArray();
-    res.json(leads)
-})
+/***************** SOCKET END **********************************/
+
 
 http.listen(PORT , err => err ? console.log(err)
 		: console.log("Server running on port " + PORT));
