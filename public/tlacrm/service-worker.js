@@ -1,8 +1,9 @@
 "use strict";
+
 const filesCached = [
     "/tlacrm/index.html",
-    "/tlacrm/js/bundle.js",
-    "https://file.myfontastic.com/LpaNVieK9xfRW9cGNAmv4F/icons.css"
+    "/tlacrm/static/js/bundle.js",
+    "/tlacrm/static/css/icons.css"
 ];
 
 ["main", "profile","home","login", "navbar", "buttons", "inputs", "list_view","checkbox", "jobs", "modal", "card"].forEach(el => {
