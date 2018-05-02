@@ -12,7 +12,7 @@ const filesCached = [
 self.addEventListener("install", function(ev){
     console.log("Services Worker installed")
     ev.waitUntil(
-        caches.open(cacheName).then(cache => {
+        caches.open("TlaCrm_Cache").then(cache => {
             return cache.addAll(filesCached)
         })
     )
