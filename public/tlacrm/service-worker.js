@@ -18,3 +18,15 @@ self.addEventListener("install", function(ev){
         })
     )
 })
+
+self.addEventListener("activate", function(ev) {
+    console.log("Services Worker Activated", ev)
+})
+
+self.addEventListener("fetch", function(ev) {
+    ev.respondWith(
+        caches.match(ev.request).then(function(response) {
+            return response || fetch(ev.request)
+        })
+    )
+})
