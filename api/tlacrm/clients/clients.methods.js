@@ -18,6 +18,13 @@ module.exports = {
         res.json({error: false, data: result})
     },
 
+    async getLastTenClients() {
+        const c = await mongo.collection(collection);
+        const clients = await c.find({}).limit(10).sort({_id: -1}).toArray();
+        if(clients.length === 0) return res.json({error: true, msg: "No hay registros"});
+        res.json({error: false, data: clients});
+    },
+
     async add(req,res) {
         const data = req.body.data;
         data.create_date = new Date();

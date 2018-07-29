@@ -13,5 +13,6 @@ router
     .post("/convert",isAuth,client.convertToClient)
     .post("/convert-from-lead", isAuth, client.convertToClient)
     .get("/get-jobs/:id", isAuth, client.getJobs)
+    .get("/get-last-ten-clients", isAuth, client.getLastTenClients)
 
 module.exports = router;
