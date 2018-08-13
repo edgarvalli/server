@@ -4,6 +4,7 @@ const collection = "jobs";
 module.exports = {
 
     async fetch(req, res) {
+        console.log("Job api")
         const c = await mongo.collection(collection);
         const result = await c.aggregate([
             { $lookup: {

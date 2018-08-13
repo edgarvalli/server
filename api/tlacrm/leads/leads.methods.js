@@ -5,6 +5,7 @@ const collection = "leads";
 module.exports = {
 
     async fetch(req, res) {
+        console.log("works");
         const page = parseInt(req.params.page);
         const limit = 50;
         const leads = await mongo.collection(collection);
