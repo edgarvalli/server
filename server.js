@@ -34,7 +34,7 @@ app
 
 /***************** API HTTP **********************************/
 
-require("./api/tlacrm/index")(app);
+require("./api/index")(app);
 
 /****************** API HTTP END *****************************/
 

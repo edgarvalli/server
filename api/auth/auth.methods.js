@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
-const mongo = require("../../../lib/mongo.client")("tlacrm");
-const { createToken } = require('../../../lib/func');
+const mongo = require("../../lib/mongo.client")("tlacrm");
+const { createToken } = require('../../lib/func');
 const moment = require("moment");
 
 module.exports = {

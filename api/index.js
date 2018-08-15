@@ -1,5 +1,4 @@
-const authRouter = require("./auth/auth.route");
-const { isAuth } = require("../../lib/func");
+const { isAuth } = require("../lib/func");
 
 module.exports = app => {
     app
