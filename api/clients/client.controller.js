@@ -27,6 +27,8 @@ module.exports = {
 
     async add(req,res) {
         const data = req.body.data;
+        const { user } = req.extra;
+        data.create_by = user._id;
         data.create_date = new Date();
         data.update_date = new Date();
         const clients = await mongo.collection(collection);
@@ -40,7 +42,7 @@ module.exports = {
         data.update_date = new Date();
         delete data._id;
         const clients = await mongo.collection(collection);
-        const update = await clients.update({_id}, data);
+        await clients.update({_id}, data);
         res.json({error: false})
     },
 
@@ -54,7 +56,7 @@ module.exports = {
     async remove(req,res) {
         const _id = mongo.id(req.params.id);
         const clients = await mongo.collection(collection);
-        const rm = await clients.remove({_id});
+        await clients.remove({_id});
         res.json({error: false})
     },
 
@@ -139,8 +141,8 @@ module.exports = {
         values.create_date = new Date();
         const clients = await mongo.collection(collection);
         const leads = await mongo.collection("leads");
-        const add = await clients.insert(values);
-        const rm = await leads.remove({_id});
+        await clients.insert(values);
+        await leads.remove({_id});
         res.json({error: false});
     },
 }

@@ -57,12 +57,14 @@ module.exports = {
 
     async add(req, res) {
         const { data } = req.body;
+        const { user } = req.extra;
+        data.create_by = user._id;
         data.client_id = mongo.id(data.client_id)
         data.create_date = new Date();
         data.update_date = new Date();
         data.payment_out = false;
         const c = await mongo.collection(collection);
-        const add = await c.insert(data);
+        await c.insert(data);
         res.json({error: false})
     },
 
