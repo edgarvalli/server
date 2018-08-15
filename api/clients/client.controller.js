@@ -66,7 +66,7 @@ module.exports = {
             $or: [
                 {name: new RegExp(value, 'i')},
                 {phone: new RegExp(value, 'i')},
-                {cell: new RegExp(value, 'i')},
+                {cellphone: new RegExp(value, 'i')},
                 {address: new RegExp(value, 'i')}
             ]
         }
