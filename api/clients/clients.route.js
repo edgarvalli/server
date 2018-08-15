@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const client = require('./clients.methods');
+const client = require('./client.controller');
 const { isAuth } = require("../../lib/func");
 
 router

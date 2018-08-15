@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const jobClass = require('./jobs.methods');
+const jobClass = require('./jobs.controller');
 const { isAuth } = require("../../lib/func");
 
 router
