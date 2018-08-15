@@ -45,7 +45,7 @@ module.exports = {
             // Finish data formated
             data.push({
                 name: r.client[0].name,
-                cell: r.client[0].cellphone,
+                cellphone: r.client[0].cellphone,
                 jobs,
                 _id: r._id,
                 total
