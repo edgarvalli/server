@@ -26,7 +26,7 @@ module.exports = {
 
     async update(req,res) {
         const {data} = req.body;
-        console.log(req.user);
+        console.log(req.extra);
         const _id = mongo.id(data._id);
         data.update_date = new Date();
         delete data._id;
