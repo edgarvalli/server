@@ -2,10 +2,10 @@ const { isAuth } = require("../lib/func");
 
 module.exports = app => {
     app
-        .get("/api/count-records", isAuth,require("./home"))
-        .use('/api/leads', require("./leads/leads.route"))
-        .use('/api/clients', require("./clients/clients.route"))
-        .use('/api/auth', require("./auth/auth.route"))
-        .use('/api/jobs',require("./jobs/jobs.route"))
-        .use("/api/users", require("./users/users.route"))
+        .get("/tlacrm/api/count-records", isAuth,require("./home"))
+        .use('/tlacrm/api/leads', require("./leads/leads.route"))
+        .use('/tlacrm/api/clients', require("./clients/clients.route"))
+        .use('/tlacrm/api/auth', require("./auth/auth.route"))
+        .use('/tlacrm/api/jobs',require("./jobs/jobs.route"))
+        .use("/tlacrm/api/users", require("./users/users.route"))
 }
