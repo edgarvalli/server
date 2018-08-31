@@ -27,6 +27,9 @@ module.exports = {
             
             if(err) return res.json({error: true, msg: "Contraseña incorrecta"})
             delete user[0].password;
+
+            console.log(client)
+
             const info = {
                 user: user[0],
                 skt: generateUniqueId(70),
@@ -41,7 +44,7 @@ module.exports = {
                 info.persistent = false;
                 token = createToken(info, 1, "days")
             }
-            res.json({error: false, user: info.user, token, msg: "Token enviado"})
+            res.json({error: false, user: info.user, token, skt, msg: "Token enviado"})
         })
     }
 
