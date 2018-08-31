@@ -26,13 +26,15 @@ module.exports = {
         bcrypt.compare(password, user[0].password, (err, success) => {
             
             if(err) return res.json({error: true, msg: "Contraseña incorrecta"})
+            
             delete user[0].password;
 
+            const skt = generateUniqueId(70);
             console.log(client)
 
             const info = {
                 user: user[0],
-                skt: generateUniqueId(70),
+                skt,
                 client
             }
             let token;
