@@ -32,7 +32,7 @@ module.exports = {
         data.create_date = new Date();
         data.update_date = new Date();
         const clients = await mongo.collection(collection);
-        const insert = await clients.insert(data);
+        await clients.insert(data);
         res.json({error: false})
     },
 
