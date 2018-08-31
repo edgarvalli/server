@@ -30,7 +30,6 @@ module.exports = {
             delete user[0].password;
 
             const skt = generateUniqueId(70);
-            console.log(client)
 
             const info = {
                 user: user[0],
