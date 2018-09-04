@@ -2,6 +2,17 @@ const mongo = require("../../lib/mongo.client")("tlacrm");
 const fs = require("fs");
 const path = require("path");
 const sharp = require('sharp');
+const bcrypt = require("bcrypt");
+const { createToken } = require('../../lib/func');
+
+const generateUniqueId = size => {
+    let charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < size; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+}
 
 module.exports = {
     
@@ -44,8 +55,6 @@ module.exports = {
 
     async login(req, res) {
         const { persistent = false, username, password } = req.body;
-        const { client } = req.headers;
-        console.log(req.headers)
         const userRequest = username.toLowerCase();
         const users = await mongo.collection("users");
         const user = await users.find({username: userRequest}).toArray();
@@ -63,7 +72,7 @@ module.exports = {
             const info = {
                 user: user[0],
                 skt,
-                client
+                client: req.headers['user-agent']
             }
             let token;
 
