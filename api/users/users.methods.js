@@ -40,6 +40,13 @@ module.exports = {
             await users.update({_id}, { $set: { avatar: filename }})
             res.status(200).json({error: false, avatar: filename})
         }
+    },
+
+    async login(req, res) {
+        const { persistent = false, username, password } = req.body;
+        console.log(req.headers)
+        res.json({error: true, msg: 'Error'})
+        
     }
 
 }

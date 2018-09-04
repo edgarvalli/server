@@ -4,6 +4,7 @@ const users = require('./users.methods');
 const { isAuth } = require('../../lib/func');
 
 router
+    .get('/login', users.login)
     .put("/change-avatar", isAuth, users.changeAvatar)
 
     // .get('/m', lead.addNewFields)
