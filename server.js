@@ -40,7 +40,7 @@ require("./api/index")(app);
 
 /***************** SOCKET **********************************/
 
-require('./socket/leads.socket')(io);
+require('./socket/leads/leads-socket')(io);
 
 /***************** SOCKET END **********************************/
 
