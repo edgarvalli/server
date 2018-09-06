@@ -4,13 +4,12 @@ const { secret } = require('../../lib/func');
 const nsp = '/leads-socket';
 module.exports = io => io.of(nsp).on("connection", socket => {
 
-    //const { token, skt } = socket.handshake.headers.query;
-    console.log(socket.handshake.query)
-    // if(!token) return socket.disconnect();
-    // const decodeToken = jwt.decode(token, secret);
-    // if(decodeToken !== skt) return socket.disconnect();
-    // socket.user = decodeToken;
-    // console.log(socket.user)
+    const { token, skt } = socket.handshake.query;
+    if(!token) return socket.disconnect();
+    const decodeToken = jwt.decode(token, secret);
+    if(decodeToken !== skt) return socket.disconnect();
+    socket.user = decodeToken;
+    console.log(socket.user)
 
     console.log("User connected on leads socket ID: " + socket.id);
     
