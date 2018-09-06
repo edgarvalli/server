@@ -64,7 +64,7 @@ module.exports = {
         bcrypt.compare(password, user[0].password, (err, success) => {
             console.log(success);
             if(err) return res.json({error: true, msg: 'Ocurrio un error con la libreria'})
-            if(success) return res.json({error: true, msg: "Contraseña incorrecta"})
+            if(!success) return res.json({error: true, msg: "Contraseña incorrecta"})
             
             delete user[0].password;
 
