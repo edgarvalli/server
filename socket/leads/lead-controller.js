@@ -4,7 +4,7 @@ const db = "leads";
 module.exports = (io, socket, nsp) => {
     return {
         newLead(data) {
-            io.of(nsp).emit('new-lead', data)
+            io.of(nsp).emit('lead-added', data)
         }
     }
 }
