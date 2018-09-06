@@ -2,10 +2,10 @@ const leadController = require('./leads-controller');
 const jwt = require('jwt-simple');
 const { secret } = require('../../lib/func');
 const nsp = '/leads-socket';
-module.exports = io => io.on("connection", socket => {
+module.exports = io => io.of(nsp).on("connection", socket => {
 
     const { token, skt } = socket.handshake.query;
-
+    console.log(socket.handshake)
     if(!token) return socket.disconnect();
     const decodeToken = jwt.decode(token, secret);
     if(decodeToken !== skt) return socket.disconnect();
