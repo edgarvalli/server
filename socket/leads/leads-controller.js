@@ -9,19 +9,22 @@ module.exports = (io, socket) => {
             // Store in databases
 
             const lead = await mongo.collection(db);
-            data.create_by = socket.user._id;
+            data.create_by = socket.client.user._id;
             data.create_date = new Date();
             data.update_date = new Date();
+            data.visited = false;
             await lead.insert(data).catch(err => {
                 console.log(err);
                 return null;
             })
 
+            const newlead = await lead.find({}).sort({_id: -1}).limit(1)
+
             // Eminting eventos to clients
-            io.of(nsp).emit('leads-changed', data);
+            io.of(nsp).emit('leads-changed', newlead[0]);
 	        socket.broadcast.emit('notify', {
                 action: 'create',
-                title: `${socket.user.name} ha creado un usuario`,
+                title: `${socket.client.user.name} ha creado un usuario`,
                 avatar: ''
             })
         },
@@ -39,7 +42,7 @@ module.exports = (io, socket) => {
             io.of(nsp).emit('leads-changed', data);
 	        socket.broadcast.emit('notify', {
                 action: 'create',
-                title: `${socket.user.name} ha creado un usuario`,
+                title: `${socket.client.user.name} ha creado un usuario`,
                 avatar: ''
             })
         }
