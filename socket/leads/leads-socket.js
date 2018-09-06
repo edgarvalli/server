@@ -4,15 +4,18 @@ const { secret } = require('../../lib/func');
 const nsp = '/leads-socket';
 module.exports = io => {
 
-    // const ioAuth = io.of(nsp).use((s, next) => {
-    //     const { token, skt } = s.request._query;
-    //     console.log(token);
-    //     const u = jwt.decode(token, secret);
-        
-    //     next()
-    // });
+    const _io = io.of(nsp).use((socket, next) => {
+        const { token, skt } = socket.request._query;
+        if(!token) return socket.disconnect();
+        const decodeToken = jwt.decode(token, secret);
+        if(!decodeToken) return socket.disconnect();
+        if(decodeToken.skt === skt) {
+            socket.user = decodeToken;
+            next();
+        }
+    });
 
-    io.of(nsp).on("connection", socket => {
+    _io.on("connection", socket => {
 
         console.log("User connected on leads socket ID: " + socket.id);
         
