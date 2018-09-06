@@ -5,10 +5,10 @@ const nsp = '/leads-socket';
 module.exports = io => {
 
     const ioAuth = io.of(nsp).use((s, next) => {
-        const { token } = s.request._query;
+        const { token, skt } = s.request._query;
         console.log(token);
-        const u = jwt.decode(toekn, secret);
-        if(u) {
+        const u = jwt.decode(token, secret);
+        if(u.skt === skt) {
             console.log(u)
             next();
         } else {

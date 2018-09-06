@@ -4,12 +4,12 @@ const nsp = '/leads-socket';
 
 module.exports = (io, socket) => {
     return {
-        async newLead(data, user) {
+        async newLead(data) {
 
             // Store in databases
 
             const lead = await mongo.collection(db);
-            data.create_by = user._id;
+            data.create_by = socket.user._id;
             data.create_date = new Date();
             data.update_date = new Date();
             await lead.insert(data).catch(err => {
@@ -21,9 +21,13 @@ module.exports = (io, socket) => {
             io.of(nsp).emit('lead-added', data);
 	        io.of(nsp).emit('notify', {
                 action: 'create',
-                title: `${user} ha creado un usuario`,
+                title: `${socket.user.name} ha creado un usuario`,
                 avatar: ''
             })
+        },
+
+        async updateLead(data) {
+
         }
     }
 }
