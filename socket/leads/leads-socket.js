@@ -2,8 +2,8 @@ const leadController = require('./leads-controller');
 const nsp = '/leads-socket';
 module.exports = io => {
 
-    const ioAauth = io.of(nsp).use((s, next) => {
-        console.log(s);
+    const ioAuth = io.of(nsp).use((s, next) => {
+        console.log(s.request._query);
         next();
     });
 
