@@ -1,10 +1,20 @@
 const leadController = require('./leads-controller');
+const jwt = require('jwt-simple');
+const { secret } = require('../../lib/func');
 const nsp = '/leads-socket';
 module.exports = io => {
 
     const ioAuth = io.of(nsp).use((s, next) => {
-        console.log(s.request._query);
-        next();
+        const { token } = s.request._query;
+        console.log(token);
+        const u = jwt.decode(toekn, secret);
+        if(u) {
+            console.log(u)
+            next();
+        } else {
+            console.error('User no allow!!!')
+            s.disconnect();
+        }
     });
 
     ioAuth.on("connection", socket => {
