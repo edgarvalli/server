@@ -1,10 +1,12 @@
 const mongo = require("../../lib/mongo.client")("tlacrm");
 const db = "leads";
+const nsp = '/leads-socket';
 
-module.exports = (io, socket, nsp) => {
+module.exports = (socket) => {
     return {
         newLead(data) {
-            io.of(nsp).emit('lead-added', data)
+            console.log(data);
+            socket.emit('lead-added', data)
         }
     }
 }
