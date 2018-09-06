@@ -6,9 +6,18 @@ module.exports = io => {
 
     const _io = io.of(nsp).use((socket, next) => {
         const { token, skt } = socket.request._query;
-        if(!token) return socket.disconnect();
+        if(!token){
+            console.log('No token provided');
+            console.log(token);
+            socket.disconnect();
+            return null;
+        }
         const decodeToken = jwt.decode(token, secret);
-        if(!decodeToken) return socket.disconnect();
+        if(!decodeToken) {
+            console.log('Error to decoded your token');
+            console.log(token)
+            socket.disconnect();
+        }
         if(decodeToken.skt === skt) {
             socket.user = decodeToken;
             next();
