@@ -1,17 +1,26 @@
 const leadController = require('./leads-controller');
 const nsp = '/leads-socket';
-module.exports = io => io.of(nsp).on("connection", socket => {
+module.exports = io => {
 
-    console.log("User connected on leads socket ID: " + socket.id);
-    
-    socket.on('test', msg => {
-	    console.log(msg);
-	    io.of(nsp).emit('test', msg)
+    const ioAauth = io.of(nsp).use((s, next) => {
+        console.log(s);
+        next();
     });
 
-    socket.on('new-lead', data => leadController(io,socket).newLead(data))
+    ioAuth.on("connection", socket => {
 
-    // Handle disconnect
-    socket.on("disconnect", () => console.log(`User disconnected with id: ${socket.id}`))
+        console.log("User connected on leads socket ID: " + socket.id);
+        
+        socket.on('test', msg => {
+            console.log(msg);
+            io.of(nsp).emit('test', msg)
+        });
+    
+        socket.on('new-lead', data => leadController(io,socket).newLead(data))
+    
+        // Handle disconnect
+        socket.on("disconnect", () => console.log(`User disconnected with id: ${socket.id}`))
+    
+    })    
 
-})
+}
