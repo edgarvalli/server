@@ -22,9 +22,10 @@ module.exports = (io, socket) => {
 
             // Eminting eventos to clients
             io.of(nsp).emit('leads-changed', newlead[0]);
-	        socket.broadcast.emit('notify', {
+	        socket.broadcast.to('/').emit('notify', {
                 action: 'create',
-                title: `${socket.agent.user.name} ha creado un usuario`,
+                title: 'Nuevo prospecto',
+                body: `${socket.agent.user.name} ha creado un usuario`,
                 avatar: ''
             })
         },
@@ -42,9 +43,10 @@ module.exports = (io, socket) => {
             // Eminting eventos to clients
             data._id = id;
             io.of(nsp).emit('leads-changed', data);
-	        socket.broadcast.emit('notify', {
+	        socket.broadcast.to('/').emit('notify', {
                 action: 'create',
-                title: `${socket.agent.user.name} ha creado un usuario`,
+                title: 'Actualización de prospecto',
+                body: `${socket.agent.user.name} ha actualizado un prospecto`,
                 avatar: ''
             })
         }
