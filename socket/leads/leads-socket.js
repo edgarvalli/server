@@ -5,7 +5,8 @@ const nsp = '/leads-socket';
 module.exports = io => io.of(nsp).on("connection", socket => {
 
     const { token, skt } = socket.handshake.query;
-    console.log('Authentication in procress ...')
+    console.log('Authentication in procress ...');
+    console.log('Your token is ' + token);
     if(!token) return socket.disconnect();
     const decodeToken = jwt.decode(token, secret);
     if(decodeToken !== skt) return socket.disconnect();
