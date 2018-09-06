@@ -3,23 +3,19 @@ const jwt = require('jwt-simple');
 const { secret } = require('../../lib/func');
 const nsp = '/leads-socket';
 module.exports = io => io.of(nsp).on("connection", socket => {
+    // Part of socket authentication
 
+    // Get token and skt from client
     const { token, skt } = socket.handshake.query;
-    console.log('Authentication in procress ...');
-    
+    // Check if token exits
     if(!token) return socket.disconnect();
-    console.log('Your token existing authentication conitune ...')
-    
+    // Decoded token
     const decodeToken = jwt.decode(token, secret);
-    console.log('Your token could be decoded');
-
-    if(decodeToken.user.skt !== skt) return socket.disconnect();
-    console.log('your secret key is no the same');
-
-    socket.user = decodeToken;
-    console.log(socket.user)
-
-    console.log("User connected on leads socket ID: " + socket.id);
+    //Check if secret key token is the same as the token
+    if(decodeToken.user.user.skt !== skt) return socket.disconnect();
+    // Set user information in user
+    socket.user = decodeToken.user.user;
+    console.log(socket.user);
     
     socket.on('test', msg => {
         console.log(msg);
