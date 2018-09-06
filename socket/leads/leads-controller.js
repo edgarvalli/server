@@ -32,13 +32,15 @@ module.exports = (io, socket) => {
         async updateLead(data) {
             
             // Update record in databases
-            const _id = mongo.id(data._id);
+            const id = data._id;
+            const _id = mongo.id(id);
             data.update_date = new Date();
             delete data._id;
             const leads = await mongo.collection(collection);
             await leads.update({_id}, {$set: data});
 
             // Eminting eventos to clients
+            data._id = id;
             io.of(nsp).emit('leads-changed', data);
 	        socket.broadcast.emit('notify', {
                 action: 'create',
