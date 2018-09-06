@@ -8,13 +8,8 @@ module.exports = io => {
         const { token, skt } = s.request._query;
         console.log(token);
         const u = jwt.decode(token, secret);
-        if(u.skt === skt) {
-            console.log(u)
-            next();
-        } else {
-            console.error('User no allow!!!')
-            s.disconnect();
-        }
+        
+        next()
     });
 
     ioAuth.on("connection", socket => {
