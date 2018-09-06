@@ -6,10 +6,15 @@ module.exports = io => io.of(nsp).on("connection", socket => {
 
     const { token, skt } = socket.handshake.query;
     console.log('Authentication in procress ...');
-    console.log('Your token is ' + token);
+    
     if(!token) return socket.disconnect();
+    console.log('Your token existing authentication conitune ...')
+    
     const decodeToken = jwt.decode(token, secret);
+    console.log('Your token could be decoded');
+    
     if(decodeToken !== skt) return socket.disconnect();
+    
     socket.user = decodeToken;
     console.log(socket.user)
 
