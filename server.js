@@ -41,7 +41,7 @@ require("./api/index")(app);
 /***************** SOCKET **********************************/
 
 require('./socket/leads/leads-socket')(io);
-io.on('connection', socket => scket.on('notify', msg => console.log(msg)))
+io.on('connection', socket => socket.on('notify', msg => console.log(msg)))
 
 /***************** SOCKET END **********************************/
 
