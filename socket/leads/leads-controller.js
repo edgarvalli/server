@@ -1,5 +1,5 @@
 const mongo = require("../../lib/mongo.client")("tlacrm");
-const db = "leads";
+const collection = "leads";
 const nsp = '/leads-socket';
 
 module.exports = (io, socket) => {
@@ -8,7 +8,7 @@ module.exports = (io, socket) => {
 
             // Store in databases
 
-            const lead = await mongo.collection(db);
+            const lead = await mongo.collection(collection);
             data.create_by = socket.client.user._id;
             data.create_date = new Date();
             data.update_date = new Date();
