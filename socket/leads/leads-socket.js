@@ -12,7 +12,7 @@ module.exports = io => io.of(nsp).on("connection", socket => {
     // Decoded token
     const decodeToken = jwt.decode(token, secret);
     //Check if secret key token is the same as the token
-    if(decodeToken.user.user.skt !== skt) return socket.disconnect();
+    if(decodeToken.user.skt !== skt) return socket.disconnect();
     // Set user information in user
     socket.user = decodeToken.user.user;
     console.log(socket.user);
