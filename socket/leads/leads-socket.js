@@ -10,7 +10,10 @@ module.exports = io => io.of(nsp).on("connection", socket => {
         io.of(nsp).emit('test', msg)
     });
 
-    socket.on('new-lead', data => leadController(io,socket).newLead(data))
+    // APIREST with socket
+    socket
+        .on('new-lead', data => leadController(io,socket).newLead(data))
+        .on('update-lead', data => leadController(io, socket).updateLead(data))
 
     // Handle disconnect
     socket.on("disconnect", () => console.log(`User disconnected with id: ${socket.id}`))

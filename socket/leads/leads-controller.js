@@ -18,8 +18,8 @@ module.exports = (io, socket) => {
             })
 
             // Eminting eventos to clients
-            io.of(nsp).emit('lead-added', data);
-	        io.of(nsp).emit('notify', {
+            io.of(nsp).emit('leads-changed', data);
+	        socket.broadcast.emit('notify', {
                 action: 'create',
                 title: `${socket.user.name} ha creado un usuario`,
                 avatar: ''
@@ -27,7 +27,21 @@ module.exports = (io, socket) => {
         },
 
         async updateLead(data) {
+            
+            // Update record in databases
+            const _id = mongo.id(data._id);
+            data.update_date = new Date();
+            delete data._id;
+            const leads = await mongo.collection(collection);
+            await leads.update({_id}, {$set: data});
 
+            // Eminting eventos to clients
+            io.of(nsp).emit('leads-changed', data);
+	        socket.broadcast.emit('notify', {
+                action: 'create',
+                title: `${socket.user.name} ha creado un usuario`,
+                avatar: ''
+            })
         }
     }
 }
