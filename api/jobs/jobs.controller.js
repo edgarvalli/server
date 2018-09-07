@@ -56,8 +56,8 @@ module.exports = {
     },
 
     async add(req, res) {
-        const { data } = req.body;
-        const { user } = req.extra;
+        const data = req.body;
+        const { user } = req.client;
         data.create_by = user._id;
         data.client_id = mongo.id(data.client_id)
         data.create_date = new Date();
@@ -95,7 +95,7 @@ module.exports = {
     },
 
     async update(req, res) {
-        const { data } = req.body;
+        const data = req.body;
         const _id = mongo.id(data.id);
         delete data.id;
         const payments = data.payments.reduce((a,b) => parseFloat(a) + parseFloat(b))
