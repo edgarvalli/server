@@ -27,11 +27,12 @@ module.exports = {
 
     async update(req,res) {
         const {data} = req.body;
-        const _id = mongo.id(data._id);
-        data.update_date = new Date();
-        delete data._id;
-        const leads = await mongo.collection(collection);
-        await leads.update({_id}, {$set: data});
+        console.log(data)
+        // const _id = mongo.id(data._id);
+        // data.update_date = new Date();
+        // delete data._id;
+        // const leads = await mongo.collection(collection);
+        // await leads.update({_id}, {$set: data});
         res.json({error: false})
     },
 
