@@ -75,7 +75,7 @@ module.exports = {
         res.json({error: false, data});
     },
 
-    async getJobs(req, res) {
+    async fetchJobs(req, res) {
         const { id } = req.params;
         const _id = mongo.id(id);
         const c = await mongo.collection("jobs");

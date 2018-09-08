@@ -12,7 +12,7 @@ router
     .get('/search/:value',isAuth,client.search)
     .post("/convert",isAuth,client.convertToClient)
     .post("/convert-from-lead", isAuth, client.convertToClient)
-    .get("/get-jobs/:id", isAuth, client.getJobs)
+    .get("/fetch-jobs/:id", isAuth, client.fetchJobs)
     .get("/get-last-ten-clients", isAuth, client.getLastTenClients)
 
 module.exports = router;
