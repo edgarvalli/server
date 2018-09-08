@@ -62,8 +62,9 @@ module.exports = {
         if(user.length <= 0 || user === undefined) return res.json({error: true, msg:"Usuario no encontrado"})
         
         bcrypt.compare(password, user[0].password, (err, success) => {
-            
-            if(err) return res.json({error: true, msg: "Contraseña incorrecta"})
+            console.log(success);
+            if(err) return res.json({error: true, msg: 'Ocurrio un error con la libreria'})
+            if(!success) return res.json({error: true, msg: "Contraseña incorrecta"})
             
             delete user[0].password;
 

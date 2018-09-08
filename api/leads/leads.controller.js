@@ -5,7 +5,6 @@ const collection = "leads";
 module.exports = {
 
     async fetch(req, res) {
-        console.log("works");
         const page = parseInt(req.params.page);
         const limit = 50;
         const leads = await mongo.collection(collection);
@@ -16,8 +15,8 @@ module.exports = {
     },
 
     async add(req,res) {
-        const data = req.body.data;
-        const { user } = req.extra;
+        const data = req.body;
+        const { user } = req.client;
         data.create_by = user._id;
         data.create_date = new Date();
         data.update_date = new Date();
@@ -27,7 +26,7 @@ module.exports = {
     },
 
     async update(req,res) {
-        const {data} = req.body;
+        const data = req.body;
         const _id = mongo.id(data._id);
         data.update_date = new Date();
         delete data._id;
