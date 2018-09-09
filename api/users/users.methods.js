@@ -46,7 +46,7 @@ module.exports = {
             .resize(73, 73)
             .toFile('public/images/profiles/' + avatar)
 
-            const _id = mongo.id(req.extra.user._id);
+            const _id = mongo.id(req.user.user._id);
             const users = await mongo.collection("users");
             await users.update({_id}, { $set: { avatar: filename }})
             res.status(200).json({error: false, avatar: filename})
