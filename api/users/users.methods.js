@@ -74,7 +74,8 @@ module.exports = {
             if(!sc) return res.json({error: true, msg: "Contraseña incorrecta"})
             bcrypt.genSalt(10, (error, salt) => {
                 bcrypt.hash(newpassword, salt, (err, hash) => {
-                    c.update({_id}, { $set: { password: hash } })
+                    c.update({_id}, { $set: { password: hash } });
+                    res.json({error: false})
                 })
             })
         })
