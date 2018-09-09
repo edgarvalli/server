@@ -29,8 +29,8 @@ module.exports = {
 
         date = `${date.getFullYear()}${month}${date.getDate()}_${date.getHours()}${date.getMinutes()}${date.getSeconds()}`
         const filename = `${req.client.user._id}_${date}.${img[1]}`;
-        const oldDest = path.join(__dirname, `../../../${image.path}`)
-        const pathProfile = "../../../public/images/profiles"
+        const oldDest = path.join(__dirname, `../../${image.path}`)
+        const pathProfile = "../../public/images/profiles"
         const newDest = path.join(__dirname, `${pathProfile}/${filename}`)
         if(oldDest) {
             const files = fs.readdirSync(path.join(__dirname, pathProfile));
