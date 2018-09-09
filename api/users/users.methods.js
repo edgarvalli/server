@@ -54,8 +54,9 @@ module.exports = {
     },
 
     async changeName(req, res) {
-        const { _id, name } = req.body;
+        const { id, name } = req.body;
         const c = await mongo.collection('users');
+        const _id = mongo.id(id);
         await c.update({_id}, { $set: { name } });
         res.json({error: false})
     },
