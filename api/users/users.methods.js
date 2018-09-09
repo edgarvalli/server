@@ -20,16 +20,8 @@ module.exports = {
         const image = req.files[0];
         if(image === undefined) return res.json({error: false, avatar: null})
         const img = image.originalname.split(".");
-        let date = new Date();
-        let month = date.getMonth() + 1;
         
-        if(month <= 9) {
-            month = month.toString();
-            month = '0' + month;
-        }
-
-        date = `${date.getFullYear()}${month}${date.getDate()}_${date.getHours()}${date.getMinutes()}${date.getSeconds()}`
-        const filename = `${req.client.user._id}_${date}.${img[1]}`;
+        const filename = req.client.user._id;
         const oldDest = path.join(__dirname, `../../${image.path}`)
         const pathProfile = "../../public/tlacrm/images/profiles"
         const newDest = path.join(__dirname, `${pathProfile}/${filename}`)
