@@ -20,7 +20,7 @@ module.exports = {
         const image = req.files[0];
         if(image === undefined) return res.json({error: false, avatar: null});
         const img = image.originalname.split(".");
-        console.log(img)
+        console.log(img[1])
         if(img[1] !== 'png' || img[1] !== 'jpg') return res.json({error: true, msg: 'Formato de imagen no soportado, solo PNG y JPG'})
         
         const filename = `${req.client.user._id}.${img[1]}`;
