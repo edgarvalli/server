@@ -53,6 +53,32 @@ module.exports = {
         }
     },
 
+    async changeName(req, res) {
+        const { _id, name } = req.body;
+        const c = await mongo.collection('users');
+        await c.update({_id}, { $set: { name } });
+        res.json({error: false})
+    },
+
+    async changePassword(req, res) {
+
+        const { newpassword, password, _id } = req.body;
+
+        const c = await mongo.collection('users');
+        const user = await c.findOne({_id});
+        
+        bcrypt.compare(password, user.password, (err, sc) => {
+            if(err) return res.json({error: true, msg: 'Ocurrio un error con la libreria'})
+            if(!success) return res.json({error: true, msg: "Contraseña incorrecta"})
+            bcrypt.genSalt(10, (error, salt) => {
+                bcrypt.hash(newpassword, salt, (err, hash) => {
+                    c.update({_id}, { $set: { password: hash } })
+                })
+            })
+        })
+        
+    },
+
     async login(req, res) {
         const { persistent = false, username, password } = req.body;
         const userRequest = username.toLowerCase();
@@ -62,7 +88,6 @@ module.exports = {
         if(user.length <= 0 || user === undefined) return res.json({error: true, msg:"Usuario no encontrado"})
         
         bcrypt.compare(password, user[0].password, (err, success) => {
-            console.log(success);
             if(err) return res.json({error: true, msg: 'Ocurrio un error con la libreria'})
             if(!success) return res.json({error: true, msg: "Contraseña incorrecta"})
             

@@ -5,8 +5,9 @@ const { isAuth } = require('../../lib/func');
 
 router
     .post('/login', users.login)
-    .put("/change-avatar", isAuth, users.changeAvatar)
-
+    .post("/change-avatar", isAuth, users.changeAvatar)
+    .post('/change-name', isAuth, users.changeName)
+    .post('/change-password', isAuth, users.changePassword)
     // .get('/m', lead.addNewFields)
 
 module.exports = router;
