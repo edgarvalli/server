@@ -28,14 +28,14 @@ module.exports = {
         }
 
         date = `${date.getFullYear()}${month}${date.getDate()}_${date.getHours()}${date.getMinutes()}${date.getSeconds()}`
-        const filename = `${req.user.user._id}_${date}.${img[1]}`;
+        const filename = `${req.client.user._id}_${date}.${img[1]}`;
         const oldDest = path.join(__dirname, `../../../${image.path}`)
         const pathProfile = "../../../public/images/profiles"
         const newDest = path.join(__dirname, `${pathProfile}/${filename}`)
         if(oldDest) {
             const files = fs.readdirSync(path.join(__dirname, pathProfile));
             files.map(file => {
-                if(file.startsWith(req.user.user._id)) {
+                if(file.startsWith(req.client.user._id)) {
                     fs.unlinkSync(path.join(__dirname, `${pathProfile}/${file}`));
                 }
             })
@@ -46,7 +46,7 @@ module.exports = {
             .resize(73, 73)
             .toFile('public/images/profiles/' + avatar)
 
-            const _id = mongo.id(req.user.user._id);
+            const _id = mongo.id(req.client.user._id);
             const users = await mongo.collection("users");
             await users.update({_id}, { $set: { avatar: filename }})
             res.status(200).json({error: false, avatar: filename})
