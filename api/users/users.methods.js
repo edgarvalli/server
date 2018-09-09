@@ -69,17 +69,15 @@ module.exports = {
         const c = await mongo.collection('users');
         const _id = mongo.id(id);
         const user = await c.findOne({_id});
-        console.log(user.password);
-        res.json({error: true, msg: 'test'})
-        // bcrypt.compare(password, user.password, (err, sc) => {
-        //     if(err) return res.json({error: true, msg: 'Ocurrio un error con la libreria'})
-        //     if(!success) return res.json({error: true, msg: "Contraseña incorrecta"})
-        //     bcrypt.genSalt(10, (error, salt) => {
-        //         bcrypt.hash(newpassword, salt, (err, hash) => {
-        //             c.update({_id}, { $set: { password: hash } })
-        //         })
-        //     })
-        // })
+        bcrypt.compare(password, user.password, (err, sc) => {
+            if(err) return res.json({error: true, msg: 'Ocurrio un error con la libreria'})
+            if(!success) return res.json({error: true, msg: "Contraseña incorrecta"})
+            bcrypt.genSalt(10, (error, salt) => {
+                bcrypt.hash(newpassword, salt, (err, hash) => {
+                    c.update({_id}, { $set: { password: hash } })
+                })
+            })
+        })
         
     },
 
