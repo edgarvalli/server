@@ -71,7 +71,7 @@ module.exports = {
         const user = await c.findOne({_id});
         bcrypt.compare(password, user.password, (err, sc) => {
             if(err) return res.json({error: true, msg: 'Ocurrio un error con la libreria'})
-            if(!success) return res.json({error: true, msg: "Contraseña incorrecta"})
+            if(!sc) return res.json({error: true, msg: "Contraseña incorrecta"})
             bcrypt.genSalt(10, (error, salt) => {
                 bcrypt.hash(newpassword, salt, (err, hash) => {
                     c.update({_id}, { $set: { password: hash } })
