@@ -64,9 +64,10 @@ module.exports = {
 
     async changePassword(req, res) {
 
-        const { newpassword, password, _id } = req.body;
+        const { newpassword, password, id } = req.body;
 
         const c = await mongo.collection('users');
+        const _id = mongo.id(id);
         const user = await c.findOne({_id});
         
         bcrypt.compare(password, user.password, (err, sc) => {
