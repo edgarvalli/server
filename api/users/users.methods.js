@@ -30,7 +30,7 @@ module.exports = {
         date = `${date.getFullYear()}${month}${date.getDate()}_${date.getHours()}${date.getMinutes()}${date.getSeconds()}`
         const filename = `${req.client.user._id}_${date}.${img[1]}`;
         const oldDest = path.join(__dirname, `../../${image.path}`)
-        const pathProfile = "../../public/images/profiles"
+        const pathProfile = "../../public/tlacrm/images/profiles"
         const newDest = path.join(__dirname, `${pathProfile}/${filename}`)
         if(oldDest) {
             const files = fs.readdirSync(path.join(__dirname, pathProfile));
@@ -44,7 +44,7 @@ module.exports = {
             const avatar = filename.split('.').join('_avatar.')
             sharp(newDest)
             .resize(73, 73)
-            .toFile('public/images/profiles/' + avatar)
+            .toFile('public/tlacrm/images/profiles/' + avatar)
 
             const _id = mongo.id(req.client.user._id);
             const users = await mongo.collection("users");
