@@ -4,7 +4,6 @@ const collection = "jobs";
 module.exports = {
 
     async fetch(req, res) {
-        console.log("Job api")
         const c = await mongo.collection(collection);
         const result = await c.aggregate([
             { $lookup: {
@@ -57,14 +56,15 @@ module.exports = {
 
     async add(req, res) {
         const data = req.body;
-        const { user } = req.client;
-        data.create_by = user._id;
-        data.client_id = mongo.id(data.client_id)
-        data.create_date = new Date();
-        data.update_date = new Date();
-        data.payment_out = false;
-        const c = await mongo.collection(collection);
-        await c.insert(data);
+        console.log(data)
+        // const { user } = req.client;
+        // data.create_by = user._id;
+        // data.client_id = mongo.id(data.client_id)
+        // data.create_date = new Date();
+        // data.update_date = new Date();
+        // data.payment_out = false;
+        // const c = await mongo.collection(collection);
+        // await c.insert(data);
         res.json({error: false})
     },
 
