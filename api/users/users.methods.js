@@ -21,7 +21,7 @@ module.exports = {
         if(image === undefined) return res.json({error: false, avatar: null})
         const img = image.originalname.split(".");
         
-        const filename = req.client.user._id;
+        const filename = `${req.client.user._id}.${img[1]}`;
         const oldDest = path.join(__dirname, `../../${image.path}`)
         const pathProfile = "../../public/tlacrm/images/profiles"
         const newDest = path.join(__dirname, `${pathProfile}/${filename}`)
