@@ -18,7 +18,7 @@ module.exports = {
     
     async changeAvatar(req, res) {
         const image = req.files[0];
-        if(image === undefined) return res.json({error: false})
+        if(image === undefined) return res.json({error: false, avatar: null})
         const img = image.originalname.split(".");
         let date = new Date();
         let month = date.getMonth() + 1;
