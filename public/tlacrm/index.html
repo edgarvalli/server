@@ -18,6 +18,7 @@
     Notification.requestPermission();
     navigator.serviceWorker.register('js/sw.js')
       .then(reg => {
+        reg.active();
         reg.pushManager.getSubscription()
         .then(sub => {
           reg.showNotification('Hello')
