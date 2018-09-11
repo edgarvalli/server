@@ -6,7 +6,7 @@ if('Notification' in window) {
 
 if('serviceWorker' in navigator) {
 
-    navigator.serviceWorker.register('/sw.js', { scope: '/tlacrm/' })
+    navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' })
     .then(reg => {
         if('pushManager' in  reg) {
             console.log(`Services Worker registered`)
