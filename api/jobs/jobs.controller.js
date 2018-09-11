@@ -19,6 +19,7 @@ module.exports = {
         
         // Define array of objects
         const data = [];
+        console.log(result)
 
         // get all the objects in result
         result.forEach(r => {
