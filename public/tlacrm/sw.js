@@ -1,4 +1,4 @@
-self.addEventListener('install', ev => {
+self.addEventListener('install', function(ev){
     ev.waitUntil(
         caches.open('tlacrm').then(cache => {
             return cache.addAll(
@@ -13,7 +13,7 @@ self.addEventListener('install', ev => {
     )
 });
 
-self.addEventListener('fetch', ev => {
+self.addEventListener('fetch', function(ev){
     ev.respondWidth(
         caches.match(ev.request).then(response => {
             return response || fetch(ev.request)
