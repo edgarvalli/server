@@ -20,7 +20,6 @@
       .then(reg => {
         if('pushManager' in  reg) {
           console.log(`Services Worker registered`)
-          reg.showNotification('Notificaciones activadas')
         } else {
           alert('Push manager no supported')
         }
