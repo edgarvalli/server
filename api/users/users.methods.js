@@ -118,6 +118,8 @@ module.exports = {
             res.json({error: true, error: err})
         });
 
+        delete data.password;
+
         res.json({error: false, data});
     }
 
