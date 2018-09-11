@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- Chrome, Firefox OS and Opera -->
+  <meta name="theme-color" content="#1A237E">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#1A237E">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="#1A237E">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="images/icons/icon_16x16.png">
   <link rel="stylesheet" href="css/styles.css">
@@ -14,27 +20,6 @@
 <body>
   <div id="root"></div>
   <script src="js/bundle.js"></script>
-  <script>
-    Notification.requestPermission();
-    navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' })
-      .then(reg => {
-        if('pushManager' in  reg) {
-          console.log(`Services Worker registered`)
-        } else {
-          alert('Push manager no supported')
-        }
-      })
-      .catch(err => console.log(err))
-
-      navigator.serviceWorker.ready.then(ev => {
-        ev.showNotification('Notificaciones activadas', {
-          icon: '/tlacrm/images/icons/icon_72x72.png',
-          body: 'Ahora recibira notificaciones del sistema',
-          badge: '/tlacrm/images/icons/icon_16x16.png'
-        })
-      })
-      .catch(err => console.log(err))
-
-  </script>
+  <script src="js/scripts.js"></script>
 </body>
 </html>
