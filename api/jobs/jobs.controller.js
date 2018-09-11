@@ -43,7 +43,7 @@ module.exports = {
 
             // Get weeks passed
             const today = new Date();
-            const date = el.create_date;
+            const date = r.create_date;
             let create_date = Math.ceil(Math.floor((date - today) / 86400000))
             
             // Finish data formated
