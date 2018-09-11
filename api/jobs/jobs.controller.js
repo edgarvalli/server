@@ -19,7 +19,6 @@ module.exports = {
         
         // Define array of objects
         const data = [];
-        console.log(result)
 
         // get all the objects in result
         result.forEach(r => {
@@ -51,7 +50,9 @@ module.exports = {
                 total,
                 create_date: r.create_date
             })
-        })
+        });
+
+        console.log(data)
 
         res.json({error: false, data})
     },
