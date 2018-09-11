@@ -26,6 +26,11 @@
       })
       .catch(err => console.log(err))
 
+      navigator.serviceWorker.ready.then(ev => {
+        ev.showNotification('Notificaciones activadas')
+      })
+      .catch(err => console.log(err))
+
   </script>
 </body>
 </html>
