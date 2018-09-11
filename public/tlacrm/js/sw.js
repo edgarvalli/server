@@ -13,6 +13,14 @@ self.addEventListener('install', ev => {
     )
 });
 
+self.addEventListener('fetch', ev => {
+    ev.respondWidth(
+        caches.match(ev.request).then(response => {
+            return response || fetch(ev.request)
+        })
+    )
+})
+
 self.addEventListener('sync', ev=> {
     ev.waitUntil(function() {
         setTimeout(() => {
