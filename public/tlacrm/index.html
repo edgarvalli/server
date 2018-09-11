@@ -27,13 +27,6 @@
       })
       .catch(err => console.log(err))
 
-    navigator.serviceWorker.ready.then(sw => {
-      sw.pushManager.subscribe()
-        .then(subs => {
-          subs.disabled = true;
-        })
-    })
-
   </script>
 </body>
 </html>
