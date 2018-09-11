@@ -30,7 +30,7 @@ module.exports = {
             r.jobs.forEach(j => jobs.push(j.name))
 
             // define subtotal and get all objects and sum all
-            let subtotal = r.jobs.map( job => parseInt(job.cant) * parseFloat(job.cost) ).reduce((a,b) => a + b)
+            let subtotal = r.jobs.map( job => parseInt(job.cant) * parseFloat(job.price) ).reduce((a,b) => a + b)
             
             // If the user set tax as true subtotal sum the .16 tax
             if(r.tax) subtotal += subtotal * .16;
