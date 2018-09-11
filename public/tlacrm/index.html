@@ -18,8 +18,12 @@
     Notification.requestPermission();
     navigator.serviceWorker.register('js/sw.js')
       .then(reg => {
-        console.log(`Services Worker registered`)
-        reg.showNotification('Notificaciones activadas')
+        if('pushManager' in  reg) {
+          console.log(`Services Worker registered`)
+          reg.showNotification('Notificaciones activadas')
+        } else {
+          alert('Push manager no supported')
+        }
       })
       .catch(err => console.log(err))
 
