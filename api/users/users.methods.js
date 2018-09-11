@@ -139,12 +139,13 @@ module.exports = {
         res.json({error: false})
     },
 
-    async updateUser(req, res) {
-        const user = req.body;
+    async resetPassword(req, res) {
+        const {id, password} = req.body;
         const _id = mongo.id(id);
-        delete data.id;
+        const salt = bcrypt.genSaltSync(10);
+        const _password = bcrypt.hashSync(password, salt);
         const users =  await mongo.collection('users');
-        await users.update({_id}, { $set: data });
+        await users.update({_id}, { $set: { password: _password } });
         res.json({error: false})
     }
 
