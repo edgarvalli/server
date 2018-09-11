@@ -11,4 +11,12 @@ self.addEventListener('install', ev => {
             )
         })
     )
+});
+
+self.addEventListener('sync', ev=> {
+    ev.waitUntil(function() {
+        setTimeout(() => {
+            
+        }, 10000)
+    })
 })
