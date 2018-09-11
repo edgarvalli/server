@@ -9,6 +9,8 @@ router
     .post('/change-name', isAuth, users.changeName)
     .post('/change-password', isAuth, users.changePassword)
     .get('/fetch-user-info/:id', isAuth, users.fetchUserInfo)
+    .get('/fetch', isAuth, users.fetchUsers)
+    .post('/add', isAuth, users.addUser)
     // .get('/m', lead.addNewFields)
 
 module.exports = router;

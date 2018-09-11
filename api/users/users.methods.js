@@ -121,6 +121,22 @@ module.exports = {
         delete data.password;
 
         res.json({error: false, data});
+    },
+
+    async fetchUsers(req, res) {
+        const users = await mongo.collection('users');
+        const allUsers = await users.find().sort({create_date: -1}).toArray();
+        res.json({error: false, data: allUsers})
+    },
+
+    async addUser(req, res) {
+        const data = req.body;
+        const users = await mongo.collection('users');
+        if(data.username === '' || data.password === '') return res.json({error: true, msg: 'No ingreso usuario o contraseña'});
+        const salt = bcrypt.genSaltSync(10);
+        const password = bcrypt.hashSync(data.password, salt);
+        await users.insert({username: data.username, password}).catch(err => res.json({error: true, msg: err}));
+        res.json({error: false})
     }
 
 }
