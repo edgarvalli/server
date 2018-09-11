@@ -135,7 +135,7 @@ module.exports = {
         if(data.username === '' || data.password === '') return res.json({error: true, msg: 'No ingreso usuario o contraseña'});
         const salt = bcrypt.genSaltSync(10);
         const password = bcrypt.hashSync(data.password, salt);
-        await users.insert({username: data.username, password, name: data.name}).catch(err => res.json({error: true, msg: err}));
+        await users.insert({username: data.username, password, name: data.name, avatar: 'default.png'}).catch(err => res.json({error: true, msg: err}));
         res.json({error: false})
     },
 
