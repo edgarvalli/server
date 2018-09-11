@@ -3,10 +3,10 @@ self.addEventListener('install', function(ev){
         caches.open('tlacrm').then(cache => {
             return cache.addAll(
                 [
-                    '/css/styles.css',
-                    'js/bundle.js',
-                    '/index.html',
-                    '/images/icons/icon_16x16.png'
+                    '/tlacrm/css/styles.css',
+                    '/tlacrm/js/bundle.js',
+                    '/tlacrm/index.html',
+                    '/tlacrm/images/icons/icon_16x16.png'
                 ]
             )
         })
