@@ -40,6 +40,11 @@ module.exports = {
             
             // Get the rest of the money
             const total = subtotal - payments;
+
+            // Get weeks passed
+            const today = new Date();
+            const date = el.create_date;
+            let create_date = Math.ceil(Math.floor((date - today) / 86400000))
             
             // Finish data formated
             data.push({
@@ -48,7 +53,7 @@ module.exports = {
                 jobs,
                 _id: r._id,
                 total,
-                create_date: r.create_date
+                create_date
             })
         });
 
