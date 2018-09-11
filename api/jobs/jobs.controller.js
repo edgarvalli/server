@@ -47,7 +47,8 @@ module.exports = {
                 cellphone: r.client[0].cellphone,
                 jobs,
                 _id: r._id,
-                total
+                total,
+                create_date: r.create_date
             })
         })
 
