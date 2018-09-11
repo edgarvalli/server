@@ -18,8 +18,10 @@
     Notification.requestPermission();
     navigator.serviceWorker.register('js/sw.js')
       .then(reg => {
-        console.log(reg);
-        reg.showNotification('Works')
+        reg.pushManager.getSubscription()
+        .then(sub => {
+          reg.showNotification('Hello')
+        })
       })
   </script>
 </body>
