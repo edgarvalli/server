@@ -109,21 +109,14 @@ module.exports = {
             date = `${day}/${month}/${date.getFullYear()}`
 
             // define subtotal and get all objects and sum all
-            let subtotal = r.jobs.map( job => parseInt(job.cant) * parseFloat(job.price) ).reduce((a,b) => a + b)
+            let total = r.jobs.map( job => parseInt(job.cant) * parseFloat(job.price) ).reduce((a,b) => a + b)
             
             // If the user set tax as true subtotal sum the .16 tax
-            if(r.tax) subtotal += subtotal * .16;
-
-            // Sum all the payments
-            const payments = r.payments.reduce( (a,b) => parseFloat(a) + parseFloat(b));
-            
-            // Get the rest of the money
-            const total = subtotal - payments;
+            if(r.tax) total += total * .16;
             
             // Finish data formated
             data.push({
-                name: r.client[0].name,
-                cell: r.client[0].cellphone,
+                name: r.job[0].name,
                 date,
                 _id: r._id,
                 total
