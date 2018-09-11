@@ -109,7 +109,8 @@ module.exports = {
         const payments = data.payments.reduce((a,b) => parseFloat(a) + parseFloat(b))
         const jobs = data.jobs.map(job => parseInt(job.cant) * parseFloat(job.cost)).reduce((a,b) => a+b);
         const rest = jobs - payments;
-        (rest <= 0) ? data.payment_out = true : data.payment_out = false
+        (rest <= 0) ? data.payment_out = true : data.payment_out = false;
+        console.log(data)
         data.update_date = new Date();
         const c = await mongo.collection(collection);
         const up = await c.update({_id}, { $set: data });
