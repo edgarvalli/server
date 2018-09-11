@@ -15,8 +15,13 @@ self.addEventListener('install', function(ev){
 
 self.addEventListener('fetch', function(ev){
     ev.respondWidth(
-        caches.match(ev.request).then(response => {
-            return response || fetch(ev.request)
+        caches.open('tlacrm').then(function(cache){
+            return cache.match(ev.request).then(function(resp) {
+                return resp || fetch(ev.request).then(function(resp) {
+                    cache.put(ev.request, resp.clone());
+                    return resp;
+                })
+            })
         })
     )
 })
