@@ -110,7 +110,7 @@ module.exports = {
         })
     },
 
-    fetchUserInfo(req, res) {
+    async fetchUserInfo(req, res) {
         const id = req.params;
         const c = await mongo.collection('users');
         const _id = mongo.id(id)
