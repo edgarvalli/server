@@ -20,11 +20,3 @@ self.addEventListener('fetch', ev => {
         })
     )
 })
-
-self.addEventListener('sync', ev=> {
-    ev.waitUntil(function() {
-        setTimeout(() => {
-            
-        }, 10000)
-    })
-})
