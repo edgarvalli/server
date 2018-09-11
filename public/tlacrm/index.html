@@ -18,12 +18,18 @@
     Notification.requestPermission();
     navigator.serviceWorker.register('js/sw.js')
       .then(reg => {
-        reg.pushManager.getSubscription()
-        .then(sub => {
-          reg.showNotification('Hello')
-        })
+        console.log(`Services Worker registered`)
+        reg.showNotification('Notificaciones activadas')
       })
       .catch(err => console.log(err))
+
+    navigator.serviceWorker.ready.then(sw => {
+      sw.pushManager.subscribe()
+        .then(subs => {
+          subs.disabled = true;
+        })
+    })
+
   </script>
 </body>
 </html>
