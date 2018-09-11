@@ -108,6 +108,17 @@ module.exports = {
             }
             res.json({error: false, user: info.user, token, skt, msg: "Token enviado"})
         })
+    },
+
+    fetchUserInfo(req, res) {
+        const id = req.params;
+        const c = await mongo.collection('users');
+        const _id = mongo.id(id)
+        const data = c.findOne({_id}).catch(err => {
+            res.json({error: true, error: err})
+        });
+
+        res.json({error: false, data});
     }
 
 }

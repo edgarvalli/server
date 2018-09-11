@@ -8,6 +8,7 @@ router
     .post("/change-avatar", isAuth, users.changeAvatar)
     .post('/change-name', isAuth, users.changeName)
     .post('/change-password', isAuth, users.changePassword)
+    .get('/fetch-user-info', isAuth, users.fetchUserInfo)
     // .get('/m', lead.addNewFields)
 
 module.exports = router;
