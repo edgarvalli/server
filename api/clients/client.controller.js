@@ -116,7 +116,7 @@ module.exports = {
             
             // Finish data formated
             data.push({
-                name: r.job[0].name,
+                name: r.jobs[0].name,
                 date,
                 _id: r._id,
                 total
