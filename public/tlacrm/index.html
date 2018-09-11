@@ -28,8 +28,9 @@
 
       navigator.serviceWorker.ready.then(ev => {
         ev.showNotification('Notificaciones activadas', {
-          icon: '/images/icons/icon_72x72.png',
-          body: 'Ahora recibira notificaciones del sistema'
+          icon: '/tlacrm/images/icons/icon_72x72.png',
+          body: 'Ahora recibira notificaciones del sistema',
+          badge: '/tlacrm/images/icons/icon_16x16.png'
         })
       })
       .catch(err => console.log(err))
