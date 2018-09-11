@@ -16,7 +16,7 @@
   <script src="js/bundle.js"></script>
   <script>
     Notification.requestPermission();
-    navigator.serviceWorker.register('sw.js', { scope: '/' })
+    navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' })
       .then(reg => {
         if('pushManager' in  reg) {
           console.log(`Services Worker registered`)
