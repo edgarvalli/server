@@ -44,7 +44,7 @@ module.exports = {
             // Get weeks passed
             const today = new Date();
             const date = r.create_date;
-            let create_date = Math.ceil(Math.floor((date - today) / 86400000))
+            let create_date = Math.ceil(Math.floor((today - date) / 86400000)) + ' semanas'
             
             // Finish data formated
             data.push({
