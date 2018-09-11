@@ -687,3 +687,9 @@ nav {
 
 h5 { width: 100%; }
 .job-date { font-size: .7rem; color: #9d9d99 }
+
+.users-form{
+    padding: 1rem;
+}
+
+.users-form * { margin-top: 1rem; }
