@@ -52,8 +52,6 @@ module.exports = {
             })
         });
 
-        console.log(data)
-
         res.json({error: false, data})
     },
 
