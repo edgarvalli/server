@@ -14,14 +14,16 @@ self.addEventListener('install', function(ev){
 });
 
 self.addEventListener('fetch', function(ev){
-    ev.respondWith(
-        caches.open('tlacrm').then(function(cache){
-            return cache.match(ev.request).then(function(resp) {
-                return resp || fetch(ev.request).then(function(resp) {
-                    cache.put(ev.request, resp.clone());
-                    return resp;
+    if(ev.request.clone().clone().method === 'GET') {
+        ev.respondWith(
+            caches.open('tlacrm').then(function(cache){
+                return cache.match(ev.request).then(function(resp) {
+                    return resp || fetch(ev.request).then(function(resp) {
+                        cache.put(ev.request, resp.clone());
+                        return resp;
+                    })
                 })
             })
-        })
-    )
+        )
+    }
 })
