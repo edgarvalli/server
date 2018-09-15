@@ -14,7 +14,6 @@ self.addEventListener('install', function(ev){
 });
 
 self.addEventListener('fetch', function(ev){
-    console.log(ev)
     ev.respondWith(
         caches.open('tlacrm').then(function(cache){
             return cache.match(ev.request).then(function(resp) {
