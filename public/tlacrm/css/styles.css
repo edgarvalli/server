@@ -665,6 +665,12 @@ nav {
 /* Profile section */
 .profile { transition: all .25s; margin-top: 1rem; margin-bottom: 1rem;}
 .profile button { margin-top: 1rem; }
+.avatar-profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 .avatar-profile img{
     width: 10rem;
     height: 10rem;
@@ -693,3 +699,80 @@ h5 { width: 100%; }
 }
 
 .users-form * { margin-top: 1rem; }
+
+.img-full-screen{
+    position: fixed;
+    z-index: 10;
+    top:0;
+    left: 0;
+    overflow: hidden;
+}
+
+.frame-body{
+    position: absolute;
+    background: #ffffff;
+}
+
+.frame-body, .frame-body img {
+    top: 0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+.img-full-screen .frame {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top:0;
+    left: 0;
+}
+
+.frame-header, .frame-footer {
+    z-index: 11;
+    height: 4rem;
+    background: rgba(0, 0, 0, 0);
+    transition: all .5s;
+    visibility: hidden;
+}
+
+.frame-header i { left: .5rem; color: #ffffff; }
+
+.frame-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+.frame-footer * { left: .5rem; }
+
+.show-fullscreen {
+    width: 100%;
+    height: 100%;
+    transition: .5s;
+}
+
+.frame-header-footer-show {
+    visibility: visible;
+    background: rgba(0, 0, 0, .5);
+    transition: all .5s;
+}
+
+.button-frame {
+    border: solid 2px;
+    padding: .5rem;
+    text-transform: uppercase;
+    color: #ffffff;
+    border-radius: .25rem;
+    cursor: pointer;
+}
+.profile .loading-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top:0;
+    left: 0;
+    z-index: 10;
+    background: #ffffff;
+}
