@@ -58,19 +58,14 @@ module.exports = {
 
     async changePassword(req, res) {
 
-        const { newpassword, password, id } = req.body;
+        const { password, id } = req.body;
 
         const c = await mongo.collection('users');
         const _id = mongo.id(id);
-        const user = await c.findOne({_id});
-        bcrypt.compare(password, user.password, (err, sc) => {
-            if(err) return res.json({error: true, msg: 'Ocurrio un error con la libreria'})
-            if(!sc) return res.json({error: true, msg: "Contraseña incorrecta"})
-            bcrypt.genSalt(10, (error, salt) => {
-                bcrypt.hash(newpassword, salt, (err, hash) => {
-                    c.update({_id}, { $set: { password: hash } });
-                    res.json({error: false})
-                })
+        bcrypt.genSalt(10, (error, salt) => {
+            bcrypt.hash(password, salt, (err, hash) => {
+                c.update({_id}, { $set: { password: hash } });
+                res.json({error: false})
             })
         })
         
