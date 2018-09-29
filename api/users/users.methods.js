@@ -22,7 +22,7 @@ module.exports = {
         const img = image.originalname.split(".");
         if(img[1] !== 'png' && img[1] !== 'jpg') return res.json({error: true, msg: 'Formato de imagen no soportado, solo PNG y JPG'})
         
-        const filename = `${req.client.user._id}.${img[1]}`;
+        const filename = `${req.client.user._id}.png`;
         const oldDest = path.join(__dirname, `../../${image.path}`)
         const pathProfile = "../../public/tlacrm/images/profiles"
         const newDest = path.join(__dirname, `${pathProfile}/${filename}`)
