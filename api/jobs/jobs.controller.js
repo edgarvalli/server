@@ -102,6 +102,15 @@ module.exports = {
         res.json({error: false, data: result})
     },
 
+    async addComment(req, res) {
+        const {id, comment} = req.body;
+        const _id = mongo.id(id);
+        const c = await mongo.collection(collection);
+        await c.update({_id}, { $push: { comments: comment } });
+        const job = await c.findOne({_id});
+        res.json({error: false, comments: job.comments});
+    },
+
     async update(req, res) {
         const data = req.body;
         const _id = mongo.id(data.id);

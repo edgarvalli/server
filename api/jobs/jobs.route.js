@@ -9,6 +9,7 @@ router
     // .get("/paid-out/:id",isAuth,jobClass.makePaidOut)
     .post("/update",isAuth,jobClass.update)
     .post('/add',isAuth,jobClass.add)
+    .post('/add-comment', isAuth, jobClass.addComment)
 
 module.exports = router;
 
