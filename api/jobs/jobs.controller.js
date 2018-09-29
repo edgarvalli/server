@@ -103,13 +103,8 @@ module.exports = {
     },
 
     async addComment(req, res) {
-        const {id, comment} = req.body;
-        const data = {
-            comment,
-            date: new Date(),
-            name: req.client.name,
-            avatar: req.client.avatar
-        }
+        const {id, data} = req.body;
+        data.date = new Date();
         const _id = mongo.id(id);
         const c = await mongo.collection(collection);
         await c.update({_id}, { $push: { comments: data } });
