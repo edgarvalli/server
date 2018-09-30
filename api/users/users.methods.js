@@ -36,7 +36,7 @@ module.exports = {
             
             // Move the image from the upload path
             fs.renameSync(oldDest, newDest)
-            const resizeImage = 'public/tlacrm/images/profiles/' + `${req.client.user_id}.png`;
+            const resizeImage =`public/tlacrm/images/profiles/${req.client.user._id}.png`;
             
             // Resize the image
             sharp(newDest)
@@ -47,7 +47,7 @@ module.exports = {
             fs.unlinkSync(newDest)
 
             // Create an avatar picture from the last
-            const avatar = `${req.client.user_id}_avatar.png`;
+            const avatar = `${req.client.user._id}_avatar.png`;
             sharp(resizeImage)
             .resize(73, 73)
             .toFile('public/tlacrm/images/profiles/' + avatar)
