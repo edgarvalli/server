@@ -44,7 +44,7 @@ module.exports = {
             .toFile(resizeImage)
 
             // After resized image delete the original image
-            fs.unlinkSync(newDest)
+            // fs.unlinkSync(newDest)
 
             // Create an avatar picture from the last
             const avatar = `${req.client.user._id}_avatar.png`;
