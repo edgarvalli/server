@@ -22,7 +22,7 @@ module.exports = {
         const img = image.originalname.split(".");
         if(img[1] !== 'png' && img[1] !== 'jpg') return res.json({error: true, msg: 'Formato de imagen no soportado, solo PNG y JPG'})
         
-        const filename = `${req.client.user._id}.png`;
+        const filename = `${req.client.user._id}_original.png`;
         const oldDest = path.join(__dirname, `../../${image.path}`)
         const pathProfile = "../../public/tlacrm/images/profiles"
         const newDest = path.join(__dirname, `${pathProfile}/${filename}`)
@@ -33,14 +33,22 @@ module.exports = {
                     fs.unlinkSync(path.join(__dirname, `${pathProfile}/${file}`));
                 }
             })
-            // fs.renameSync(oldDest, newDest)
-
-            sharp(oldDest)
-            .resize(720, 1280)
-            .toFile('public/tlacrm/images/profiles/' + filename)
-
-            const avatar = filename.split('.').join('_avatar.')
+            
+            // Move the image from the upload path
+            fs.renameSync(oldDest, newDest)
+            const resizeImage = 'public/tlacrm/images/profiles/' + `${req.client.user_id}.png`;
+            
+            // Resize the image
             sharp(newDest)
+            .resize(720, 1280)
+            .toFile(resizeImage)
+
+            // After resized image delete the original image
+            fs.unlinkSync(newDest)
+
+            // Create an avatar picture from the last
+            const avatar = `${req.client.user_id}_avatar.png`;
+            sharp(resizeImage)
             .resize(73, 73)
             .toFile('public/tlacrm/images/profiles/' + avatar)
 
