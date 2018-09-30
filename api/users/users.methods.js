@@ -33,7 +33,11 @@ module.exports = {
                     fs.unlinkSync(path.join(__dirname, `${pathProfile}/${file}`));
                 }
             })
-            fs.renameSync(oldDest, newDest)
+            // fs.renameSync(oldDest, newDest)
+
+            sharp(oldDest)
+            .resize(720, 1280)
+            .toFile('public/tlacrm/images/profiles/' + filename)
 
             const avatar = filename.split('.').join('_avatar.')
             sharp(newDest)
