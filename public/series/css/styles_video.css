@@ -1,0 +1,54 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body { background: #eeeeee; }
+video {
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+}
+h3 { margin-left: 1rem; margin-top: 2rem; }
+ul { list-style: none; }
+#subtitle { text-align: center; width: 100%; margin-bottom: 1rem}
+
+.menu {
+    position: relative;
+    background: #ffff;
+    width: 95%;
+    margin: auto;
+    border: solid thin lightgray;
+}
+
+.list-of-season {
+    position: relative;
+    width: 100%;
+    padding: .25rem;
+    border-bottom: solid thin lightgrey;
+    overflow: hidden;
+    margin-top: .5rem;
+}
+
+.list-of-season h5  { cursor: pointer; padding: .5rem; }
+
+.list-of-season ul { transition: all .5s; }
+
+.list-of-season li {
+    cursor: pointer;
+    padding: .5rem;
+    font-size: .75rem;
+}
+.list-of-season li:hover {
+    background: #efefef;
+}
+
+@media screen and (min-width: 780px) {
+    body {
+        width: 60%;
+        margin: auto;
+        margin-bottom: 5rem;
+    }
+}
