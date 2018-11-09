@@ -8,6 +8,8 @@ Router.use(function(res,req, next) {
 
 Router
     .get('/get-series/:page', c.getSeries)
+    .get('/get-seasons/:id', c.getSeasons)
+    .get('/get-chapters/:serieid/:seasonid', c.getChapters)
 
 
 module.exports = Router;
