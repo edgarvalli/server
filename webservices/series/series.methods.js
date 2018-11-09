@@ -1,9 +1,37 @@
 const mongo = require('../../lib/mongo.client')('own_series');
 
 module.exports = {
-    async getSeries(req, res) {
+    
+    async getSeries(req, res)
+    {
+        let page = req.params.page || 1;
         const db = await mongo.collection('series');
         const series = await db.find({release: true}).toArray();
         res.json({error: false, data: { series } })
+    },
+
+    async getSeasons(req, res)
+    {
+        let season_id = req.params.id;
+        season_id = mongo.id(season_id);
+
+        const db = await mongo.collection('seasons');
+        const seasons = await db.find({season_id, release: true}).toArray()
+            .catch(error => res.json({error: true, msg: error}))
+        res.json({error: false, data: { seasons }})
+    },
+
+    async getChapters(req, res)
+    {
+        let serie_id = req.params.serieid;
+        let season_id = req.params.seasonid;
+
+        serie_id = mongo.id(serie_id);
+        season_id = mongo.id(season_id);
+
+        const db = await mongo.collection('chapters');
+        const chapters = await db.find({_id: season_id, serie_id}).toArray()
+            .catch(msg => res.json({error: true, msg}));
+        res.json({error: false, data: { chapters }});
     }
 }
