@@ -223,7 +223,8 @@ const addSerie = () => new Promise(async(resolve, reject) => {
 
     await season.insertMany(seasonsList);
 
-    const ss = await season.find({serie_id: s._id}).toArray();
+    const ss = await season.find({}).toArray();
+    
     ss.forEach( (el , i) => {
         data.seasons[i].chapters.forEach( (c, n) => {
 
