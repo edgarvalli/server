@@ -30,7 +30,7 @@ module.exports = {
         season_id = mongo.id(season_id);
 
         const db = await mongo.collection('chapters');
-        const chapters = await db.find({_id: season_id, serie_id}).toArray()
+        const chapters = await db.find({season_id, serie_id}).toArray()
             .catch(msg => res.json({error: true, msg}));
         res.json({error: false, data: { chapters }});
     }
