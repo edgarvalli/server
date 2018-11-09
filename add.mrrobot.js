@@ -189,6 +189,8 @@ const addSerie = () => new Promise(async(resolve, reject) => {
         ]
     }
 
+    const chapters = []
+
 
     const serie = {
         serie_name: 'Mr Robot',
@@ -202,26 +204,47 @@ const addSerie = () => new Promise(async(resolve, reject) => {
 
     const s = await db.findOne({serie_name: 'Mr Robot'});
     let i = 0;
+    const seasonsList = [];
+
     for(i = 0; i < 3; i ++)
     {
+        const index = i + 1;
         let release = true;
         if(i === 2) release = false;
-        await season.insertOne({
+
+        seasonsList.push({
             serie_id: s._id,
-            season: i + 1,
+            season: index,
             date: new Date(),
-            release
+            release,
+            image: 'https://ev-server.ddns.net/series/images/'+ mongo.string(s._id) +'/season_'+ index +'.png'
         })
     }
 
-    const ss = await db.find({serie_id: s._id}).toArray();
+    await season.insertMany(seasonsList);
 
-    ss.forEach(function(el, n) {
-        data.seasons[n].chapters.forEach( async function (c, r) {
-            c.url = 'https://ev-server.ddns.net/series/videos/'+ s._id + '/season_' + n + '/chapter_' + r + '.webm';
-            await chapter.insertOne(c)
+    const ss = await season.find({serie_id: s._id}).toArray();
+    ss.forEach( (el , i) => {
+        data.seasons[i].chapters.forEach( (c, n) => {
+
+            const url = `https://ev-server.ddns.net/series/videos/${el.serie_id}/season_${i + 1}/chapter_${n + 1}.webm`;
+
+            chapters.push({
+                serie_id: el.serie_id,
+                season_id: el._id,
+                season_number: i + 1,
+                name: c.name,
+                image: el.image,
+                url,
+                release: c.release
+            })
         })
     })
+
+    await chapter.insertMany(chapters);
+
+
+    
 
     resolve('works')
 })
