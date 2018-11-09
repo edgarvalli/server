@@ -3,6 +3,8 @@ const mongo = require('./lib/mongo.client')('own_series');
 
 const addSerie = () => new Promise(async(resolve, reject) => {
     const db = await mongo.collection('series');
+    const season = await mongo.collection('seasons');
+    const chapter = await mongo.collection('chapters');
     const data = {
         serie_name: 'Mr Robot',
         release_date: new Date('2015-06-24'),
@@ -187,7 +189,41 @@ const addSerie = () => new Promise(async(resolve, reject) => {
         ]
     }
 
-    await db.insertOne(data).catch(error => reject(error)).then(() => resolve('Success'))
+
+    const serie = {
+        serie_name: 'Mr Robot',
+        release_date: new Date('2015-06-24'),
+        release: true,
+        image: 'https://ev-server.ddns.net/series/images/mr-robot/mr_robot.png'
+    }
+
+    
+    await db.insertOne(serie);
+
+    const s = await db.findOne({serie_name: 'Mr Robot'});
+    let i = 0;
+    for(i = 0; i < 3; i ++)
+    {
+        let release = true;
+        if(i === 2) release = false;
+        await season.insertOne({
+            serie_id: s._id,
+            season: i + 1,
+            date: new Date(),
+            release
+        })
+    }
+
+    const ss = await db.find({serie_id: s._id}).toArray();
+
+    ss.forEach(function(el, n) {
+        data.seasons[n].chapters.forEach( async function (c, r) {
+            c.url = 'https://ev-server.ddns.net/series/videos/'+ s._id + '/season_' + n + '/chapter_' + r + '.webm';
+            await chapter.insertOne(c)
+        })
+    })
+
+    resolve('works')
 })
 
 addSerie()
