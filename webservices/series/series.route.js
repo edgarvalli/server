@@ -2,8 +2,10 @@ const Router = require('express').Router();
 const c = require('./series.methods');
 
 Router.use(function(res,req, next) {
-    console.log('Middleware');
-    next();
+    const token = req.header.token;
+    (token === '=a144sDajAcoimA2MAdjs#==')
+        ? res.json({error: false, msg: 'No estas autorizado para usar este webservices'})
+        : next();
 })
 
 Router
