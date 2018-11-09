@@ -7,7 +7,7 @@ Router.use(function(res,req, next) {
 })
 
 Router
-    .get('get-series', c.getSeries)
+    .get('/get-series', c.getSeries)
 
 
 module.exports = Router;
