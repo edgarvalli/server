@@ -36,14 +36,14 @@ app
 
 require("./api/index")(app);
 
-/****************** API HTTP END *****************************/
-
 /***************** SOCKET **********************************/
 
 require('./socket/leads/leads-socket')(io);
 io.on('connection', socket => socket.on('notify', msg => console.log(msg)))
 
-/***************** SOCKET END **********************************/
+
+/***************** WebServices *********************************/
+express.use(require('./webservices/series/series.route'));
 
 
 http.listen(PORT , err => err ? console.log(err)
