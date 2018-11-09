@@ -4,7 +4,6 @@ module.exports = {
     
     async getSeries(req, res)
     {
-        let page = req.params.page || 1;
         const db = await mongo.collection('series');
         const series = await db.find({release: true}).toArray();
         res.json({error: false, data: { series } })
@@ -30,7 +29,7 @@ module.exports = {
         season_id = mongo.id(season_id);
 
         const db = await mongo.collection('chapters');
-        const chapters = await db.find({season_id, serie_id}).toArray()
+        const chapters = await db.find({season_id, serie_id, release: true}).toArray()
             .catch(msg => res.json({error: true, msg}));
         res.json({error: false, data: { chapters }});
     }
