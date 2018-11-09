@@ -12,11 +12,11 @@ module.exports = {
 
     async getSeasons(req, res)
     {
-        let season_id = req.params.id;
-        season_id = mongo.id(season_id);
+        let serie_id = req.params.id;
+        serie_id = mongo.id(serie_id);
 
         const db = await mongo.collection('seasons');
-        const seasons = await db.find({season_id, release: true}).toArray()
+        const seasons = await db.find({serie_id, release: true}).toArray()
             .catch(error => res.json({error: true, msg: error}))
         res.json({error: false, data: { seasons }})
     },
