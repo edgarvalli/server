@@ -44,7 +44,7 @@ io.on('connection', socket => socket.on('notify', msg => console.log(msg)))
 
 /***************** WebServices *********************************/
 
-app.use('/ws/series',require('./webservices/series/series.route'));
+app.use('/ws/series/',require('./webservices/series/series.route'));
 
 
 http.listen(PORT , err => err ? console.log(err)
