@@ -3,7 +3,7 @@ const c = require('./series.methods');
 
 Router.use(function(res,req, next) {
     const token = req.header.token;
-    (token === '=a144sDajAcoimA2MAdjs#==')
+    (token !== '=a144sDajAcoimA2MAdjs#==')
         ? res.json({error: false, msg: 'No estas autorizado para usar este webservices'})
         : next();
 })
