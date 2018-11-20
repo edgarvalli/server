@@ -21,7 +21,7 @@ module.exports = {
         data.create_date = new Date();
         data.update_date = new Date();
         const leads = await mongo.collection(collection);
-        const insert = await leads.insert(data);
+        await leads.insert(data);
         res.json({error: false});
     },
 
@@ -29,6 +29,7 @@ module.exports = {
         const data = req.body;
         const _id = mongo.id(data._id);
         data.update_date = new Date();
+        data.visited = false;
         delete data._id;
         const leads = await mongo.collection(collection);
         await leads.update({_id}, {$set: data});
