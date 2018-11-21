@@ -20,6 +20,7 @@ module.exports = {
         data.create_by = user._id;
         data.create_date = new Date();
         data.update_date = new Date();
+        data.visited = false;
         const leads = await mongo.collection(collection);
         await leads.insert(data);
         res.json({error: false});
