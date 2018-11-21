@@ -127,7 +127,7 @@ module.exports = {
     },
 
     async convertToClient(req, res) {
-        const values = req.body;
+        const values = req.body.data;
         const _id = mongo.id(values._id);
         delete values._id;
         values.update_date = new Date();
