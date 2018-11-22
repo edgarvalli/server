@@ -17,30 +17,7 @@ module.exports = {
 
         // Format the result for only necesary fields
         
-        // Define array of objects
-        const data = [];
-
-        // get all the objects in result
-        result.forEach(r => {
-
-            // define jobs array
-            const jobs = [];
-
-            // Push all the job name in the result array
-            r.jobs.forEach(j => jobs.push(j.name))
-
-            // define subtotal and get all objects and sum all
-            let subtotal = r.jobs.map( job => parseInt(job.cant) * parseFloat(job.price) ).reduce((a,b) => a + b)
-            
-            // If the user set tax as true subtotal sum the .16 tax
-            if(r.tax) subtotal += subtotal * .16;
-
-            // Sum all the payments
-            const payments = r.payments.reduce( (a,b) => parseFloat(a) + parseFloat(b));
-            
-            // Get the rest of the money
-            const total = subtotal - payments;
-
+        const data = result.map(item => {
             // Get weeks passed
             const today = new Date();
             const date = r.create_date;
@@ -48,17 +25,12 @@ module.exports = {
             (create_date > 1)
                 ? create_date = create_date + ' semanas'
                 : create_date = create_date + ' semana' 
-            
-            // Finish data formated
-            data.push({
-                name: r.client[0].name,
-                cellphone: r.client[0].cellphone,
-                jobs,
-                _id: r._id,
-                total,
-                create_date
-            })
-        });
+
+            item.create_date = create_date;
+            return item;
+        })
+
+       
 
         res.json({error: false, data})
     },
