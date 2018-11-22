@@ -1,4 +1,4 @@
-const mongo = require("../../lib/mongo.client")("tlacrm");
+const mongo = require("../../../lib/mongo.client")("tlacrm");
 const collection = "jobs";
 
 module.exports = {

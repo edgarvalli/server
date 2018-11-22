@@ -1,5 +1,5 @@
-const mongo = require("../../lib/mongo.client")("tlacrm");
-const { nextPage, now } = require("../../lib/func");
+const mongo = require("../../../lib/mongo.client")("tlacrm");
+const { nextPage } = require("../../../lib/func");
 const collection = "leads";
 
 module.exports = {

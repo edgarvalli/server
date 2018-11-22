@@ -1,9 +1,9 @@
-const mongo = require("../../lib/mongo.client")("tlacrm");
+const mongo = require("../../../lib/mongo.client")("tlacrm");
 const fs = require("fs");
 const path = require("path");
 const sharp = require('sharp');
 const bcrypt = require("bcrypt");
-const { createToken } = require('../../lib/func');
+const { createToken } = require('../../../lib/func');
 
 const generateUniqueId = size => {
     let charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",

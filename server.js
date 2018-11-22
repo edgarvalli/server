@@ -1,15 +1,8 @@
-const fs = require("fs");
 const express = require('express');
 const app = express();
 const multer = require("multer");
 
 /***************** Express setup ******************************/
-
-// const options = {
-//     key: fs.readFileSync("certificates/ev-server.key"),
-//     cert: fs.readFileSync("certificates/ev-server.crt"),
-//     ca: fs.readFileSync("certificates/ev-server.csr"),
-// };
 
 // const https = require("https").Server(options, app);
 const http = require("http").Server(app);
@@ -45,6 +38,7 @@ io.on('connection', socket => socket.on('notify', msg => console.log(msg)))
 /***************** WebServices *********************************/
 
 app.use('/ws/series/',require('./webservices/series/series.route'));
+app.use("/ws/tlacrm/", require("./webservices/tlacrm/tlacrm.router"))
 
 
 http.listen(PORT , err => err ? console.log(err)

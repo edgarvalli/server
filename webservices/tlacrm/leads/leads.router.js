@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const lead = require('./leads.controller');
-const { isAuth } = require('../../lib/func');
+const { isAuth } = require("../../../lib/func");
 
 router
     .get('/fetch/:page',isAuth,lead.fetch)
