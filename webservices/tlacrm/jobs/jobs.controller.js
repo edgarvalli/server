@@ -129,7 +129,7 @@ module.exports = {
 
     async formatJob(req, res) {
         const db = await mongo.collection("jobs");
-        const jobs = await db.find();
+        const jobs = await db.find().toArray();
         res.json({error: false, data: {jobs}})
     }
 
