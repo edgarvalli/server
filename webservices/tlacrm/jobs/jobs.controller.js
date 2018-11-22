@@ -36,7 +36,7 @@ module.exports = {
     },
 
     async add(req, res) {
-        const data = req.body;
+        const data = req.body.data;
         const { user } = req.client;
         data.create_by = user._id;
         data.client_id = mongo.id(data.client_id)
@@ -44,7 +44,7 @@ module.exports = {
         data.update_date = new Date();
         data.payment_out = false;
         const c = await mongo.collection(collection);
-        await c.insert(data);
+        await c.insertOne(data);
         res.json({error: false})
     },
 
@@ -85,44 +85,17 @@ module.exports = {
     },
 
     async update(req, res) {
-        const data = req.body;
+        const data = req.body.data;
         const _id = mongo.id(data.id);
         delete data.id;
-        const payments = data.payments.reduce((a,b) => parseFloat(a) + parseFloat(b))
-        const jobs = data.jobs.map(job => parseInt(job.cant) * parseFloat(job.price)).reduce((a,b) => a+b);
+        const payments = data.anticipo
+        const jobs = data.total
         const rest = jobs - payments;
         (rest <= 0) ? data.payment_out = true : data.payment_out = false;
         data.update_date = new Date();
         const c = await mongo.collection(collection);
-        const up = await c.update({_id}, { $set: data });
-        if(up === null) return res.json({error: true, msg:"Hello from the server"})
+        c.update({_id}, { $set: data }).catch(error => res.json({error: true, msg: error}))
         res.json({error: false})
-    },
-
-    async formatJob(req, res) {
-        const db = await mongo.collection("jobs");
-
-        await db.find().forEach(async el => {
-            const jobs = el.jobs.map(item => {
-                if(item.mat) delete item.mat;
-                if(item.cost) delete item.cost;
-                item.precio = 250;
-                item.material = "Danali black"
-                item.trabajo ="Tapizado de sillas"
-                item.cantidad = 6
-                return item;
-            })
-            const anticipo = el.payments.reduce((a,b) => parseFloat(a) + parseFloat(b));
-            const payments = el.payments.map(el => {
-                return {
-                    payment: parseFloat(el),
-                    create_date: new Date()
-                }
-            })
-            await db.updateOne({_id: el._id}, { $set: { jobs, anticipo, payments} })
-        })
-        const jobs = await db.find().toArray();
-        res.json({error: false, data: {jobs}})
     }
 
 }
