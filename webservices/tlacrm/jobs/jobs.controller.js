@@ -112,7 +112,14 @@ module.exports = {
                 item.cantidad = 6
                 return item;
             })
-            await db.updateOne({_id: el._id}, { $set: { jobs} })
+            const anticipo = el.payments.reduce((a,b) => parseFloat(a) + parseFloat(b));
+            const payments = el.payments.map(el => {
+                return {
+                    payment: parseFloat(el),
+                    create_date: new Date()
+                }
+            })
+            await db.updateOne({_id: el._id}, { $set: { jobs, anticipo, payments} })
         })
         const jobs = await db.find().toArray();
         res.json({error: false, data: {jobs}})
