@@ -110,6 +110,7 @@ module.exports = {
                 delete el.cant;
                 delete el.price;
                 delete el.name;
+                console.log(el)
                 return el;
             })
             await db.updateOne({_id: el._id}, { $set: { jobs } })
