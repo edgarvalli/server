@@ -105,7 +105,7 @@ module.exports = {
         await db.find().forEach(async el => {
             const jobs = el.jobs.map(el => {
                 el.cantidad = parseFloat(el.cant);
-                el.precio = parseFloat(e.price);
+                el.precio = parseFloat(el.price);
                 el.trabajo = el.name;
                 delete el.cant;
                 delete el.price;
