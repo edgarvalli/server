@@ -129,13 +129,16 @@ module.exports = {
 
     async formatJob(req, res) {
         const db = await mongo.collection("jobs");
-        const jobs = await db.find().toArray();
-        const jobsF = [];
-        jobs.forEach(el => {
-            const subtotal = el.jobs.map((item) => item.price * item.cant).reduce((a, b) => a + b)
-            jobsF.push(subtotal)
+
+        await db.find().forEach(async el => {
+            const subtotal = el.jobs.map((item) => item.price * item.cant).reduce((a, b) => a + b);
+            let iva  = 0;
+            if(el.tax) iva = subtotal * 0.16;
+            const total = subtotal + iva;
+            await db.updateOne({_id: el._id}, { $set: { subtotal, iva, total } })
         })
-        res.json({error: false, data: {jobsF}})
+        const jobs = await db.find().toArray();
+        res.json({error: false, data: {jobs}})
     }
 
 }
