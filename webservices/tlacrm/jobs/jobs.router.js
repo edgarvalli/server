@@ -4,7 +4,7 @@ const jobClass = require('./jobs.controller');
 const { isAuth } = require("../../../lib/func");
 
 router
-    .get("/fetch/:page",isAuth,jobClass.fetch)
+    .get("/fetch/:page",jobClass.fetch)
     .get("/getone/:id",isAuth,jobClass.getOne)
     // .get("/paid-out/:id",isAuth,jobClass.makePaidOut)
     .post("/update",isAuth,jobClass.update)
