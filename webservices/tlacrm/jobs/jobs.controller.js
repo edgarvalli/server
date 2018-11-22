@@ -27,6 +27,7 @@ module.exports = {
                 : create_date = create_date + ' semana' 
 
             item.create_date = create_date;
+            item.client = item.client[0]
             return item;
         })
 
