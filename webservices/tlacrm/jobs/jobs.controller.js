@@ -103,10 +103,16 @@ module.exports = {
         const db = await mongo.collection("jobs");
 
         await db.find().forEach(async el => {
-            const payments = [];
-            payments.push(el.anticipo);
-            const anticipo = el.anticipo.payment
-            await db.updateOne({_id: el._id}, { $set: { payments, anticipo} })
+            const jobs = el.jobs.map(item => {
+                if(item.mat) delete item.mat;
+                if(item.cost) delete item.cost;
+                item.precio = 250;
+                item.material = "Danali black"
+                item.trabajo ="Tapizado de sillas"
+                item.cantidad = 6
+                return item;
+            })
+            await db.updateOne({_id: el._id}, { $set: { jobs} })
         })
         const jobs = await db.find().toArray();
         res.json({error: false, data: {jobs}})
