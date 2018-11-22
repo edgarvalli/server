@@ -20,7 +20,7 @@ module.exports = {
         const data = result.map(item => {
             // Get weeks passed
             const today = new Date();
-            const date = r.create_date;
+            const date = item.create_date;
             let create_date = Math.ceil(Math.floor((today - date) / 86400000) / 7);
             (create_date > 1)
                 ? create_date = create_date + ' semanas'
