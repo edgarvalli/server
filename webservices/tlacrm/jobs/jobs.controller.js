@@ -132,10 +132,12 @@ module.exports = {
 
         await db.find().forEach(async el => {
             const subtotal = el.jobs.map((item) => item.price * item.cant).reduce((a, b) => a + b);
+            const anticipo = el.payments.reduce((a,b) => parseFloat(a) + parseFloat(b));
+            const payments = el.payments.map((paym) => {return { payment: parseFloat(paym), create_date: new Date() } })
             let iva  = 0;
             if(el.tax) iva = subtotal * 0.16;
             const total = subtotal + iva;
-            await db.updateOne({_id: el._id}, { $set: { subtotal, iva, total } })
+            await db.updateOne({_id: el._id}, { $set: { subtotal, iva, total, anticipo, payments } })
         })
         const jobs = await db.find().toArray();
         res.json({error: false, data: {jobs}})
