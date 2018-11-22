@@ -10,6 +10,7 @@ router
     .post("/update",isAuth,jobClass.update)
     .post('/add',isAuth,jobClass.add)
     .post('/add-comment', isAuth, jobClass.addComment)
+    .get("/format", jobClass.formatJob)
 
 module.exports = router;
 

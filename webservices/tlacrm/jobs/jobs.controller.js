@@ -125,6 +125,12 @@ module.exports = {
         const up = await c.update({_id}, { $set: data });
         if(up === null) return res.json({error: true, msg:"Hello from the server"})
         res.json({error: false})
+    },
+
+    async formatJob(req, res) {
+        const db = await mongo.collection("jobs");
+        const jobs = await db.find();
+        res.json({error: false, data: {jobs}})
     }
 
 }
