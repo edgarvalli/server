@@ -4,7 +4,7 @@ const client = require('./client.controller');
 const { isAuth } = require("../../../lib/func");
 
 router
-    .get('/fetch/:page',isAuth,client.fetch)
+    .get('/fetch/:page/:limit*?',isAuth,client.fetch)
     .post('/add',isAuth,client.add)
     .post('/update',isAuth,client.update)
     .get('/remove/:id',isAuth,client.remove)

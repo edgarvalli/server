@@ -6,7 +6,7 @@ module.exports = {
 
     async fetch(req, res) {
         const page = parseInt(req.params.page);
-        const limit = 50;
+        const limit = req.params.limit || 50;
         const skip =  nextPage(page,limit)
         const sort = { update_date: -1 }
 
