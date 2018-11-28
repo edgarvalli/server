@@ -47,9 +47,8 @@ module.exports = {
         data.payments[0].create_date = new Date();
         data.payment_out = false;
         data.jobs = JSON.parse(data.jobs);
-        console.log(data)
-        // const c = await mongo.collection(collection);
-        // await c.insertOne(data);
+        const c = await mongo.collection(collection);
+        await c.insertOne(data);
         res.json({error: false})
     },
 
