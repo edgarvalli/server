@@ -43,6 +43,7 @@ module.exports = {
         data.client_id = mongo.id(data.client_id)
         data.create_date = new Date();
         data.update_date = new Date();
+        data.payments[0].create_date = new Date();
         data.payment_out = false;
         const c = await mongo.collection(collection);
         await c.insertOne(data);
