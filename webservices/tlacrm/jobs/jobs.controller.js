@@ -90,6 +90,7 @@ module.exports = {
 
     async update(req, res) {
         const data = req.body.data;
+        console.log(data);
         const _id = mongo.id(data._id);
         delete data._id;
         data.client_id = mongo.id(data.client_id);
