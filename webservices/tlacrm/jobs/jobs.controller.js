@@ -94,8 +94,6 @@ module.exports = {
         const _id = mongo.id(data._id);
         delete data._id;
         data.client_id = mongo.id(data.client_id);
-        data.payments = JSON.parse(data.payments);
-        data.jobs = JSON.parse(data.jobs);
         const rest = parseFloat(data.total) - parseFloat(data.anticipo);
         (rest <= 0) ? data.payment_out = true : data.payment_out = false;
         data.update_date = new Date();
