@@ -90,8 +90,8 @@ module.exports = {
 
     async update(req, res) {
         const data = req.body.data;
-        const _id = mongo.id(data.id);
-        delete data.id;
+        const _id = mongo.id(data._id);
+        delete data._id;
         const payments = data.anticipo
         const jobs = data.total
         const rest = jobs - payments;

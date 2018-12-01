@@ -2,7 +2,7 @@ const Router = require('express').Router();
 const c = require('./series.methods');
 
 Router.use(function(req,res, next) {
-    const token = req.header.token;
+    const token = req.headers.token;
     (token !== '=a144sDajAcoimA2MAdjs#==')
         ? res.json({error: false, msg: 'No estas autorizado para usar este webservices'})
         : next();
