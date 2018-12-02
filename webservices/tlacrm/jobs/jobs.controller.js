@@ -78,6 +78,31 @@ module.exports = {
         res.json({error: false, data: result})
     },
 
+    async getAllJobsFromId(req, res) {
+        const id = req.params.id;
+        const _id = mongo.id(id);
+        const db = await mongo.collection("jobs");
+        const result = await db.find({client_id: _id}).toArray();
+        // Format the result for only necesary fields
+        
+        const data = result.map(item => {
+            // Get weeks passed
+            const today = new Date();
+            const date = item.create_date;
+            let create_date = Math.ceil(Math.floor((today - date) / 86400000) / 7);
+            (create_date > 1)
+                ? create_date = create_date + ' semanas'
+                : create_date = create_date + ' semana' 
+
+            item.create_date = create_date;
+            item.client = item.client[0]
+            return item;
+        })
+
+        res.json({error: false, data});
+
+    },
+
     async addComment(req, res) {
         const {id, data} = req.body;
         data.date = new Date();
