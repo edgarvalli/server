@@ -4,6 +4,24 @@ const collection = "clients"
 
 module.exports = {
 
+    clientSchema: (data = {}) => {
+        this.name = data.name || '';
+        this.contact = data.contact || '';
+        this.rfc = data.rfc || '';
+        this.cellphone = data.cellphone || '';
+        this.phone = data.phone || '';
+        this.zip = data.zip || '';
+        this.address = data.address || '';
+        this.hood = data.hood || '';
+        this.county = data.county || '';
+        this.state = data.state || '';
+        this.description = data.description || '';
+        this.create_by = data.create_by || '';
+        this.create_date = data.create_date || new Date();
+        this.update_date = data.update_date || new Date();
+        return this;
+    },
+
     async fetch(req, res) {
         const page = parseInt(req.params.page);
         const limit = req.params.limit || 50;
@@ -26,23 +44,26 @@ module.exports = {
     },
 
     async add(req,res) {
-        const data = req.body.data;
+        const { data } = req.body;
         const { user } = req.client;
-        data.create_by = user._id;
-        data.create_date = new Date();
-        data.update_date = new Date();
+        
+        client.data.create_by = user._id;
+        client.data.create_date = new Date();
+        client.data.update_date = new Date();
+        
         const clients = await mongo.collection(collection);
-        await clients.insert(data);
+        await clients.insert(this.clientSchema(client.data));
         res.json({error: false})
     },
 
     async update(req,res) {
-        const data = req.body.data;
-        const _id = mongo.id(data._id);
-        data.update_date = new Date();
-        delete data._id;
+        const { data } = req.body;
+        const _id = mongo.id(data.id);
+
+        data.client.update_date = new Date();
+        
         const clients = await mongo.collection(collection);
-        await clients.update({_id}, data);
+        await clients.update({_id}, {$set: this.clientSchema(data.client)});
         res.json({error: false})
     },
 
@@ -127,14 +148,15 @@ module.exports = {
     },
 
     async convertToClient(req, res) {
-        const values = req.body.data;
-        const _id = mongo.id(values._id);
-        delete values._id;
-        values.update_date = new Date();
-        values.create_date = new Date();
+        const { data } = req.body;
+        const _id = mongo.id(data.id);
+
+        data.client.update_date = new Date();
+        data.client.create_date = new Date();
+
         const clients = await mongo.collection(collection);
         const leads = await mongo.collection("leads");
-        await clients.insert(values);
+        await clients.insert(this.clientSchema(data.client));
         await leads.remove({_id});
         res.json({error: false});
     },
