@@ -22,8 +22,8 @@ module.exports = {
         
         // Checking if is the same client
         if (
-            token.user.client !== req.headers['user-agent'] ||
-            token.user.skt !== req.headers.skt
+            payload.user.client !== req.headers['user-agent'] ||
+            payload.user.skt !== req.headers.skt
         ) {
             res.json({ error: true, msg: "No es tu token" })
         } else {
