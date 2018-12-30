@@ -115,14 +115,14 @@ module.exports = {
 
     async update(req, res) {
         const { data } = req.body;
-        const _id = mongo.id(data.client._id);
-        delete data.client._id;
-        data.client.client_id = mongo.id(data.client.client_id);
-        const rest = parseFloat(data.client.total) - parseFloat(data.client.anticipo);
-        (rest <= 0) ? data.client.payment_out = true : data.client.payment_out = false;
-        data.client.update_date = new Date();
+        const _id = mongo.id(data.job._id);
+        delete data.job._id;
+        data.job.client_id = mongo.id(data.job.client_id);
+        const rest = parseFloat(data.job.total) - parseFloat(data.job.anticipo);
+        (rest <= 0) ? data.job.payment_out = true : data.job.payment_out = false;
+        data.job.update_date = new Date();
         const c = await mongo.collection(collection);
-        c.updateOne({ _id }, { $set: data.client }).catch(error => res.json({ error: true, msg: error }))
+        c.updateOne({ _id }, { $set: data.job }).catch(error => res.json({ error: true, msg: error }))
         res.json({ error: false })
     }
 
