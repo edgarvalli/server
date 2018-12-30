@@ -27,7 +27,7 @@ module.exports = {
         ) {
             res.json({ error: true, msg: "No es tu token" })
         } else {
-            req.client = token.user;
+            req.client = payload.user;
             next();
         }
     }
