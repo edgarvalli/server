@@ -15,14 +15,14 @@ module.exports = {
         const result = await clients.find({}).skip(skip).limit(limit).sort(sort).toArray();
         const pages = Math.ceil(clientsTotal / limit);
         if (pages < page) return res.json({ complete: true, data: [], msg: "No hay elementos" })
-        res.json({ error: false, data: result })
+        res.json({ error: false, data: { clients: result } })
     },
 
     async getLastTenClients(req, res) {
         const c = await mongo.collection(collection);
         const clients = await c.find({}).limit(10).sort({ _id: -1 }).toArray();
         if (clients.length === 0) return res.json({ error: true, msg: "No hay registros" });
-        res.json({ error: false, data: clients });
+        res.json({ error: false, data: { clients } });
     },
 
     async add(req, res) {
@@ -75,7 +75,7 @@ module.exports = {
         }
         const clients = await mongo.collection(collection);
         const data = await clients.find(query).limit(50).toArray();
-        res.json({ error: false, data });
+        res.json({ error: false, data: { clients: data } });
     },
 
     async fetchJobs(req, res) {
@@ -127,7 +127,7 @@ module.exports = {
             })
         })
 
-        res.json({ error: false, data })
+        res.json({ error: false, data: { jobs: data } })
     },
 
     async convertToClient(req, res) {

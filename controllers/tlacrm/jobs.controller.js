@@ -34,7 +34,7 @@ module.exports = {
 
 
 
-        res.json({ error: false, data })
+        res.json({ error: false, data: { jobs: data } })
     },
 
     async add(req, res) {
@@ -74,7 +74,7 @@ module.exports = {
         update_date = `${day}/${month}/${update_date.getFullYear()}`
         result.update_date = update_date;
         result.create_date = create_date;
-        res.json({ error: false, data: result })
+        res.json({ error: false, data: { job: result } })
     },
 
     async getAllJobsFromId(req, res) {
@@ -97,7 +97,7 @@ module.exports = {
             return item;
         })
 
-        res.json({ error: false, data });
+        res.json({ error: false, data: { jobs: data } });
 
     },
 
