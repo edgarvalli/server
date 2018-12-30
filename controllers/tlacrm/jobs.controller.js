@@ -42,7 +42,6 @@ module.exports = {
         const { user } = req.client;
         data.job.create_by = user._id;
         data.job.client_id = mongo.id(data.client_id);
-        data.job.payments = JSON.parse(data.job.payments);
         data.job.create_date = new Date();
         data.job.update_date = new Date();
         data.job.payments[0].create_date = new Date();
