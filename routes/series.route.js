@@ -1,5 +1,5 @@
 const Router = require('express').Router();
-const c = require('./series.methods');
+const c = require('../controllers/series/series.controller');
 
 Router.use(function(req,res, next) {
     const token = req.headers.token;

@@ -1,4 +1,4 @@
-const mongo = require('../../lib/mongo.client')('own_series');
+const mongo = require('../../helpers/mongo.client')('own_series');
 
 module.exports = {
     

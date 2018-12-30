@@ -1,99 +1,81 @@
-const mongo = require("../../../lib/mongo.client")("tlacrm");
-const { nextPage } = require('../../../lib/func');
+const mongo = require('../../helpers/mongo.client')("tlacrm");
+const { nextPage } = require('../../helpers/func');
 const collection = "clients"
 
 module.exports = {
 
-    clientSchema: (data = {}) => {
-        this.name = data.name || '';
-        this.contact = data.contact || '';
-        this.rfc = data.rfc || '';
-        this.cellphone = data.cellphone || '';
-        this.phone = data.phone || '';
-        this.zip = data.zip || '';
-        this.address = data.address || '';
-        this.hood = data.hood || '';
-        this.county = data.county || '';
-        this.state = data.state || '';
-        this.description = data.description || '';
-        this.create_by = data.create_by || '';
-        this.create_date = data.create_date || new Date();
-        this.update_date = data.update_date || new Date();
-        return this;
-    },
-
     async fetch(req, res) {
         const page = parseInt(req.params.page);
         const limit = req.params.limit || 50;
-        const skip =  nextPage(page,limit)
+        const skip = nextPage(page, limit)
         const sort = { update_date: -1 }
 
         const clients = await mongo.collection(collection);
         const clientsTotal = await clients.find({}).count();
         const result = await clients.find({}).skip(skip).limit(limit).sort(sort).toArray();
-        const pages = Math.ceil(clientsTotal/limit);
-        if(pages < page) return res.json({complete: true, data: [], msg: "No hay elementos"})
-        res.json({error: false, data: result})
+        const pages = Math.ceil(clientsTotal / limit);
+        if (pages < page) return res.json({ complete: true, data: [], msg: "No hay elementos" })
+        res.json({ error: false, data: result })
     },
 
     async getLastTenClients(req, res) {
         const c = await mongo.collection(collection);
-        const clients = await c.find({}).limit(10).sort({_id: -1}).toArray();
-        if(clients.length === 0) return res.json({error: true, msg: "No hay registros"});
-        res.json({error: false, data: clients});
+        const clients = await c.find({}).limit(10).sort({ _id: -1 }).toArray();
+        if (clients.length === 0) return res.json({ error: true, msg: "No hay registros" });
+        res.json({ error: false, data: clients });
     },
 
-    async add(req,res) {
+    async add(req, res) {
         const { data } = req.body;
         const { user } = req.client;
-        
-        client.data.create_by = user._id;
-        client.data.create_date = new Date();
-        client.data.update_date = new Date();
-        
+
+        data.client.create_by = user._id;
+        data.client.create_date = new Date();
+        data.client.update_date = new Date();
+
         const clients = await mongo.collection(collection);
-        await clients.insert(this.clientSchema(client.data));
-        res.json({error: false})
+        await clients.insertOne(data.client).catch(() => res.json({ error: true, msg: 'Ocurrio un error en la base de datos' }));
+        res.json({ error: false })
     },
 
-    async update(req,res) {
+    async update(req, res) {
         const { data } = req.body;
         const _id = mongo.id(data.id);
 
         data.client.update_date = new Date();
-        
+
         const clients = await mongo.collection(collection);
-        await clients.update({_id}, {$set: this.clientSchema(data.client)});
-        res.json({error: false})
+        await clients.updateOne({ _id }, { $set: data.client }).catch(() => res.json({ error: true, msg: 'Ocurrio un error en la base de datos' }));
+        res.json({ error: false })
     },
 
-    async getOne(req,res) {
+    async getOne(req, res) {
         const _id = mongo.id(req.params.id);
         const clients = await mongo.collection(collection);
-        const client = await clients.findOne({_id});
-        res.json({error: false, data: client});
+        const client = await clients.findOne({ _id });
+        res.json({ error: false, data: client });
     },
 
-    async remove(req,res) {
+    async remove(req, res) {
         const _id = mongo.id(req.params.id);
         const clients = await mongo.collection(collection);
-        await clients.remove({_id});
-        res.json({error: false})
+        await clients.remove({ _id });
+        res.json({ error: false })
     },
 
-    async search(req,res) {
+    async search(req, res) {
         const value = req.params.value;
-        const query =  {
+        const query = {
             $or: [
-                {name: new RegExp(value, 'i')},
-                {phone: new RegExp(value, 'i')},
-                {cellphone: new RegExp(value, 'i')},
-                {address: new RegExp(value, 'i')}
+                { name: new RegExp(value, 'i') },
+                { phone: new RegExp(value, 'i') },
+                { cellphone: new RegExp(value, 'i') },
+                { address: new RegExp(value, 'i') }
             ]
         }
         const clients = await mongo.collection(collection);
         const data = await clients.find(query).limit(50).toArray();
-        res.json({error: false, data});
+        res.json({ error: false, data });
     },
 
     async fetchJobs(req, res) {
@@ -101,17 +83,18 @@ module.exports = {
         const _id = mongo.id(id);
         const c = await mongo.collection("jobs");
         const result = await c.aggregate([
-            { $lookup: {
+            {
+                $lookup: {
                     from: "clients",
                     localField: "client_id",
                     foreignField: "_id",
                     as: "client"
                 }
-            },{$match: {client_id: _id} }, { $sort: { create_date: -1 } }
+            }, { $match: { client_id: _id } }, { $sort: { create_date: -1 } }
         ]).toArray();
 
         // Format the result for only necesary fields
-        
+
         // Define array of objects
         const data = [];
 
@@ -124,17 +107,17 @@ module.exports = {
             // Push all the job name in the result array
             let date = r.update_date;
             let day = "0" + date.getDate();
-            if(day.length >= 3) day = date.getDate();
+            if (day.length >= 3) day = date.getDate();
             let month = "0" + (date.getMonth() + 1);
-            if(month.length >= 3) month = (date.getMonth() + 1);
+            if (month.length >= 3) month = (date.getMonth() + 1);
             date = `${day}/${month}/${date.getFullYear()}`
 
             // define subtotal and get all objects and sum all
-            let total = r.jobs.map( job => parseInt(job.cant) * parseFloat(job.price) ).reduce((a,b) => a + b)
-            
+            let total = r.jobs.map(job => parseInt(job.cant) * parseFloat(job.price)).reduce((a, b) => a + b)
+
             // If the user set tax as true subtotal sum the .16 tax
-            if(r.tax) total += total * .16;
-            
+            if (r.tax) total += total * .16;
+
             // Finish data formated
             data.push({
                 name: r.jobs[0].name,
@@ -144,7 +127,7 @@ module.exports = {
             })
         })
 
-        res.json({error: false, data})
+        res.json({ error: false, data })
     },
 
     async convertToClient(req, res) {
@@ -157,7 +140,7 @@ module.exports = {
         const clients = await mongo.collection(collection);
         const leads = await mongo.collection("leads");
         await clients.insert(this.clientSchema(data.client));
-        await leads.remove({_id});
-        res.json({error: false});
+        await leads.remove({ _id });
+        res.json({ error: false });
     },
 }
