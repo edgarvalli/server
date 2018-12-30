@@ -14,7 +14,7 @@ module.exports = {
 
         // Decoding token
         const payload = await decodeToken(token).catch(error => {
-            return res.json({ error: true, tokenExpired: true, msg: error })
+            return res.json({ error: true, tokenExpired: true, msg: `${error.message} at ${new Date(error.expiredAt)}` })
         })
 
         // Check if token is not expired
