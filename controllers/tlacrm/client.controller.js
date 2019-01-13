@@ -12,7 +12,7 @@ module.exports = {
 
         const db = await mongo.collection(collection);
         const clientsTotal = await db.find({}).count();
-        const client = await db.find({}).skip(skip).limit(limit).sort(sort).toArray();
+        const clients = await db.find({}).skip(skip).limit(limit).sort(sort).toArray();
         const pages = Math.ceil(clientsTotal / limit);
         if (pages < page) return res.json({ complete: true, data: [], message: "No hay elementos" })
         res.json({ error: false, data: { clients } })
