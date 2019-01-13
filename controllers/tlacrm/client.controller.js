@@ -41,9 +41,7 @@ module.exports = {
     async update(req, res) {
         const { data } = req.body;
         const _id = mongo.id(data.id);
-
         data.client.update_date = new Date();
-        console.log(data)
         const clients = await mongo.collection(collection);
         await clients.updateOne({ _id }, { $set: data.client }).catch(() => res.json({ error: true, message: 'Ocurrio un error en la base de datos' }));
         res.json({ error: false })
