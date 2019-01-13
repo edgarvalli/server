@@ -20,7 +20,7 @@ module.exports = {
         const image = req.files[0];
         if (image === undefined) return res.json({ error: false, avatar: null });
         const img = image.originalname.split(".");
-        if (img[1] !== 'png' && img[1] !== 'jpg') return res.json({ error: true, msg: 'Formato de imagen no soportado, solo PNG y JPG' })
+        if (img[1] !== 'png' && img[1] !== 'jpg') return res.json({ error: true, message: 'Formato de imagen no soportado, solo PNG y JPG' })
 
         const filename = `${req.client.user._id}.png`;
         const oldDest = path.join(__dirname, `../../${image.path}`)
@@ -79,11 +79,11 @@ module.exports = {
         const users = await mongo.collection("users");
         const user = await users.find({ username: userRequest }).toArray();
 
-        if (user.length <= 0 || user === undefined) return res.json({ error: true, msg: "Usuario no encontrado" })
+        if (user.length <= 0 || user === undefined) return res.json({ error: true, message: "Usuario no encontrado" })
 
         bcrypt.compare(password, user[0].password, (err, success) => {
-            if (err) return res.json({ error: true, msg: 'Ocurrio un error con la libreria' })
-            if (!success) return res.json({ error: true, msg: "Contraseña incorrecta" })
+            if (err) return res.json({ error: true, message: 'Ocurrio un error con la libreria' })
+            if (!success) return res.json({ error: true, message: "Contraseña incorrecta" })
 
             delete user[0].password;
 
@@ -103,7 +103,7 @@ module.exports = {
                 info.persistent = false;
                 token = createToken(info, 1, "days")
             }
-            res.json({ error: false, user: info.user, token, skt, msg: "Token enviado" })
+            res.json({ error: false, user: info.user, token, skt, message: "Token enviado" })
         })
     },
 
@@ -129,10 +129,10 @@ module.exports = {
     async addUser(req, res) {
         const data = req.body;
         const users = await mongo.collection('users');
-        if (data.username === '' || data.password === '') return res.json({ error: true, msg: 'No ingreso usuario o contraseña' });
+        if (data.username === '' || data.password === '') return res.json({ error: true, message: 'No ingreso usuario o contraseña' });
         const salt = bcrypt.genSaltSync(10);
         const password = bcrypt.hashSync(data.password, salt);
-        await users.insert({ username: data.username, password, name: data.name, avatar: 'default.png' }).catch(err => res.json({ error: true, msg: err }));
+        await users.insert({ username: data.username, password, name: data.name, avatar: 'default.png' }).catch(err => res.json({ error: true, message: err }));
         res.json({ error: false })
     },
 

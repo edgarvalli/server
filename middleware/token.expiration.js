@@ -7,22 +7,22 @@ module.exports = async (req, res, next) => {
     const { token } = req.headers;
 
     // Check if token exist
-    if (!token) return res.json({ error: true, msg: "Token no proporcionado" })
+    if (!token) return res.json({ error: true, message: "Token no proporcionado" })
 
     // Decoding token
     const payload = await decodeToken(token).catch(error => {
-        return res.json({ error: true, tokenExpired: true, msg: `${error.message} at ${new Date(error.expiredAt)}` })
+        return res.json({ error: true, tokenExpired: true, message: `${error.message} at ${new Date(error.expiredAt)}` })
     })
 
     // Check if token is not expired
-    if (payload.exp < moment().unix()) return res.json({ error: true, tokenExpired: true, msg: error });
+    if (payload.exp < moment().unix()) return res.json({ error: true, tokenExpired: true, message: error });
 
     // Checking if is the same client
     if (
         payload.user.client !== req.headers['user-agent'] ||
         payload.user.skt !== req.headers.skt
     ) {
-        res.json({ error: true, msg: "No es tu token" })
+        res.json({ error: true, message: "No es tu token" })
     } else {
         req.client = payload.user;
         next();
