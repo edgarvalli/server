@@ -40,14 +40,15 @@ module.exports = {
     async add(req, res) {
         const { data } = req.body;
         const { user } = req.client;
-        data.job.create_by = user._id;
-        data.job.client_id = mongo.id(data.client_id);
-        data.job.create_date = new Date();
-        data.job.update_date = new Date();
-        data.job.payments[0].create_date = new Date();
-        data.job.payment_out = false;
-        const c = await mongo.collection(collection);
-        await c.insertOne(data.job).catch((message) => res.json({ error: true, message }));
+        console.log(data)
+        // data.job.create_by = user._id;
+        // data.job.client_id = mongo.id(data.client_id);
+        // data.job.create_date = new Date();
+        // data.job.update_date = new Date();
+        // data.job.payments[0].create_date = new Date();
+        // data.job.payment_out = false;
+        // const c = await mongo.collection(collection);
+        // await c.insertOne(data.job).catch((message) => res.json({ error: true, message }));
         res.json({ error: false })
     },
 
