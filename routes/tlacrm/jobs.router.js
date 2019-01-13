@@ -11,7 +11,7 @@ router
     .post('/add',tokenExpiration,jobController.add)
     .post('/add-comment', tokenExpiration, jobController.addComment)
     .get("/get-client-jobs/:id", tokenExpiration, jobController.getAllJobsFromId)
-    .get("/set-job-as-payment/:id", tokenExpiration, jobController.setAsPayed)
+    .get("/set-as-paid/:id", tokenExpiration, jobController.setAsPayed)
 
 module.exports = router;
 
