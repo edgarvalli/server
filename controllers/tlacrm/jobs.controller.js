@@ -3,7 +3,7 @@ const collection = "jobs";
 
 module.exports = {
 
-    async fetch(req, res) {
+    async fetch(_, res) {
         const c = await mongo.collection(collection);
         const result = await c.aggregate([
             {
@@ -121,6 +121,25 @@ module.exports = {
         data.job.update_date = new Date();
         const c = await mongo.collection(collection);
         c.updateOne({ _id }, { $set: data.job }).catch(error => res.json({ error: true, msg: error }))
+        res.json({ error: false })
+    },
+
+    async setAsPayed(req, res) {
+        
+        const id = req.params.id;
+        const _id = mongo.id(id);
+        const db = await mongo.collection(collection);
+        const job = await db.findOne({ _id })
+        const payment = { create_date: new Date() }
+
+        const paymentTotal = job.payments.map(el => parseFloat(el.payment)).reduce((a, b) => a + b);
+        payment.payment = parseFloat(job.total) - paymentTotal;
+
+        await db.updateOne({ _id }, {
+            $set: { "payment_out": true, },
+            $push: { payments: payment }
+        }).catch((msg) => res.json({ error: true, msg }));
+
         res.json({ error: false })
     }
 
