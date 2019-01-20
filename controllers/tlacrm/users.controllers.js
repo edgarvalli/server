@@ -3,16 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const sharp = require('sharp');
 const bcrypt = require("bcrypt");
-const { createToken } = require('../../helpers/handletoken');
-
-const generateUniqueId = size => {
-    let charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-        retVal = "";
-    for (var i = 0, n = charset.length; i < size; ++i) {
-        retVal += charset.charAt(Math.floor(Math.random() * n));
-    }
-    return retVal;
-}
+const { generateToken } = require('../../helpers/handletoken');
 
 module.exports = {
 
@@ -96,7 +87,8 @@ module.exports = {
                 user,
                 client: req.headers['user-agent']
             }
-            let token = createToken(info, 1, "days");
+
+            const token = generateToken(1, info);
             
             res.json({ error: false, user, token, message: "Token enviado" })
         })

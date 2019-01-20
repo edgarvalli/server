@@ -9,7 +9,15 @@ module.exports = {
     }),
     generateToken(exp = 2, user) {
         const payload = { user };
-        payload.exp = moment().add(exp, 'days').unix();
+        payload.exp = moment().add(exp, "minute").unix();
         return jwt.sign(payload, secret)
+    },
+    generateUniqueId = size => {
+        let charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            retVal = "";
+        for (var i = 0, n = charset.length; i < size; ++i) {
+            retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return retVal;
     }
 }
