@@ -7,8 +7,8 @@ module.exports = {
             error ? reject(error) : resolve(decoded)
         })
     }),
-    generateToken(exp = 2, user) {
-        const payload = { user };
+    generateToken(exp = 2, payload) {
+        const payload = payload;
         payload.exp = moment().add(exp, "minute").unix();
         return jwt.sign(payload, secret)
     },

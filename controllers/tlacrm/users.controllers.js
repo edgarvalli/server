@@ -83,12 +83,12 @@ module.exports = {
 
             // const skt = generateUniqueId(70);
 
-            const info = {
+            const payload = {
                 user,
                 client: req.headers['user-agent']
             }
 
-            const token = generateToken(1, info);
+            const token = generateToken(1, payload);
             
             res.json({ error: false, user, token, message: "Token enviado" })
         })
