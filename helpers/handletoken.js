@@ -12,7 +12,7 @@ module.exports = {
         payload.exp = moment().add(exp, "minute").unix();
         return jwt.sign(payload, secret)
     },
-    generateUniqueId = size => {
+    generateUniqueId(size) {
         let charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
             retVal = "";
         for (var i = 0, n = charset.length; i < size; ++i) {
