@@ -18,7 +18,7 @@ module.exports = async (req, res, next) => {
     if (payload.exp < moment().unix()) return res.json({ error: true, tokenExpired: true, message: error });
 
     // Checking if is the same client
-    if (payload.user.client !== req.headers['user-agent']) {
+    if (payload.client !== req.headers['user-agent']) {
         res.json({ error: true, message: "No es tu token" })
     } else {
         req.client = payload.user;
