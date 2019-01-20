@@ -74,36 +74,31 @@ module.exports = {
     },
 
     async login(req, res) {
-        const { persistent = false, username, password } = req.body;
+        const { username, password } = req.body;
         const userRequest = username.toLowerCase();
         const users = await mongo.collection("users");
-        const user = await users.find({ username: userRequest }).toArray();
+        const user = await users.findOne({ username: userRequest })
+        // const user = await users.find({ username: userRequest }).toArray();
 
-        if (user.length <= 0 || user === undefined) return res.json({ error: true, message: "Usuario no encontrado" })
+        if(!user) return res.json({ error: true, message: "Usuario no encontrado" });
 
-        bcrypt.compare(password, user[0].password, (err, success) => {
+        // if (user.length <= 0 || user === undefined) return res.json({ error: true, message: "Usuario no encontrado" })
+
+        bcrypt.compare(password, user.password, (err, success) => {
             if (err) return res.json({ error: true, message: 'Ocurrio un error con la libreria' })
             if (!success) return res.json({ error: true, message: "Contraseña incorrecta" })
 
-            delete user[0].password;
+            delete user.password;
 
-            const skt = generateUniqueId(70);
+            // const skt = generateUniqueId(70);
 
             const info = {
-                user: user[0],
-                skt,
+                user,
                 client: req.headers['user-agent']
             }
-            let token;
-
-            if (persistent) {
-                info.persistent = true
-                token = createToken(info, 100, "years")
-            } else {
-                info.persistent = false;
-                token = createToken(info, 1, "days")
-            }
-            res.json({ error: false, user: info.user, token, skt, message: "Token enviado" })
+            let token = createToken(info, 1, "days");
+            
+            res.json({ error: false, user, token, message: "Token enviado" })
         })
     },
 
