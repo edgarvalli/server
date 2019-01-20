@@ -5,7 +5,6 @@ const collection = "clients"
 module.exports = {
 
     async fetch(req, res) {
-        console.log("here")
         const page = parseInt(req.params.page);
         const limit = req.params.limit || 50;
         const skip = nextPage(page, limit)
