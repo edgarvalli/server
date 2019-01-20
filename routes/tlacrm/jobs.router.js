@@ -4,7 +4,7 @@ const jobController = require('../../controllers/tlacrm/jobs.controller');
 const { tokenExpiration } = require("../../middleware");
 
 router
-    .get("/fetch/:page",jobController.fetch)
+    .get("/fetch/:page",tokenExpiration,jobController.fetch)
     .get("/getone/:id",tokenExpiration,jobController.getOne)
     // .get("/paid-out/:id",isAuth,jobController.makePaidOut)
     .post("/update",tokenExpiration,jobController.update)

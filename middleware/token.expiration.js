@@ -2,32 +2,27 @@ const moment = require('moment');
 const { decodeToken } = require('../helpers/handletoken');
 
 module.exports = async (req, res, next) => {
+    
+    // Get token and skt from client
+    const { token } = req.headers;
 
-    try {
-        // Get token and skt from client
-        const { token } = req.headers;
+    // Check if token exist
+    if (!token) return res.json({ error: true, message: "Token no proporcionado" })
 
-        // Check if token exist
-        if (!token) return res.json({ error: true, message: "Token no proporcionado" })
+    // Decoding token
+    const payload = await decodeToken(token).catch(error => {
+        return res.json({ error: true, tokenExpired: true, message: `${error.message} at ${new Date(error.expiredAt)}` })
+    })
 
-        // Decoding token
-        const payload = await decodeToken(token).catch(error => {
-            return res.json({ error: true, tokenExpired: true, message: `${error.message} at ${new Date(error.expiredAt)}` })
-        })
+    // Check if token is not expired
+    if (payload.exp < moment().unix()) return res.json({ error: true, tokenExpired: true, message: error });
 
-        // Check if token is not expired
-        if (payload.exp < moment().unix()) return res.json({ error: true, tokenExpired: true, message: error });
-
-        // Checking if is the same client
-        if (payload.client !== req.headers['user-agent']) {
-            return res.json({ error: true, message: "No es tu token" })
-        } else {
-            req.client = payload.user;
-            next();
-        }
-    } catch(error) {
-        console.log(error)
-        res.json({ error: true, message: "No es tu token" })
+    // Checking if is the same client
+    if (payload.client !== req.headers['user-agent']) {
+        return res.json({ error: true, message: "No es tu token" })
+    } else {
+        req.client = payload.user;
+        next();
     }
 
 }
