@@ -19,6 +19,7 @@ module.exports = async (req, res, next) => {
 
     // Checking if is the same client
     if (payload.client !== req.headers['user-agent']) {
+        console.log(payload)
         res.json({ error: true, message: "No es tu token" })
     } else {
         req.client = payload.user;
