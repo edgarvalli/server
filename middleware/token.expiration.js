@@ -2,7 +2,7 @@ const moment = require('moment');
 const { decodeToken } = require('../helpers/handletoken');
 
 module.exports = async (req, res, next) => {
-
+    
     // Get token and skt from client
     const { token } = req.headers;
 
