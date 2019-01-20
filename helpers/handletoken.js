@@ -8,7 +8,6 @@ module.exports = {
         })
     }),
     generateToken(exp = 2, payload) {
-        const payload = payload;
         payload.exp = moment().add(exp, "minute").unix();
         return jwt.sign(payload, secret)
     },
