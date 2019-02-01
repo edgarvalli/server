@@ -19,17 +19,7 @@ module.exports = {
 
         // Check if token is not expired
         if (payload.exp < moment().unix()) return res.json({ error: true, tokenExpired: true, msg: error });
-        
-        // Checking if is the same client
-        if (
-            payload.user.client !== req.headers['user-agent'] ||
-            payload.user.skt !== req.headers.skt
-        ) {
-            res.json({ error: true, msg: "No es tu token" })
-        } else {
-            req.client = payload.user;
-            next();
-        }
+        next();
     }
 
 }

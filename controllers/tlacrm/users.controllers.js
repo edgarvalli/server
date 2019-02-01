@@ -5,15 +5,6 @@ const sharp = require('sharp');
 const bcrypt = require("bcrypt");
 const { createToken } = require('../../helpers/handletoken');
 
-const generateUniqueId = size => {
-    let charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-        retVal = "";
-    for (var i = 0, n = charset.length; i < size; ++i) {
-        retVal += charset.charAt(Math.floor(Math.random() * n));
-    }
-    return retVal;
-}
-
 module.exports = {
 
     async changeAvatar(req, res) {
@@ -87,22 +78,10 @@ module.exports = {
 
             delete user[0].password;
 
-            const skt = generateUniqueId(70);
-
             const info = {
-                user: user[0],
-                skt,
-                client: req.headers['user-agent']
+                user: user[0]
             }
-            let token;
-
-            if (persistent) {
-                info.persistent = true
-                token = createToken(info, 100, "years")
-            } else {
-                info.persistent = false;
-                token = createToken(info, 1, "days")
-            }
+            const token = createToken({ user: user[0] });
             res.json({ error: false, user: info.user, token, skt, msg: "Token enviado" })
         })
     },
