@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const sharp = require('sharp');
 const bcrypt = require("bcrypt");
-const { createToken } = require('../../helpers/handletoken');
+const { generateToken } = require('../../helpers/handletoken');
 
 module.exports = {
 
@@ -81,7 +81,7 @@ module.exports = {
             const info = {
                 user: user[0]
             }
-            const token = createToken({ user: user[0] });
+            const token = generateToken({ user: user[0] });
             res.json({ error: false, user: info.user, token, skt, msg: "Token enviado" })
         })
     },
