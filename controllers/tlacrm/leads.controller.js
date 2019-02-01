@@ -10,7 +10,7 @@ module.exports = {
         const leads = await mongo.collection(collection);
         const data = await leads.find({ visited: false }).skip(nextPage(page, limit)).limit(limit).sort({ update_date: -1 }).toArray();
         const pages = Math.ceil(data.length / limit);
-        if (pages < page) return res.send({ complete: true, data: [], msg: "No hay elements" })
+        if (pages < page) return res.send({ complete: true, data: [], message: "No hay elements" })
         res.json({ error: false, data: { leads: data }, complete: false })
     },
 
@@ -26,7 +26,7 @@ module.exports = {
 
         const leads = await mongo.collection(collection);
         await leads.insertOne(this.leadSchema(data.lead))
-            .catch((error) => res.json({ error: true, msg: `Ocurrio un error al crear prospecto  error: ${error}` }));
+            .catch((error) => res.json({ error: true, message: `Ocurrio un error al crear prospecto  error: ${error}` }));
         res.json({ error: false });
     },
 
@@ -35,21 +35,21 @@ module.exports = {
         const _id = mongo.id(data.id);
         data.lead.update_date = new Date();
         const leads = await mongo.collection(collection);
-        await leads.updateOne({ _id }, { $set: this.leadSchema(data.lead) });
+        await leads.updateOne({ _id }, { $set: this.leadSchema(data.lead) }).catch((message) => res.json({ error: true, message }));
         res.json({ error: false })
     },
 
     async getOne(req, res) {
         const _id = mongo.id(req.params.id);
         const leads = await mongo.collection(collection);
-        const lead = await leads.findOne({ _id });
+        const lead = await leads.findOne({ _id }).catch((message) => res.json({ error: true, message }));
         res.json({ error: false, data: { lead } });
     },
 
     async remove(req, res) {
         const _id = mongo.id(req.params.id);
         const leads = await mongo.collection(collection);
-        await leads.remove({ _id });
+        await leads.remove({ _id }).catch((message) => res.json({ error: true, message }));
         res.json({ error: false });
     },
 

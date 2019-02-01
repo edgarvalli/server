@@ -3,7 +3,7 @@ const collection = "jobs";
 
 module.exports = {
 
-    async fetch(req, res) {
+    async fetch(_, res) {
         const c = await mongo.collection(collection);
         const result = await c.aggregate([
             {
@@ -41,13 +41,13 @@ module.exports = {
         const { data } = req.body;
         const { user } = req.client;
         data.job.create_by = user._id;
-        data.job.client_id = mongo.id(data.client_id);
+        data.job.client_id = mongo.id(data.job.client_id);
         data.job.create_date = new Date();
         data.job.update_date = new Date();
         data.job.payments[0].create_date = new Date();
         data.job.payment_out = false;
         const c = await mongo.collection(collection);
-        await c.insertOne(data.job);
+        await c.insertOne(data.job).catch((message) => res.json({ error: true, message }));
         res.json({ error: false })
     },
 
@@ -55,7 +55,7 @@ module.exports = {
         const { id } = req.params;
         const _id = mongo.id(id);
         const c = await mongo.collection(collection);
-        const result = await c.findOne({ _id });
+        const result = await c.findOne({ _id }).catch((message) => res.json({ error: true, message }));
         if (result === null) return res.json({ error: true, msg: "No se encontro registro" })
         // Push all the job name in the result array
         let create_date = result.create_date;
@@ -107,7 +107,7 @@ module.exports = {
         const _id = mongo.id(id);
         const c = await mongo.collection(collection);
         await c.updateOne({ _id }, { $push: { comments: data } });
-        const job = await c.findOne({ _id });
+        const job = await c.findOne({ _id }).catch((message) => res.json({ error: true, message }));
         res.json({ error: false, comments: job.comments });
     },
 
@@ -120,7 +120,26 @@ module.exports = {
         (rest <= 0) ? data.job.payment_out = true : data.job.payment_out = false;
         data.job.update_date = new Date();
         const c = await mongo.collection(collection);
-        c.updateOne({ _id }, { $set: data.job }).catch(error => res.json({ error: true, msg: error }))
+        c.updateOne({ _id }, { $set: data.job }).catch(error => res.json({ error: true, message: error }))
+        res.json({ error: false })
+    },
+
+    async setAsPayed(req, res) {
+
+        const id = req.params.id;
+        const _id = mongo.id(id);
+        const db = await mongo.collection(collection);
+        const job = await db.findOne({ _id })
+        const payment = { create_date: new Date(), ajuste: true }
+
+        const paymentTotal = job.payments.map(el => parseFloat(el.payment)).reduce((a, b) => a + b);
+        payment.payment = parseFloat(job.total) - paymentTotal;
+
+        await db.updateOne({ _id }, {
+            $set: { "payment_out": true, },
+            $push: { payments: payment }
+        }).catch((msg) => res.json({ error: true, msg }));
+
         res.json({ error: false })
     }
 

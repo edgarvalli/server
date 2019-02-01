@@ -10,18 +10,18 @@ module.exports = {
         const skip = nextPage(page, limit)
         const sort = { update_date: -1 }
 
-        const clients = await mongo.collection(collection);
-        const clientsTotal = await clients.find({}).count();
-        const result = await clients.find({}).skip(skip).limit(limit).sort(sort).toArray();
+        const db = await mongo.collection(collection);
+        const clientsTotal = await db.find({}).count();
+        const clients = await db.find({}).skip(skip).limit(limit).sort(sort).toArray();
         const pages = Math.ceil(clientsTotal / limit);
-        if (pages < page) return res.json({ complete: true, data: [], msg: "No hay elementos" })
-        res.json({ error: false, data: { clients: result } })
+        if (pages < page) return res.json({ complete: true, data: [], message: "No hay elementos" })
+        res.json({ error: false, data: { clients } })
     },
 
-    async getLastTenClients(req, res) {
+    async getLastTenClients(_, res) {
         const c = await mongo.collection(collection);
         const clients = await c.find({}).limit(10).sort({ _id: -1 }).toArray();
-        if (clients.length === 0) return res.json({ error: true, msg: "No hay registros" });
+        if (clients.length === 0) return res.json({ error: true, message: "No hay registros" });
         res.json({ error: false, data: { clients } });
     },
 
@@ -34,18 +34,16 @@ module.exports = {
         data.client.update_date = new Date();
 
         const clients = await mongo.collection(collection);
-        await clients.insertOne(data.client).catch(() => res.json({ error: true, msg: 'Ocurrio un error en la base de datos' }));
+        await clients.insertOne(data.client).catch(() => res.json({ error: true, message: 'Ocurrio un error en la base de datos' }));
         res.json({ error: false })
     },
 
     async update(req, res) {
         const { data } = req.body;
         const _id = mongo.id(data.id);
-
         data.client.update_date = new Date();
-
         const clients = await mongo.collection(collection);
-        await clients.updateOne({ _id }, { $set: data.client }).catch(() => res.json({ error: true, msg: 'Ocurrio un error en la base de datos' }));
+        await clients.updateOne({ _id }, { $set: data.client }).catch(() => res.json({ error: true, message: 'Ocurrio un error en la base de datos' }));
         res.json({ error: false })
     },
 
