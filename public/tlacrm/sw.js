@@ -14,5 +14,5 @@ self.addEventListener('install', function(ev){
 });
 
 self.addEventListener('fetch', function(ev) {
-    console.log(ev)
+    
 })
