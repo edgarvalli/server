@@ -65,7 +65,7 @@ module.exports = {
     },
 
     async login(req, res) {
-        const { persistent = false, username, password } = req.body;
+        const { username, password } = req.body;
         const userRequest = username.toLowerCase();
         const users = await mongo.collection("users");
         const user = await users.find({ username: userRequest }).toArray();

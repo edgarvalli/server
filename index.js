@@ -5,7 +5,10 @@ const PORT = 3080;
 app.get('/', (_, res) => res.send("Express Working"))
 require("./routes")(app);
 
-app.listen(PORT, (error) => {
+// Socket
+const server = require("./socket")(app);
+
+server.listen(PORT, (error) => {
     if (error) return console.error(`Ocurrio un error: ${error}`);
     console.log(`Server running on port ${PORT}`);
 })
