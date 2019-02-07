@@ -77,7 +77,7 @@ module.exports = {
             if (!success) return res.json({ error: true, msg: "Contraseña incorrecta" })
 
             delete user[0].password;
-            const token = generateToken({ user: user[0] });
+            const token = generateToken(user[0]);
             res.json({ error: false, user: user[0], token, msg: "Token enviado" })
         })
     },
