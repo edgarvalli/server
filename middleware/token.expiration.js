@@ -17,8 +17,7 @@ module.exports = async (req, res, next) => {
     // Check if token is not expired
     if (payload.exp < moment().unix()) return res.json({ error: true, tokenExpired: true, message: error });
 
-    req.client = payload;
-    console.log(payload)
+    req.client = payload.user;
     next();
 
 }
