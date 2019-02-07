@@ -28,12 +28,13 @@ module.exports = {
     async add(req, res) {
         const data = req.body;
         const user = req.client;
-        data.client.create_by = user._id;
-        data.client.create_date = new Date();
-        data.client.update_date = new Date();
+        console.log(data)
+        // data.client.create_by = user._id;
+        // data.client.create_date = new Date();
+        // data.client.update_date = new Date();
 
-        const clients = await mongo.collection(collection);
-        await clients.insertOne(data.client).catch(() => res.json({ error: true, message: 'Ocurrio un error en la base de datos' }));
+        // const clients = await mongo.collection(collection);
+        // await clients.insertOne(data.client).catch(() => res.json({ error: true, message: 'Ocurrio un error en la base de datos' }));
         res.json({ error: false })
     },
 
