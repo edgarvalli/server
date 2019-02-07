@@ -28,7 +28,7 @@ module.exports = {
     async add(req, res) {
         const data = req.body;
         const { user } = req.client;
-
+        console.log(req.client)
         data.client.create_by = user._id;
         data.client.create_date = new Date();
         data.client.update_date = new Date();
