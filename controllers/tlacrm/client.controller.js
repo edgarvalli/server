@@ -55,8 +55,14 @@ module.exports = {
 
     async remove(req, res) {
         const _id = mongo.id(req.params.id);
+
         const clients = await mongo.collection(collection);
+        const budgets = await mongo.collection('budgets');
+        const jobs = await mongo.collection('jobs');
+
         await clients.remove({ _id });
+        await budgets.remove({clientId: req.params.id});
+        await jobs.remove({ clientId: req.params.id })
         res.json({ error: false })
     },
 
