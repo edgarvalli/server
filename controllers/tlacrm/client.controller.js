@@ -26,7 +26,7 @@ module.exports = {
     },
 
     async add(req, res) {
-        const { data } = req.body;
+        const data = req.body;
         const { user } = req.client;
 
         data.client.create_by = user._id;
@@ -39,7 +39,7 @@ module.exports = {
     },
 
     async update(req, res) {
-        const { data } = req.body;
+        const data = req.body;
         const _id = mongo.id(data.id);
         data.client.update_date = new Date();
         const clients = await mongo.collection(collection);
