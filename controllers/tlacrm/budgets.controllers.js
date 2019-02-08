@@ -17,7 +17,7 @@ module.exports = {
         const data = req.body;
         data.createDate = new Date();
         data.updateDate = new Date();
-        data.createBy = req.user._id
+        data.createBy = req.client._id
 
         const db = await mongo.collection(collection);
         const budget = await db.insertOne(data);
