@@ -22,7 +22,9 @@ module.exports = {
             data.createBy = req.user._id
 
             const db = await mongo.collection(collection);
-            const budget = await db.insertOne(data);
+            const budget = await db.insertOne(data).catch(message => {
+                res.json({ error: true, message })
+            });
             res.json({ error: false, data: { budget } })
 
         } catch (message) {
