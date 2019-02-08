@@ -7,7 +7,7 @@ const { tokenExpiration } = require("../../middleware");
 router
     .post('/add', tokenExpiration, controller.add)
     .post('/update', tokenExpiration, controller.update)
-    .get('/fetch', tokenExpiration, controller.fetch)
+    .get('/fetch/:page', tokenExpiration, controller.fetch)
     .get('/getone', tokenExpiration, controller.getOne)
     .get('/remove', tokenExpiration, controller.remove)
     .get('/search', tokenExpiration, controller.search)
