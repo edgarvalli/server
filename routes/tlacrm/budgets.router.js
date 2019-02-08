@@ -5,11 +5,11 @@ const { tokenExpiration } = require("../../middleware");
 
 
 router
-    .post('/add', controller.add)
-    .post('/update', controller.update)
-    .get('/fetch', controller.fetch)
-    .get('/getone', controller.getOne)
-    .get('/remove', controller.remove)
-    .get('/search', controller.search)
+    .post('/add', tokenExpiration, controller.add)
+    .post('/update', tokenExpiration, controller.update)
+    .get('/fetch', tokenExpiration, controller.fetch)
+    .get('/getone', tokenExpiration, controller.getOne)
+    .get('/remove', tokenExpiration, controller.remove)
+    .get('/search', tokenExpiration, controller.search)
 
 module.exports = router;
