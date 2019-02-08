@@ -14,20 +14,14 @@ module.exports = {
     },
 
     async add(req, res) {
-        try {
+        const data = req.body;
+        data.createDate = new Date();
+        data.updateDate = new Date();
+        data.createBy = req.user._id
 
-            const data = req.body;
-            data.createDate = new Date();
-            data.updateDate = new Date();
-            data.createBy = req.user._id
-
-            const db = await mongo.collection(collection);
-            const budget = await db.insertOne(data);
-            res.json({ error: false, data: { budget } })
-
-        } catch (message) {
-            res.json({ error: true, message })
-        }
+        const db = await mongo.collection(collection);
+        const budget = await db.insertOne(data);
+        res.json({ error: false, data: { budget } })
     },
 
     async update(req, res) {
