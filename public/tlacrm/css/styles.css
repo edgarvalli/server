@@ -19,6 +19,8 @@ code {
     monospace;
 }
 
+.margin-top-1 { margin-top: 1rem; }
+
 .login-container {
   position: relative;
   display: flex;
@@ -123,3 +125,5 @@ code {
   background: rgba(255, 255, 255, 0.5);
   z-index: 100;
 }
+
+.active:active { background: #e1e1e1; transition: all .5s; }
