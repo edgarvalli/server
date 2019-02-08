@@ -8,7 +8,7 @@ module.exports = {
         const page = parseInt(req.params.page);
         const limit = req.params.limit || 50;
         const skip = nextPage(page, limit)
-        const sort = { update_date: -1 }
+        const sort = { updateDate: -1 }
 
         const db = await mongo.collection(collection);
         const clientsTotal = await db.find({}).count();
@@ -28,9 +28,9 @@ module.exports = {
     async add(req, res) {
         const data = req.body;
         const user = req.client;
-        data.create_by = user._id;
-        data.create_date = new Date();
-        data.update_date = new Date();
+        data.createBy = user._id;
+        data.createDate = new Date();
+        data.updateDate = new Date();
 
         const clients = await mongo.collection(collection);
         const client = await clients.insertOne(data).catch(() => res.json({ error: true, message: 'Ocurrio un error en la base de datos' }));
@@ -40,7 +40,7 @@ module.exports = {
     async update(req, res) {
         const data = req.body;
         const _id = mongo.id(data.id);
-        data.client.update_date = new Date();
+        data.client.updateDate = new Date();
         const clients = await mongo.collection(collection);
         await clients.updateOne({ _id }, { $set: data.client }).catch(() => res.json({ error: true, message: 'Ocurrio un error en la base de datos' }));
         res.json({ error: false })
