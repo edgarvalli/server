@@ -34,9 +34,9 @@ module.exports = {
             budget.updateDate = new Date();
 
             const db = await mongo.collection(collection);
-            await db.updateOne({ _id }, { $set: { budget } });
+            const budget = await db.updateOne({ _id }, { $set: { budget } });
 
-            res.json({ error: false })
+            res.json({ error: false, data: { budget } })
 
         } catch (message) {
             res.json({ error: true, message })
