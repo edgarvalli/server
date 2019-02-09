@@ -8,8 +8,8 @@ router
     .post('/add', tokenExpiration, controller.add)
     .post('/update', tokenExpiration, controller.update)
     .get('/fetch/:page', tokenExpiration, controller.fetch)
-    .get('/getone', tokenExpiration, controller.getOne)
-    .get('/remove', tokenExpiration, controller.remove)
-    .get('/search', tokenExpiration, controller.search)
+    .get('/getone/:id', tokenExpiration, controller.getOne)
+    .get('/remove/:id', tokenExpiration, controller.remove)
+    .get('/search/:value', tokenExpiration, controller.search)
 
 module.exports = router;
