@@ -25,23 +25,17 @@ module.exports = {
     },
 
     async update(req, res) {
-        try {
+        const data = req.body;
+        console.log(data)
+        const _id = mongo.id(data.id);
+        const budget = data.budget;
 
-            const data = req.body;
-            console.log(data)
-            const _id = mongo.id(data.id);
-            const budget = data.budget;
+        budget.updateDate = new Date();
 
-            budget.updateDate = new Date();
+        const db = await mongo.collection(collection);
+        await db.updateOne({ _id }, budget);
 
-            const db = await mongo.collection(collection);
-            await db.updateOne({ _id }, budget);
-
-            res.json({ error: false })
-
-        } catch (message) {
-            res.json({ error: true, message })
-        }
+        res.json({ error: false })
     },
 
     async remove(req, res) {
