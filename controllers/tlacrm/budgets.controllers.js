@@ -29,12 +29,12 @@ module.exports = {
 
             const data = req.body;
             const _id = mongo.id(data.id);
+            
             const budget = data.budget;
-
             budget.updateDate = new Date();
 
             const db = await mongo.collection(collection);
-            const _budget = await db.updateOne({ _id }, { $set: { budget } });
+            const _budget = await db.updateOne({ _id }, { $set: budget });
 
             res.json({ error: false, data: { budget: _budget } })
 
