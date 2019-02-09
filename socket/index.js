@@ -23,6 +23,8 @@ module.exports = app => {
                 budget.updateDate = new Date(); 
 
                 const db = await mongo.collection(collection);
+                await db.updateOne({ _id }, { $set: budget });
+                
             } catch (message) {
                 console.log(message)
             }
