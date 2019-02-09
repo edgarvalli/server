@@ -24,7 +24,10 @@ module.exports = app => {
 
                 const db = await mongo.collection(collection);
                 await db.updateOne({ _id }, { $set: budget });
-                
+
+                budget._id = data.id;
+                socket.emit('add_comment', budget)
+
             } catch (message) {
                 console.log(message)
             }
