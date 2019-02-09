@@ -11,7 +11,7 @@ module.exports = app => {
             console.log(data)
         })
 
-        socket.on('client_typing', (data) => {
+        socket.broadcast.on('client_typing', (data) => {
             socket.emit('client_typing', data)
         })
 
