@@ -8,8 +8,9 @@ module.exports = app => {
             console.log(data)
         })
 
-        socket.on('client_typing', data => {
-            console.log(data);
+        socket.on('client_typing', (data) => {
+            socket.emit('client_typing', data)
+
         })
     })
 
