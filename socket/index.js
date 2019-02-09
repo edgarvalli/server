@@ -1,5 +1,5 @@
 const mongo =  require('../helpers/mongo.client')('tlacrm');
-
+const collection = 'budgets';
 module.exports = app => {
     const http = require("http").Server(app);
     const io = require("socket.io")(http);
