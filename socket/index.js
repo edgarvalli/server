@@ -24,7 +24,6 @@ module.exports = app => {
 
                 const db = await mongo.collection(collection);
                 const d = await db.updateOne({ _id }, { $set: budget });
-                console.log(d)
             } catch (message) {
                 console.log(message)
             }
