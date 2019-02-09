@@ -7,6 +7,10 @@ module.exports = app => {
         socket.on("add_child", data => {
             console.log(data)
         })
+
+        socket.on('client_typing', data => {
+            console.log(data);
+        })
     })
 
 
