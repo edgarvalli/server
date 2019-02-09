@@ -27,7 +27,7 @@ module.exports = {
     async update(req, res) {
         try {
 
-            const { data } = req.body;
+            const data = req.body;
             const _id = mongo.id(data.id);
             const budget = data.budget;
 
