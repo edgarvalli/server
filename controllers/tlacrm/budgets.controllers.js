@@ -28,6 +28,7 @@ module.exports = {
         try {
 
             const data = req.body;
+            console.log(data)
             const _id = mongo.id(data.id);
             const budget = data.budget;
 
