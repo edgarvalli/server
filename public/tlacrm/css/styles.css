@@ -148,7 +148,7 @@ button { cursor: pointer; }
 
 .add-budget:focus { outline: none; }
 
-.comments { background: #ffffff; }
+.comments { background: #ffffff; padding-bottom: 5rem;}
 
 .main-comment {
   padding: 1rem;
