@@ -17,6 +17,7 @@ module.exports = {
         const data = req.body;
         data.createDate = new Date();
         data.updateDate = new Date();
+        data.visited = false;
         data.createBy = req.client._id
 
         const db = await mongo.collection(collection);
@@ -29,7 +30,7 @@ module.exports = {
 
             const data = req.body;
             const _id = mongo.id(data.id);
-            
+
             const budget = data.budget;
             budget.updateDate = new Date();
 
