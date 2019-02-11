@@ -84,8 +84,7 @@ module.exports = {
     },
 
     async uploadFiles(req, res) {
-        console.log(req.headers.data);
-        console.log(req.files)
+        console.log(req.file)
         res.json({error: false})
     }
 
