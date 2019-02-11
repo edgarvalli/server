@@ -83,7 +83,7 @@ module.exports = {
         }
     },
 
-    async addImages(req, res) {
+    async uploadFiles(req, res) {
         console.log(req.headers);
         console.log(req.files)
         res.json({error: false})
