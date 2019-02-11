@@ -11,5 +11,6 @@ router
     .get('/getone/:id', tokenExpiration, controller.getOne)
     .get('/remove/:id', tokenExpiration, controller.remove)
     .get('/search/:value', tokenExpiration, controller.search)
+    .post('/addimages/', tokenExpiration, controller.addImages)
 
 module.exports = router;

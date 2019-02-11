@@ -81,6 +81,12 @@ module.exports = {
         } catch (message) {
             res.json({ error: true, message })
         }
+    },
+
+    async addImages(req, res) {
+        console.log(req.headers);
+        console.log(req.files)
+        res.json({error: false})
     }
 
 }

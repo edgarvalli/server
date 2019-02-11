@@ -194,3 +194,7 @@ button { cursor: pointer; }
   display: flex;
   justify-content: flex-start;
 }
+
+.action-icons {
+  padding: 1rem;
+}
