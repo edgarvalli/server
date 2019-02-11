@@ -84,7 +84,8 @@ module.exports = {
     },
 
     async uploadFiles(req, res) {
-        console.log(req.files)
+        const path = require('path')
+        console.log(path.resolve(__dirname, '../../'))
         res.json({error: false})
     }
 
