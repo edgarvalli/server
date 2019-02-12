@@ -11,9 +11,11 @@ module.exports = app => {
             console.log(data)
         })
 
-        socket.broadcast.on('client_typing', (data) => {
-            socket.emit('client_typing', data)
+        socket.on('client_typing', (data) => {
+            socket.broadcast.emit('client_typing', data)
         })
+
+        socket.broadcast.on('client_stop_typing', () => socket.broadcast.emit('client_stop_typing'))
 
         socket.on('add_commnet', async (data) => {
             try {
