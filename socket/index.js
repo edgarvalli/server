@@ -9,6 +9,7 @@ module.exports = app => {
         
         console.log('User connected')
         
+        console.log(socket)
         socket.join(socket.room);
         
         socket.on("add_child", data => {
