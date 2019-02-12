@@ -1,4 +1,4 @@
-const mongo =  require('../helpers/mongo.client')('tlacrm');
+const mongo = require('../helpers/mongo.client')('tlacrm');
 const collection = 'budgets';
 
 module.exports = app => {
@@ -12,17 +12,21 @@ module.exports = app => {
         })
 
         socket.on('client_typing', (data) => {
-            socket.broadcast.emit('client_typing', data)
+            socket.join(data.room);
+            socket.broadcast.to(data.room).emit('client_typing', data);
         })
 
-        socket.broadcast.on('client_stop_typing', () => socket.broadcast.emit('client_stop_typing'))
+        socket.broadcast.on('client_stop_typing', (data) => {
+            socket.join(data.room);
+            socket.broadcast.to(data.room).emit('client_typing', data);
+        })
 
         socket.on('add_commnet', async (data) => {
             try {
                 const _id = mongo.id(data.id);
 
                 const budget = data.budget;
-                budget.updateDate = new Date(); 
+                budget.updateDate = new Date();
 
                 const db = await mongo.collection(collection);
                 await db.updateOne({ _id }, { $set: budget });
