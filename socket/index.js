@@ -9,14 +9,13 @@ module.exports = app => {
 
         console.log('User connected')
         const { room } = socket.handshake.query;
-        socket.join();
+        socket.join(room);
 
         socket.on("add_child", data => {
             console.log(data)
         })
 
         socket.on('client_typing', (data) => {
-            console.log(room)
             socket.broadcast.to(room).emit('client_typing', data);
         })
 
