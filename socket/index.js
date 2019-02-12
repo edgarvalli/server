@@ -6,18 +6,21 @@ module.exports = app => {
     const io = require("socket.io")(http);
 
     io.of("/tlacrm").on("connection", socket => {
+        
         console.log('User connected')
+        
+        socket.join(data.room);
+        
         socket.on("add_child", data => {
             console.log(data)
         })
 
         socket.on('client_typing', (data) => {
-            socket.join(data.room);
+            
             socket.broadcast.to(data.room).emit('client_typing', data);
         })
 
         socket.broadcast.on('client_stop_typing', (data) => {
-            socket.join(data.room);
             socket.broadcast.to(data.room).emit('client_typing', data);
         })
 
