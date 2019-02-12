@@ -20,7 +20,7 @@ module.exports = app => {
         })
 
         socket.broadcast.on('client_stop_typing', (data) => {
-            socket.broadcast.to(room).emit('client_typing', data);
+            socket.broadcast.to(room).emit('client_stop_typing', data);
         })
 
         socket.on('add_commnet', async (data) => {
