@@ -9,8 +9,8 @@ module.exports = app => {
         
         console.log('User connected')
         
-        console.log(socket)
-        socket.join(socket.room);
+        console.log(socket.handshake.query)
+        socket.join(socket.handshake.query.room);
         
         socket.on("add_child", data => {
             console.log(data)
