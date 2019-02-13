@@ -11,7 +11,7 @@ module.exports = {
         const { dbname, collection } = req.headers;
         console.log(collection);
         const db = await mongo(dbname).collection(collection);
-        const children = await db.find(filter).sort(sort).limit(limit).skip(skip).toArray();
+        const children = await db.find(filter).toArray();
         res.json({ error: false, data: { children } })
 
     }
