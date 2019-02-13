@@ -4,6 +4,7 @@ const PORT = 3080;
 // Routes
 app.get('/', (_, res) => res.send("Express Working"))
 require("./routes")(app);
+require('./evbase')(app);
 
 // Socket
 const server = require("./socket")(app);
