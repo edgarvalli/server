@@ -9,7 +9,7 @@ module.exports = {
         const sort = d.sort || { _id: -1 };
         const filter = d.filter || {};
         const { dbname, collection } = req.headers;
-        console.log(dbname);
+        console.log(collection);
         const db = await mongo(dbname).collection(collection);
         const children = await db.find(filter).sort(sort).limit(limit).skip(skip).toArray();
         res.json({ error: false, data: { children } })
