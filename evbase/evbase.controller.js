@@ -4,7 +4,7 @@ module.exports = {
     async fetch(req, res) {
 
         const d = JSON.parse(req.params.data);
-        const limit = d.limit || 0;
+        const limit = d.limit || 50;
         const skip = d.skip || 0;
         const sort = d.sort || { _id: -1 };
         const filter = d.filter || {};
