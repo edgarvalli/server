@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const evbase = require('./evbase.controller');
 
-const parseParams = (req, res, next) => {
+const parseParams = (req, _, next) => {
     const { q } = req.params;
-    req.query = q;
+    const params = q.split("&").map(elements => elements.split("=").map(el => ({[el[0]]: el[1]})))
+    req.query = params;
     next();
 }
 
