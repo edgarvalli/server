@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>EVBase</title>
+</head>
+<body>
+    <button onclick="fetchData">fetch</button>
+    <div id="result"></div>
+</body>
+<script>
+    const fetchData = () => {
+        const url ="https://ev-server.ddns.net/api/evbase/fetch/";
+        fetch(url, {
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "DBName": "tlacrm",
+                "collection": "clients"
+            },
+            method: "get"
+        }).then(resp => resp.json())
+        .then(response => {
+            document.querySelector("#result").innerHTML = "<p>" + JSON.stringify(response) +"</p>"
+        })
+    }
+</script>
+</html>

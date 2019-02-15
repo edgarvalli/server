@@ -13,6 +13,6 @@ const parseParams = (req, _, next) => {
 }
 
 router
-    .get('/fetch/:q', parseParams, evbase.fetch)
+    .get('/fetch/:q?*', parseParams, evbase.fetch)
 
 module.exports = router;
