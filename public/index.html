@@ -15,7 +15,8 @@
     <script>
         const fetchData = () => {
             const uri = window.location.href;
-            console.log(uri)
+            const _uri = new URL(uri);
+            console.log(_uri.getParams.get())
             const url = "https://ev-server.ddns.net/api/evbase/fetch/limit=1";
             fetch(url, {
                 headers: {
