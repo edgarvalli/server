@@ -5,8 +5,8 @@ const parseParams = (req, _, next) => {
     const { q } = req.params;
     const params = {};
     q.split("&").forEach(el => {
-        el.split('=');
-        params[el] = el
+        const e = el.split('=');
+        params[e[0]] = e[1];
     })
     req.query = params
     next();
