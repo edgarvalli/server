@@ -8,6 +8,6 @@ const parseParams = (req, res, next) => {
 }
 
 router
-    .get('/fetch/:data', parseParams, evbase.fetch)
+    .get('/fetch/:q', parseParams, evbase.fetch)
 
 module.exports = router;
