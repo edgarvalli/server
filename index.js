@@ -1,9 +1,15 @@
 const app = require("./server")();
 const PORT = 3080;
+const webpush = require('web-push');
+
+const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
+const privateVapidKey  = process.env.PRIVATE_VAPID_KEY;
+
+webpush.setVapidDetails('edgarvalli80@gmail.com', publicVapidKey, privateVapidKey);
 
 // Routes
 app.get('/', (_, res) => res.send("Express Working"))
-require("./routes")(app);
+require("./routes")(app, webpush);
 require('./evbase')(app);
 
 // Socket
