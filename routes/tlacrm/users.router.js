@@ -15,6 +15,7 @@ const userRouter = webpush => {
         // .get('/m', lead.addNewFields)
         .post('/subscribe', (_, res) => {
             const subscription = req.body;
+            console.log(subscription)
             const payload = JSON.stringify({
                 title: "TlaCrm Notification",
                 message: "Tu tes has subscripto a las notificaciones"
