@@ -20,26 +20,30 @@ const convertDataURIToBinary = dataURI => {
     return array;
 }
 
+if ('serviceWorker' in navigator) {
+    console.log('Registering service worker');
+
+    run().catch(error => console.error(error));
+}
+
 const run = async () => {
-    if ('serviceWorker' in navigator) {
 
-        const reg = await navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' }).catch(err => console.log(err));
-        if ('pushManager' in reg) {
+    const reg = await navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' }).catch(err => console.log(err));
+    if ('pushManager' in reg) {
 
-            const subscription = await reg.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: convertDataURIToBinary(publicVapidKey)
-            })
+        const subscription = await reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: convertDataURIToBinary(publicVapidKey)
+        })
 
-            await fetch('https://ev-server.ddns.net/api/users/subscribe', {
-                headers: { "Content-Type": "application/json" },
-                method: "post",
-                body: JSON.stringify(subscription)
-            })
+        await fetch('https://ev-server.ddns.net/api/users/subscribe', {
+            headers: { "Content-Type": "application/json" },
+            method: "post",
+            body: JSON.stringify(subscription)
+        })
 
-        } else {
-            alert('Push manager no supported')
-        }
+    } else {
+        alert('Push manager no supported')
     }
 }
 
