@@ -6,6 +6,20 @@ if ('Notification' in window) {
 
 const publicVapidKey = 'BH54HR9NEeTIQ36JskmMCoKMsM1EseYPAEv7O575VrgJ9xtXW3gh8nVO23PVwNWB8CDUCypLRBGU9jCiXkQVUZY';
 
+var BASE64_MARKER = ';base64,';
+const convertDataURIToBinary = dataURI => {
+    var base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
+    var base64 = dataURI.substring(base64Index);
+    var raw = window.atob(base64);
+    var rawLength = raw.length;
+    var array = new Uint8Array(new ArrayBuffer(rawLength));
+
+    for (i = 0; i < rawLength; i++) {
+        array[i] = raw.charCodeAt(i);
+    }
+    return array;
+}
+
 const run = async () => {
     if ('serviceWorker' in navigator) {
 
@@ -14,7 +28,7 @@ const run = async () => {
 
             const subscription = await reg.pushManager.subscribe({
                 userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUnit8Array(publicVapidKey)
+                applicationServerKey: convertDataURIToBinary(publicVapidKey)
             })
 
             await fetch('https://ev-server.ddns.net/api/users/subscribe', {
