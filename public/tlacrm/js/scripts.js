@@ -20,12 +20,6 @@ const convertDataURIToBinary = dataURI => {
     return array;
 }
 
-if ('serviceWorker' in navigator) {
-    console.log('Registering service worker');
-
-    run().catch(error => console.error(error));
-}
-
 const run = async () => {
 
     const reg = await navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' }).catch(err => console.log(err));
@@ -58,3 +52,10 @@ self.addEventListener('push', ev => {
         body: data.message
     })
 })
+
+
+if ('serviceWorker' in navigator) {
+    console.log('Registering service worker');
+
+    run().catch(error => console.error(error));
+}
