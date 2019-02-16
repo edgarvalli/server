@@ -43,7 +43,7 @@ const run = async () => {
     }
 }
 
-run();
+run().catch(error => console.log(error));
 
 
 self.addEventListener('push', ev => {
