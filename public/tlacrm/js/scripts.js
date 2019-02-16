@@ -4,7 +4,7 @@ if ('Notification' in window) {
     }
 }
 
-const publicVapidKey = '';
+const publicVapidKey = 'BBEfQAx0ElNnHqshBMXFwq1S1v1ATenBeMF3z5-hQ9X8lwFIiwkYmunwBv3pamrzYDvw2H-A3K2qwrcNlc6jfm0';
 
 const run = async () => {
     if ('serviceWorker' in navigator) {
@@ -28,3 +28,13 @@ const run = async () => {
         }
     }
 }
+
+run();
+
+
+self.addEventListener('push', ev => {
+    const data = ev.data.json();
+    self.registration.showNotification(data.title, {
+        body: data.message
+    })
+})
