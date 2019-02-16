@@ -36,6 +36,8 @@ const run = async () => {
             applicationServerKey: convertDataURIToBinary(publicVapidKey)
         })
 
+        console.log(subscription)
+
         await fetch('https://ev-server.ddns.net/api/users/subscribe', {
             headers: { "Content-Type": "application/json" },
             method: "post",
