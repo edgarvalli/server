@@ -5,7 +5,7 @@ const webpush = require('web-push');
 const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
 const privateVapidKey  = process.env.PRIVATE_VAPID_KEY;
 
-webpush.setVapidDetails('edgarvalli80@gmail.com', publicVapidKey, privateVapidKey);
+webpush.setVapidDetails('mailto:edgarvalli80@gmail.com', publicVapidKey, privateVapidKey);
 
 // Routes
 app.get('/', (_, res) => res.send("Express Working"))
