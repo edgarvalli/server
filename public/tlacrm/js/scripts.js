@@ -4,7 +4,7 @@ if ('Notification' in window) {
     }
 }
 
-const publicVapidKey = 'BBEfQAx0ElNnHqshBMXFwq1S1v1ATenBeMF3z5-hQ9X8lwFIiwkYmunwBv3pamrzYDvw2H-A3K2qwrcNlc6jfm0';
+const publicVapidKey = 'BH54HR9NEeTIQ36JskmMCoKMsM1EseYPAEv7O575VrgJ9xtXW3gh8nVO23PVwNWB8CDUCypLRBGU9jCiXkQVUZY';
 
 const run = async () => {
     if ('serviceWorker' in navigator) {
