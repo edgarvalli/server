@@ -7,26 +7,30 @@ if ('serviceWorker' in navigator) {
         if (reg.active) sw = reg.active;
         if (sw.state === 'activated') console.log('ServiceWorker Activated');
 
-        
+
         sw.addEventListener('statechange', function (e) {
             console.log(e.target.state)
             if (e.target.state === "activated") {
                 // use pushManger for subscribing here.
                 console.log("Just now activated. now we can subscribe for push notification");
                 const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
-                reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).then(sub => {
+                reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).catch(error => console.log(`Error al suscribirse ${error}`))
+                reg.pushManager.getSubscription().then(sub => {
+
+                    console.log(sub)
+
                     fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
                         headers: { "Content-Type": "application/json" },
                         method: "post",
                         body: JSON.stringify(sub)
                     }).catch(error => error)
-                }).catch(error => console.log(`Error al suscribirse ${error}`))
+                })
             }
         })
     }).catch(error => console.log(`Error al registrar el service worker ${error}`))
 
     navigator.serviceWorker.ready.then(reg => {
-        
+
     })
 }
 
