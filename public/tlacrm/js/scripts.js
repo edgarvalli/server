@@ -6,6 +6,8 @@ if ('serviceWorker' in navigator) {
         if (reg.waiting) sw = reg.waiting;
         if (reg.active) sw = reg.active;
 
+        console.log(reg)
+
         sw.addEventListener('statechange', function (e) {
             if (e.target.state === "activated") {
 
