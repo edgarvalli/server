@@ -47,26 +47,5 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 function runServiceWorker() {
-    navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' }).then(reg => {
-        let sw;
-        if (reg.installing) sw = reg.installing;
-        if (reg.waiting) sw = reg.waiting;
-        if (reg.active) sw = reg.active;
-        console.log(`Service Worker is registered with status: ${sw.state}`)
-        sw.onerror = (error) => console.log(error)
-        sw.addEventListener('statechange', ev => {
-            console.log(`Service Worker change status to ${ev.target.state}`)
-            // if (ev.target.state === 'activated') {
-            //     const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
-            //     reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).then(sub => {
-            //         fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
-            //             headers: { "Content-Type": "Application/json" },
-            //             method: "post",
-            //             body: JSON.stringify(sub)
-            //         })
-            //     })
-            // }
-        })
-
-    }).catch(error => console.log(`Service Worker failed to register, Error: ${error}`))
+    navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' }).catch(error => console.log(`Service Worker failed to register, Error: ${error}`))
 }
