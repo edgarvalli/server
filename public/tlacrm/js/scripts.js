@@ -1,3 +1,9 @@
+if ('serviceWorker' in navigator) {
+    console.log('Registering service worker');
+
+    run().catch(error => console.error("Ocurrio un error: " + error));
+}
+
 if ('Notification' in window) {
     if (Notification.permission !== 'granted') {
         Notification.requestPermission();
@@ -20,7 +26,34 @@ const convertDataURIToBinary = dataURI => {
     return array;
 }
 
-const run = async () => {
+async function run() {
+    console.log('Registering service worker');
+    const registration = await navigator.serviceWorker.
+        register('/worker.js', { scope: '/' });
+    console.log('Registered service worker');
+
+    console.log('Registering push');
+    const subscription = await registration.pushManager.
+        subscribe({
+            userVisibleOnly: true,
+            // The `urlBase64ToUint8Array()` function is the same as in
+            // https://www.npmjs.com/package/web-push#using-vapid-key-for-applicationserverkey
+            applicationServerKey: convertDataURIToBinary(publicVapidKey)
+        });
+    console.log('Registered push');
+
+    console.log('Sending push');
+    await fetch('https://ev-server.ddns.net/api/users/subscribe', {
+        method: 'POST',
+        body: JSON.stringify(subscription),
+        headers: {
+            'content-type': 'application/json'
+        }
+    });
+    console.log('Sent push');
+}
+
+const _run = async () => {
 
     const reg = await navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' }).catch(err => err);
     if ('pushManager' in reg) {
@@ -41,10 +74,4 @@ const run = async () => {
     } else {
         alert('Push manager no supported')
     }
-}
-
-if ('serviceWorker' in navigator) {
-    console.log('Registering service worker');
-
-    run().catch(error => console.error("Ocurrio un error: " + error));
 }
