@@ -19,12 +19,3 @@ self.addEventListener('push', ev => {
         body: data.message
     })
 })
-
-self.addEventListener('activate', function(event) {
-	// `claim()` sets this worker as the active worker for all clients that
-	// match the workers scope and triggers an `oncontrollerchange` event for
-    // the clients.
-    console.log('activeted');
-    console.log(self.clients)
-	return self.clients.claim();
-});
