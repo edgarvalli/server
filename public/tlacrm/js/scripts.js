@@ -48,6 +48,7 @@ function _run() {
                 // use pushManger for subscribing here.
                 console.log("Just now activated. now we can subscribe for push notification");
                 const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
+                console.log(applicationServerKey)
                 reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).then(sub => {
                     fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
                         headers: { "Content-Type": "application/json" },
