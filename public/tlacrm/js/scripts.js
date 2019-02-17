@@ -42,5 +42,5 @@ function _run  () {
                     })
                 })
         })
-        .catch(error => console.error("Ocurrio un error: " + error));
+        .catch(error => console.log(error))
 }
