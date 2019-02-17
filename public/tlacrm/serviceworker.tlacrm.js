@@ -9,7 +9,7 @@ self.addEventListener('install', function (ev) {
                     '/tlacrm/images/icons/icon_16x16.png'
                 ]
             )
-        })
+        }).catch(erro => console.log(error))
     )
 
 });
