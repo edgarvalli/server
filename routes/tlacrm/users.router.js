@@ -3,12 +3,15 @@ const userController = require('../../controllers/tlacrm/users.controllers');
 const { tokenExpiration } = require("../../middleware");
 const sendNotification = require('../../scripts/send_notification');
 
-const checkPermission = (req, res, next) => {
+const checkPermission = (req, res, next, action) => {
     const user = req.client;
     const { modules } = user.profile;
     const module = modules.filter(m => m.key = 'users')[0];
-    console.log(module);
-    next()
+    if (module[action]) {
+        next()
+    } else {
+        res.json({ error: true, message: 'No tiene permisos para realizar esta ación' })
+    }
 }
 
 router
@@ -21,7 +24,11 @@ router
     .post('/add', tokenExpiration, userController.addUser)
     .post('/reset-password', tokenExpiration, userController.resetPassword)
 
-    .get('/fetch/:limit', tokenExpiration, checkPermission,userController.fetch)
+    .get(
+        '/fetch/:limit',
+        tokenExpiration, (req, res, next) => checkPermission(req, res, next, 'read'),
+        userController.fetch
+    )
 
     // .get('/m', lead.addNewFields)
     .post('/subscribe', (req, res) => {
