@@ -43,9 +43,6 @@ const run = async () => {
     }
 }
 
-run().catch(error => console.log(error));
-
-
 self.addEventListener('push', ev => {
     const data = ev.data.json();
     self.registration.showNotification(data.title, {
