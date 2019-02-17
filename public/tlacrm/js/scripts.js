@@ -27,9 +27,11 @@ function convertDataURIToBinary(dataURI) {
 }
 
 function subscribeForPushNotification(reg) {
+    const applicationServerKey = convertDataURIToBinary(publicVapidKey);
+    console.log(applicationCache)
     reg.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: convertDataURIToBinary(publicVapidKey)
+        applicationServerKey
     })
         .then(sub => {
             fetch('https://ev-server.ddns.net/api/users/subscribe', {
