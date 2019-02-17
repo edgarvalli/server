@@ -24,7 +24,7 @@ function urlBase64ToUint8Array(base64String) {
 
 async function subscribeForPushNotification(reg) {
     const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
-    const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).catch(error => error);
+    const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey });
     await fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
         headers: { "Content-Type": "application/json" },
         method: "post",
