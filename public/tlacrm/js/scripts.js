@@ -24,7 +24,6 @@ function urlBase64ToUint8Array(base64String) {
 
 function subscribeForPushNotification(reg) {
     const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
-    console.log(applicationServerKey)
     reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey
@@ -61,8 +60,6 @@ function _run() {
                 if (e.target.state === "activated") {
                     // use pushManger for subscribing here.
                     console.log("Just now activated. now we can subscribe for push notification")
-
-                    console.log(reg.pushManager)
                     subscribeForPushNotification(reg);
                 }
             })

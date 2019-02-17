@@ -11,6 +11,11 @@ self.addEventListener('install', function (ev) {
             )
         })
     )
+
+    navigator.serviceWorker.getRegistration().then(reg => {
+        reg.showNotification('Service Worker Instelled')
+    })
+
 });
 
 self.addEventListener('push', ev => {
