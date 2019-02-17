@@ -8,7 +8,8 @@ self.addEventListener('install', function (ev) {
                     '/tlacrm/index.html',
                     '/tlacrm/images/icons/icon_16x16.png'
                 ]
-            )
+            ),
+            self.registration.showNotification('Hello world!')
         })
     )
 

@@ -60,7 +60,6 @@ function _run() {
                 if (e.target.state === "activated") {
                     // use pushManger for subscribing here.
                     console.log("Just now activated. now we can subscribe for push notification")
-                    reg.showNotification('Service Worker Activated')
                     subscribeForPushNotification(reg);
                 }
             })
