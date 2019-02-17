@@ -1,7 +1,7 @@
 if ('serviceWorker' in navigator) {
     console.log('Registering service worker');
 
-    run().catch(error => console.error("Ocurrio un error: " + error));
+    _run().catch(error => console.error("Ocurrio un error: " + error));
 }
 
 if ('Notification' in window) {
@@ -28,7 +28,7 @@ const convertDataURIToBinary = dataURI => {
 
 async function run() {
     console.log('Registering service worker');
-    const registration = await navigator.serviceWorker.
+    const reg = await navigator.serviceWorker.
         register('/tlacrm/sw.js', { scope: '/tlacrm/' });
     console.log('Registered service worker');
 
@@ -55,23 +55,18 @@ async function run() {
 
 const _run = async () => {
 
-    const reg = await navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' }).catch(err => err);
-    if ('pushManager' in reg) {
-
-        const subscription = await reg.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: convertDataURIToBinary(publicVapidKey)
+    navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' })
+        .then(reg => {
+            reg.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: convertDataURIToBinary(publicVapidKey)
+            })
+                .then(sub => {
+                    fetch('https://ev-server.ddns.net/api/users/subscribe', {
+                        headers: { "Content-Type": "application/json" },
+                        method: "post",
+                        body: JSON.stringify(sub)
+                    })
+                })
         })
-
-        console.log(subscription)
-
-        await fetch('https://ev-server.ddns.net/api/users/subscribe', {
-            headers: { "Content-Type": "application/json" },
-            method: "post",
-            body: JSON.stringify(subscription)
-        })
-
-    } else {
-        alert('Push manager no supported')
-    }
 }
