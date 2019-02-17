@@ -5,16 +5,16 @@ if ('serviceWorker' in navigator) {
         if (reg.installing) sw = reg.installing;
         if (reg.waiting) sw = reg.waiting;
         if (reg.active) sw = reg.active;
-        if (sw.state === 'activated') console.log('ServiceWorker Activated');
-
 
         sw.addEventListener('statechange', function (e) {
-            console.log(e.target.state)
             if (e.target.state === "activated") {
-                // use pushManger for subscribing here.
+
                 console.log("Just now activated. now we can subscribe for push notification");
                 const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
-                reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).catch(error => console.log(`Error al suscribirse ${error}`))
+
+                reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey })
+                    .catch(error => console.log(`Error al suscribirse ${error}`))
+
                 reg.pushManager.getSubscription().then(sub => {
 
                     console.log(sub)
