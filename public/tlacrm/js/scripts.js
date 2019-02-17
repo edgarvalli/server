@@ -32,10 +32,6 @@ if ('serviceWorker' in navigator) {
             }
         })
     }).catch(error => console.log(`Error al registrar el service worker ${error}`))
-
-    navigator.serviceWorker.ready.then(reg => {
-
-    })
 }
 
 if ('Notification' in window) {
