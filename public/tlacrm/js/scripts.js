@@ -34,22 +34,23 @@ function subscribeForPushNotification(reg) {
     })
 }
 
-async function _run() {
+function _run() {
 
-    const reg = await navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' }).catch(error => console.log(error));
+    navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' }).then(reg => {
+        let sw;
+        if (reg.installing) sw = reg.installing;
+        if (reg.waiting) sw = reg.waiting;
+        if (reg.active) sw = reg.active;
+        if (sw.state === 'activated') console.log('ServiceWorker Activated');
 
-    let sw;
-    if (reg.installing) sw = reg.installing;
-    if (reg.waiting) sw = reg.waiting;
-    if (reg.active) sw = reg.active;
-    if (sw.state === 'activated') console.log('ServiceWorker Activated');
-
-    sw.addEventListener('statechange', async function (e) {
-        if (e.target.state === "activated") {
-            // use pushManger for subscribing here.
-            console.log("Just now activated. now we can subscribe for push notification")
-            subscribeForPushNotification(reg);
-        }
+        sw.addEventListener('statechange', async function (e) {
+            if (e.target.state === "activated") {
+                // use pushManger for subscribing here.
+                console.log("Just now activated. now we can subscribe for push notification")
+                subscribeForPushNotification(reg);
+            }
+        })
     })
+
 
 }
