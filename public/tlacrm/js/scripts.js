@@ -22,47 +22,32 @@ function urlBase64ToUint8Array(base64String) {
     return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
 }
 
-function subscribeForPushNotification(reg) {
+async function subscribeForPushNotification(reg) {
     const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
-    reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey
-    }).then(sub => {
-        fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
-            headers: { "Content-Type": "application/json" },
-            method: "post",
-            body: JSON.stringify(sub)
-        })
-    }).catch(error => console.error("Ocurrio un error: " + error));
+    const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey });
+    await fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
+        headers: { "Content-Type": "application/json" },
+        method: "post",
+        body: JSON.stringify(sub)
+    })
 }
 
-function _run() {
+async function _run() {
 
-    navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' })
-        .then(reg => {
-            let sw;
-            if (reg.installing) {
-                console.log('Service worker installing');
-                sw = reg.installing;
-            } else if (reg.waiting) {
-                sw = reg.waiting;
-                console.log('Service worker installed');
-            } else if (reg.active) {
-                sw = reg.active;
-                console.log('Service worker active');
-            }
+    const reg = await navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' }).catch(error => console.log(error));
+    
+    let sw;
+    if (reg.installing) sw = reg.installing;
+    if (reg.waiting) sw = reg.waiting;
+    if (reg.active) sw = reg.active;
+    if (sw.state === 'activated') console.log('ServiceWorker Activated');
 
-            if (sw.state === 'activated') {
-                console.log('ServiceWorker Activated');
-            }
+    sw.addEventListener('statechange', function (e) {
+        if (e.target.state === "activated") {
+            // use pushManger for subscribing here.
+            console.log("Just now activated. now we can subscribe for push notification")
+            subscribeForPushNotification(reg);
+        }
+    })
 
-            sw.addEventListener('statechange', function (e) {
-                if (e.target.state === "activated") {
-                    // use pushManger for subscribing here.
-                    console.log("Just now activated. now we can subscribe for push notification")
-                    subscribeForPushNotification(reg);
-                }
-            })
-        })
-        .catch(error => console.log(error))
 }
