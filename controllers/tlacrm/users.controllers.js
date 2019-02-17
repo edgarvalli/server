@@ -100,6 +100,11 @@ module.exports = {
         res.json({ error: false, data: { user } });
     },
 
+    async fetch(_, res) {
+        const db = await mongo.collection('users');
+        const users = await db.find().toArray();
+        res.json({error: false, data: { users }})
+    },
     async fetchUsers(req, res) {
         const users = await mongo.collection('users');
         const allUsers = await users.find().sort({ create_date: -1 }).toArray();
