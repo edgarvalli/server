@@ -22,7 +22,7 @@ const convertDataURIToBinary = dataURI => {
 
 const run = async () => {
 
-    const reg = await navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' }).catch(err => console.log(err));
+    const reg = await navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' }).catch(err => err);
     if ('pushManager' in reg) {
 
         const subscription = await reg.pushManager.subscribe({
