@@ -52,6 +52,6 @@ function runServiceWorker() {
         if (reg.installing) sw = reg.installing;
         if (reg.waiting) sw = reg.waiting;
         if (reg.active) sw = reg.active;
-        console.log(`Service Worker is registered with status: ${JSON.stringify(sw)}`)
+        console.log(`Service Worker is registered with status: ${sw.state}`)
     }).catch(error => console.log(`Service Worker failed to register, Error: ${error}`))
 }
