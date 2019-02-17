@@ -41,6 +41,7 @@ function _run  () {
                         body: JSON.stringify(sub)
                     })
                 })
+                .catch(error => console.error("Ocurrio un error: " + error));
         })
         .catch(error => console.log(error))
 }
