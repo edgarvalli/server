@@ -1,4 +1,5 @@
 if ('serviceWorker' in navigator) {
+    removeOldServiceWorkers();
     runServiceWorker();
     // console.log('Registering service worker');
 
@@ -56,4 +57,13 @@ async function runServiceWorker() {
     sw.addEventListener('statechange', event => {
         console.log(event.target.state)
     })
+}
+
+async function removeOldServiceWorkers() {
+    const regs = await navigator.serviceWorker.getRegistrations();
+    if(regs.length > 0) {
+        for(let reg in regs) {
+            reg.unregister();
+        }
+    }
 }
