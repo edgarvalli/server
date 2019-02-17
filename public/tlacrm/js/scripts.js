@@ -1,7 +1,7 @@
 if ('serviceWorker' in navigator) {
     console.log('Registering service worker');
 
-    _run();
+    _run().catch(error => console.log(error));
 }
 
 if ('Notification' in window) {
@@ -24,12 +24,12 @@ function urlBase64ToUint8Array(base64String) {
 
 async function subscribeForPushNotification(reg) {
     const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
-    const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey });
+    const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).catch(error => error);
     await fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
         headers: { "Content-Type": "application/json" },
         method: "post",
         body: JSON.stringify(sub)
-    })
+    }).catch(error => error)
 }
 
 async function _run() {
