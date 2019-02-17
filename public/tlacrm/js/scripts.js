@@ -2,14 +2,6 @@ if ('serviceWorker' in navigator) {
 
     console.log('Registering service worker');
 
-    navigator.serviceWorker.getRegistrations().then(regs => {
-        if (regs.length > 0) {
-            for (let reg in regs) {
-                reg.unregister()
-            }
-        }
-    })
-
     navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' }).then(reg => {
         let sw;
         if (reg.installing) sw = reg.installing;
@@ -37,6 +29,8 @@ if ('serviceWorker' in navigator) {
                         body: JSON.stringify(sub)
                     }).catch(error => error)
                 })
+            } else if( e.target.state === 'redundant') {
+                removeSw();
             }
         })
     }).catch(error => console.log(`Error al registrar el service worker ${error}`))
@@ -62,4 +56,12 @@ function urlBase64ToUint8Array(base64String) {
         ;
     const rawData = window.atob(base64);
     return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+}
+
+function removeSw() {
+    navigator.serviceWorker.getRegistrations().then(regs => {
+        for (let reg in regs) {
+            reg.unregister()
+        }
+    })
 }
