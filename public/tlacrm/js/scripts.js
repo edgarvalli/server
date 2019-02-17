@@ -46,11 +46,18 @@ function _run() {
         sw.addEventListener('statechange', async function (e) {
             if (e.target.state === "activated") {
                 // use pushManger for subscribing here.
-                console.log("Just now activated. now we can subscribe for push notification")
-                subscribeForPushNotification(reg);
+                console.log("Just now activated. now we can subscribe for push notification");
+                const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
+                reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).then(sub => {
+                    fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
+                        headers: { "Content-Type": "application/json" },
+                        method: "post",
+                        body: JSON.stringify(sub)
+                    }).catch(error => error)
+                }).catch(error => console.log(`Error al suscribirse ${error}`))
             }
         })
-    }).catch(erro => console.log(`Error al registrar el service worker ${error}`))
+    }).catch(error => console.log(`Error al registrar el service worker ${error}`))
 
 
 }
