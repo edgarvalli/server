@@ -22,15 +22,16 @@ function urlBase64ToUint8Array(base64String) {
     return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
 }
 
-async function subscribeForPushNotification(reg) {
+function subscribeForPushNotification(reg) {
     const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
-    const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).catch(error => error);
-    console.log(sub)
-    await fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
-        headers: { "Content-Type": "application/json" },
-        method: "post",
-        body: JSON.stringify(sub)
-    }).catch(error => error)
+    reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).then(sub => {
+        console.log(sub)
+        await fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
+            headers: { "Content-Type": "application/json" },
+            method: "post",
+            body: JSON.stringify(sub)
+        }).catch(error => error)
+    })
 }
 
 async function _run() {
@@ -47,14 +48,7 @@ async function _run() {
         if (e.target.state === "activated") {
             // use pushManger for subscribing here.
             console.log("Just now activated. now we can subscribe for push notification")
-            const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
-            const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).catch(error => error);
-            console.log(sub)
-            await fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
-                headers: { "Content-Type": "application/json" },
-                method: "post",
-                body: JSON.stringify(sub)
-            }).catch(error => error)
+            subscribeForPushNotification(reg);
         }
     })
 
