@@ -16,9 +16,10 @@ self.addEventListener('install', function (ev) {
 
 self.addEventListener('push', ev => {
     const data = ev.data.json();
-    ev.waitUntil()
-    self.registration.showNotification(data.title, {
-        body: data.message,
-        icon: data.icon
-    })
+    ev.waitUntil(
+        self.registration.showNotification(data.title, {
+            body: data.message,
+            icon: data.icon
+        })
+    )
 })
