@@ -43,11 +43,11 @@ async function _run() {
     if (reg.active) sw = reg.active;
     if (sw.state === 'activated') console.log('ServiceWorker Activated');
 
-    sw.addEventListener('statechange', function (e) {
+    sw.addEventListener('statechange', async function (e) {
         if (e.target.state === "activated") {
             // use pushManger for subscribing here.
             console.log("Just now activated. now we can subscribe for push notification")
-            subscribeForPushNotification(reg);
+            await subscribeForPushNotification(reg);
         }
     })
 
