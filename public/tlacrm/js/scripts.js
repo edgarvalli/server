@@ -26,7 +26,7 @@ function subscribeForPushNotification(reg) {
     const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
     reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).then(sub => {
         console.log(sub)
-        await fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
+        fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
             headers: { "Content-Type": "application/json" },
             method: "post",
             body: JSON.stringify(sub)
