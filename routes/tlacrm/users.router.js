@@ -13,7 +13,7 @@ const userRouter = webpush => {
         .post('/add', tokenExpiration, userController.addUser)
         .post('/reset-password', tokenExpiration, userController.resetPassword)
         // .get('/m', lead.addNewFields)
-        .post('/subscribe', (_, res) => {
+        .post('/subscribe', (req, res) => {
             const subscription = req.body;
             console.log(subscription)
             const payload = JSON.stringify({
