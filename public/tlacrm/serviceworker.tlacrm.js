@@ -1,4 +1,4 @@
-self.addEventListener('install', function() {
+self.addEventListener('install', function(ev) {
     ev.waitUntil(
         Promise.reject()
     )
