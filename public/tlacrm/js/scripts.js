@@ -62,6 +62,6 @@ self.addEventListener('activate', function(event) {
 	// match the workers scope and triggers an `oncontrollerchange` event for
     // the clients.
     console.log('activeted');
-    _run();
+    navigator.serviceWorker.ready.then(reg => pushManagerFun(reg))
 	return self.clients.claim();
 });
