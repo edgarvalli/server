@@ -36,7 +36,7 @@ async function subscribeForPushNotification(reg) {
 async function _run() {
 
     const reg = await navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' }).catch(error => console.log(error));
-    
+
     let sw;
     if (reg.installing) sw = reg.installing;
     if (reg.waiting) sw = reg.waiting;
@@ -47,7 +47,14 @@ async function _run() {
         if (e.target.state === "activated") {
             // use pushManger for subscribing here.
             console.log("Just now activated. now we can subscribe for push notification")
-            await subscribeForPushNotification(reg);
+            const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
+            const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).catch(error => error);
+            console.log(sub)
+            await fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
+                headers: { "Content-Type": "application/json" },
+                method: "post",
+                body: JSON.stringify(sub)
+            }).catch(error => error)
         }
     })
 
