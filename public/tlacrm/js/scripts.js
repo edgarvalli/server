@@ -1,18 +1,18 @@
 if ('serviceWorker' in navigator) {
+
     console.log('Registering service worker');
 
-
     navigator.serviceWorker.getRegistrations().then(regs => {
-        console.log(regs)
+        for(let reg in regs){
+            reg.unregister()
+        }
     })
 
     navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' }).then(reg => {
         let sw;
         if (reg.installing) sw = reg.installing;
         if (reg.waiting) sw = reg.waiting;
-        if (reg.active) sw = reg.active;
-
-        console.log(reg)
+        if (reg.active) sw = reg.active;        
 
         sw.addEventListener('statechange', function (e) {
             if (e.target.state === "activated") {
