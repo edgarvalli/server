@@ -48,5 +48,5 @@ function urlBase64ToUint8Array(base64String) {
 
 async function runServiceWorker() {
     const reg = await navigator.serviceWorker.register('sw.js').catch(error => console.log(`Service Worker failed to register, Error: ${error}`))
-    console.log(reg.scope)
+    reg.showNotification("HEllo")
 }
