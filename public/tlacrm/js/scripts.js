@@ -17,17 +17,14 @@ if ('serviceWorker' in navigator) {
                 const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
 
                 reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey })
+                    .then(sub => {
+                        fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
+                            headers: { "Content-Type": "application/json" },
+                            method: "post",
+                            body: JSON.stringify(sub)
+                        }).catch(error => error)
+                    })
                     .catch(error => console.log(`Error al suscribirse ${error}`))
-
-                reg.pushManager.getSubscription().then(sub => {
-                    fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
-                        headers: { "Content-Type": "application/json" },
-                        method: "post",
-                        body: JSON.stringify(sub)
-                    }).catch(error => error)
-                })
-            } else if( e.target.state === 'redundant') {
-                reg.update();
             }
         })
     }).catch(error => console.log(`Error al registrar el service worker ${error}`))
