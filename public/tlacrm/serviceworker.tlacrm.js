@@ -11,7 +11,7 @@ self.addEventListener('activate', function (ev) {
             )
         }).catch(error => console.log(error))
     )
-
+    self.skipWaiting();
 });
 
 self.addEventListener('push', event => {
