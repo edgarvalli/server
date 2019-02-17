@@ -21,7 +21,7 @@ router
     .post('/add', tokenExpiration, userController.addUser)
     .post('/reset-password', tokenExpiration, userController.resetPassword)
 
-    .get('/fetch/:limit', tokenExpiration, userController.fetch)
+    .get('/fetch/:limit', tokenExpiration, checkPermission,userController.fetch)
 
     // .get('/m', lead.addNewFields)
     .post('/subscribe', (req, res) => {
