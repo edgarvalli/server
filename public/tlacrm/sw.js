@@ -41,20 +41,6 @@ self.addEventListener('activate', function () {
     // `claim()` sets this worker as the active worker for all clients that
     // match the workers scope and triggers an `oncontrollerchange` event for
     // the clients.
-    console.log('activeted');
-    navigator.serviceWorker.ready.then(reg => {
-        reg.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: convertDataURIToBinary(publicVapidKey)
-        })
-            .then(sub => {
-                fetch('https://ev-server.ddns.net/api/users/subscribe', {
-                    headers: { "Content-Type": "application/json" },
-                    method: "post",
-                    body: JSON.stringify(sub)
-                })
-            })
-            .catch(error => console.error("Ocurrio un error: " + error));
-    })
+    console.log('Service Worker activated');
     return self.clients.claim();
 });
