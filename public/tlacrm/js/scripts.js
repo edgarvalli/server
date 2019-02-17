@@ -46,6 +46,7 @@ function urlBase64ToUint8Array(base64String) {
     return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
 }
 
-function runServiceWorker() {
-    navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' }).catch(error => console.log(`Service Worker failed to register, Error: ${error}`))
+async function runServiceWorker() {
+    const reg = await navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' }).catch(error => console.log(`Service Worker failed to register, Error: ${error}`))
+    console.log(reg.scope)
 }
