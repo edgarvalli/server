@@ -14,6 +14,7 @@ router
     // .get('/m', lead.addNewFields)
     .post('/subscribe', (req, res) => {
         const subscription = req.body;
+        console.log(subscription)
         const payload = {
             title: "TlaCrm Notification",
             message: "Tu te has subscripto a las notificaciones",
