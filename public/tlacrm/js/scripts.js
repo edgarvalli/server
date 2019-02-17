@@ -54,5 +54,5 @@ self.addEventListener('push', ev => {
 if ('serviceWorker' in navigator) {
     console.log('Registering service worker');
 
-    run().catch(error => console.error("Ocurrurrio un error"));
+    run().catch(error => console.error("Ocurrio un error: " + error));
 }
