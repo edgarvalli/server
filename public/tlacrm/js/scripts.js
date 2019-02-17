@@ -3,8 +3,10 @@ if ('serviceWorker' in navigator) {
     console.log('Registering service worker');
 
     navigator.serviceWorker.getRegistrations().then(regs => {
-        for(let reg in regs){
-            reg.unregister()
+        if (regs.length > 0) {
+            for (let reg in regs) {
+                reg.unregister()
+            }
         }
     })
 
@@ -12,7 +14,9 @@ if ('serviceWorker' in navigator) {
         let sw;
         if (reg.installing) sw = reg.installing;
         if (reg.waiting) sw = reg.waiting;
-        if (reg.active) sw = reg.active;        
+        if (reg.active) sw = reg.active;
+
+        console.log(reg)
 
         sw.addEventListener('statechange', function (e) {
             if (e.target.state === "activated") {
