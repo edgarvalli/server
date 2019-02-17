@@ -33,7 +33,7 @@ async function run() {
     console.log('Registered service worker');
 
     console.log('Registering push');
-    const subscription = await registration.pushManager.
+    const subscription = await window.pushManager.
         subscribe({
             userVisibleOnly: true,
             // The `urlBase64ToUint8Array()` function is the same as in
