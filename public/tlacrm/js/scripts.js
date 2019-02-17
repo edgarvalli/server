@@ -28,7 +28,7 @@ function subscribeForPushNotification(reg) {
         userVisibleOnly: true,
         applicationServerKey
     }).then(sub => {
-        fetch('https://ev-server.ddns.net/api/users/subscribe', {
+        fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
             headers: { "Content-Type": "application/json" },
             method: "post",
             body: JSON.stringify(sub)
