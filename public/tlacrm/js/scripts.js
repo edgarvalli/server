@@ -53,5 +53,5 @@ function runServiceWorker() {
         if (reg.waiting) sw = reg.waiting;
         if (reg.active) sw = reg.active;
         console.log(`Service Worker is registered with status: ${sw.status}`)
-    })
+    }).catch(error => console.log(`Service Worker failed to register, Error: ${error}`))
 }
