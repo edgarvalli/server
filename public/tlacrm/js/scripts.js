@@ -26,7 +26,7 @@ function convertDataURIToBinary(dataURI) {
     return array;
 }
 
-function pushManagerFun(reg) {
+function subscribeForPushNotification(reg) {
     reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: convertDataURIToBinary(publicVapidKey)
@@ -45,14 +45,29 @@ function _run() {
 
     navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' })
         .then(reg => {
+            let sw;
             if (reg.installing) {
                 console.log('Service worker installing');
+                sw = reg.installing;
             } else if (reg.waiting) {
+                sw = reg.waiting;
                 console.log('Service worker installed');
             } else if (reg.active) {
+                sw = reg.active;
                 console.log('Service worker active');
-                pushManagerFun(reg)
+            }
+
+            if (sw.state === 'activated') {
+                console.log('ServiceWorker Activated');
+            }
+
+            sw.addEventListener('statechange', function (e) {
+                if(e.target.state === "activated") {
+                // use pushManger for subscribing here.
+                console.log("Just now activated. now we can subscribe for push notification")
+                subscribeForPushNotification(reg);
             }
         })
-        .catch(error => console.log(error))
+})
+        .catch (error => console.log(error))
 }
