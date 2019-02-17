@@ -53,3 +53,11 @@ function urlBase64ToUint8Array(base64String) {
     const rawData = window.atob(base64);
     return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
 }
+
+function removeSw() {
+    navigator.serviceWorker.getRegistrations().then(regs => {
+        for (let reg in regs) {
+            reg.unregister()
+        }
+    })
+}
