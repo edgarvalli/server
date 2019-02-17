@@ -1,4 +1,4 @@
-const sendNotification = require('web-push');
+const sendNotification = require('./send_notification');
 const sub = {
     endpoint:
         'https://fcm.googleapis.com/fcm/send/cCAliKEvWnc:APA91bFaCl4rYgH2HaLP4NZdmMMDz7z_inD7o8Yn2z-6a7GuSvHYQcPOeTFTtZvY5dfoh2-Q4DXUwFngtshVesy0JUpH1oBA5vRvPMXuRDQ3PQtTZs2Kj6kcQOMH_oBwS3pGnu9yCWkZ',
