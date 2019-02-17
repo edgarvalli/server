@@ -53,7 +53,7 @@ async function run() {
     console.log('Sent push');
 }
 
-const _run = async () => {
+function _run  () {
 
     navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' })
         .then(reg => {
