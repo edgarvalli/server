@@ -1,3 +1,41 @@
+if ('serviceWorker' in navigator) {
+
+    console.log('Registering service worker');
+    removeSw();
+
+    navigator.serviceWorker.
+
+    navigator.serviceWorker.register('sw.tlacrm.js').then(reg => {
+        let sw;
+        if (reg.installing) sw = reg.installing;
+        if (reg.waiting) sw = reg.waiting;
+        if (reg.active) sw = reg.active;
+
+        reg.update();
+
+        sw.addEventListener('statechange', function (e) {
+            if (e.target.state === "activated") {
+
+                console.log("Just now activated. now we can subscribe for push notification");
+                const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
+
+                reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey })
+                    .catch(error => console.log(`Error al suscribirse ${error}`))
+
+                reg.pushManager.getSubscription().then(sub => {
+                    fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
+                        headers: { "Content-Type": "application/json" },
+                        method: "post",
+                        body: JSON.stringify(sub)
+                    }).catch(error => error)
+                })
+            } else if( e.target.state === 'redundant') {
+                reg.update();
+            }
+        })
+    }).catch(error => console.log(`Error al registrar el service worker ${error}`))
+}
+
 if ('Notification' in window) {
     if (Notification.permission !== 'granted') {
         Notification.requestPermission();
