@@ -59,15 +59,3 @@ function urlBase64ToUint8Array(base64String) {
     const rawData = window.atob(base64);
     return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
 }
-
-function subscribeForPushNotification(reg) {
-    const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
-    reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).then(sub => {
-        console.log(sub)
-        fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
-            headers: { "Content-Type": "application/json" },
-            method: "post",
-            body: JSON.stringify(sub)
-        }).catch(error => error)
-    }).catch(error => console.log(`Error al suscribirse ${error}`))
-}
