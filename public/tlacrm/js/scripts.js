@@ -1,7 +1,27 @@
 if ('serviceWorker' in navigator) {
     console.log('Registering service worker');
+    navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' }).then(reg => {
+        let sw;
+        if (reg.installing) sw = reg.installing;
+        if (reg.waiting) sw = reg.waiting;
+        if (reg.active) sw = reg.active;
+        if (sw.state === 'activated') console.log('ServiceWorker Activated');
 
-    _run()
+        sw.addEventListener('statechange', function (e) {
+            if (e.target.state === "activated") {
+                // use pushManger for subscribing here.
+                console.log("Just now activated. now we can subscribe for push notification");
+                const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
+                reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).then(sub => {
+                    fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
+                        headers: { "Content-Type": "application/json" },
+                        method: "post",
+                        body: JSON.stringify(sub)
+                    }).catch(error => error)
+                }).catch(error => console.log(`Error al suscribirse ${error}`))
+            }
+        })
+    }).catch(error => console.log(`Error al registrar el service worker ${error}`))
 }
 
 if ('Notification' in window) {
@@ -32,33 +52,4 @@ function subscribeForPushNotification(reg) {
             body: JSON.stringify(sub)
         }).catch(error => error)
     }).catch(error => console.log(`Error al suscribirse ${error}`))
-}
-
-function _run() {
-
-    navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' }).then(reg => {
-        let sw;
-        if (reg.installing) sw = reg.installing;
-        if (reg.waiting) sw = reg.waiting;
-        if (reg.active) sw = reg.active;
-        if (sw.state === 'activated') console.log('ServiceWorker Activated');
-
-        sw.addEventListener('statechange',function (e) {
-            if (e.target.state === "activated") {
-                // use pushManger for subscribing here.
-                console.log("Just now activated. now we can subscribe for push notification");
-                const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
-                console.log(applicationServerKey)
-                reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey }).then(sub => {
-                    fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
-                        headers: { "Content-Type": "application/json" },
-                        method: "post",
-                        body: JSON.stringify(sub)
-                    }).catch(error => error)
-                }).catch(error => console.log(`Error al suscribirse ${error}`))
-            }
-        })
-    }).catch(error => console.log(`Error al registrar el service worker ${error}`))
-
-
 }
