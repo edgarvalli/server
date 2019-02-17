@@ -20,9 +20,6 @@ if ('serviceWorker' in navigator) {
                     .catch(error => console.log(`Error al suscribirse ${error}`))
 
                 reg.pushManager.getSubscription().then(sub => {
-
-                    console.log(sub)
-
                     fetch('https://ev-server.ddns.net/api/tlacrm/users/subscribe', {
                         headers: { "Content-Type": "application/json" },
                         method: "post",
@@ -30,6 +27,7 @@ if ('serviceWorker' in navigator) {
                     }).catch(error => error)
                 })
             } else if( e.target.state === 'redundant') {
+                console.log(e.target)
                 removeSw();
             }
         })
