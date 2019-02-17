@@ -24,19 +24,17 @@ function urlBase64ToUint8Array(base64String) {
 
 function subscribeForPushNotification(reg) {
     const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
-    console.log(applicationCache)
+    console.log(applicationServerKey)
     reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey
-    })
-        .then(sub => {
-            fetch('https://ev-server.ddns.net/api/users/subscribe', {
-                headers: { "Content-Type": "application/json" },
-                method: "post",
-                body: JSON.stringify(sub)
-            })
+    }).then(sub => {
+        fetch('https://ev-server.ddns.net/api/users/subscribe', {
+            headers: { "Content-Type": "application/json" },
+            method: "post",
+            body: JSON.stringify(sub)
         })
-        .catch(error => console.error("Ocurrio un error: " + error));
+    }).catch(error => console.error("Ocurrio un error: " + error));
 }
 
 function _run() {
