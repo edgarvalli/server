@@ -48,6 +48,7 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 async function runServiceWorker() {
+    debugger;
     const reg = await navigator.serviceWorker.register('sw.js').catch(error => console.log(`Service Worker failed to register, Error: ${error}`))
     let sw;
     if (reg.installing) sw = reg.installing;
