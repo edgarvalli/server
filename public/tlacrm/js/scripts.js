@@ -29,7 +29,7 @@ const convertDataURIToBinary = dataURI => {
 async function run() {
     console.log('Registering service worker');
     const registration = await navigator.serviceWorker.
-        register('/worker.js', { scope: '/' });
+        register('/tlacrm/sw.js', { scope: '/tlacrm/' });
     console.log('Registered service worker');
 
     console.log('Registering push');
