@@ -39,7 +39,7 @@ function subscribeForPushNotification(reg) {
 
 function _run() {
 
-    navigator.serviceWorker.register('/sw.js', { scope: '/tlacrm/' })
+    navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' })
         .then(reg => {
             console.log(reg)
             let sw;
