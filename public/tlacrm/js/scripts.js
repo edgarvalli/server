@@ -47,7 +47,7 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 function runServiceWorker() {
-    navigator.serviceWorker.register('./tlacrm/serviceworker.tlacrm.js', { scope: '/tlacrm/' }).then(reg => {
+    navigator.serviceWorker.register('serviceworker.tlacrm.js', { scope: '/tlacrm/' }).then(reg => {
         let sw;
         if (reg.installing) sw = reg.installing;
         if (reg.waiting) sw = reg.waiting;
