@@ -41,6 +41,7 @@ function _run() {
 
     navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' })
         .then(reg => {
+            console.log(reg)
             let sw;
             if (reg.installing) {
                 console.log('Service worker installing');
