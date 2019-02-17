@@ -1,5 +1,4 @@
 self.addEventListener('activate', function (ev) {
-    console.log("Activated")
     ev.waitUntil(
         caches.open('tlacrm').then(cache => {
             return cache.addAll(
@@ -14,3 +13,13 @@ self.addEventListener('activate', function (ev) {
     )
 
 });
+
+self.addEventListener('push', event => {
+    const data = event.data.json();
+    event.waitUntil(
+        self.registration.showNotification(data.title, {
+            icon: data.icon,
+            body: data.message
+        })
+    )
+})
