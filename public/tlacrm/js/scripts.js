@@ -1,17 +1,13 @@
 if ('serviceWorker' in navigator) {
     console.log('Registering service worker');
-    navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' }).then(reg => {
-
-    }).catch(error => console.log(`Error al registrar el service worker ${error}`))
-
-    navigator.serviceWorker.ready.then(reg => {
+    navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' }).then(reg => {
         let sw;
         if (reg.installing) sw = reg.installing;
         if (reg.waiting) sw = reg.waiting;
         if (reg.active) sw = reg.active;
         if (sw.state === 'activated') console.log('ServiceWorker Activated');
 
-
+        
         sw.addEventListener('statechange', function (e) {
             console.log(e.target.state)
             if (e.target.state === "activated") {
@@ -27,6 +23,10 @@ if ('serviceWorker' in navigator) {
                 }).catch(error => console.log(`Error al suscribirse ${error}`))
             }
         })
+    }).catch(error => console.log(`Error al registrar el service worker ${error}`))
+
+    navigator.serviceWorker.ready.then(reg => {
+        
     })
 }
 
