@@ -13,6 +13,9 @@ self.addEventListener('install', function(ev){
     )
 });
 
-self.addEventListener('fetch', function(ev) {
-    
+self.addEventListener('push', ev => {
+    const data = ev.data.json();
+    self.registration.showNotification(data.title, {
+        body: data.message
+    })
 })
