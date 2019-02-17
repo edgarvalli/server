@@ -12,13 +12,3 @@ self.addEventListener('activate', function (ev) {
         }).catch(error => console.log(error))
     )
 });
-
-self.addEventListener('push', event => {
-    const data = event.data.json();
-    event.waitUntil(
-        self.registration.showNotification(data.title, {
-            icon: data.icon,
-            body: data.message
-        })
-    )
-})
