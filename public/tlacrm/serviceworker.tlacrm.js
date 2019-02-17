@@ -1,9 +1,5 @@
-self.addEventListener('install', function(ev) {
-    ev.waitUntil(
-        Promise.reject()
-    )
-})
 self.addEventListener('activate', function (ev) {
+    console.log("Activated")
     ev.waitUntil(
         caches.open('tlacrm').then(cache => {
             return cache.addAll(
