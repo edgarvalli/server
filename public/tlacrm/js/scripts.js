@@ -31,7 +31,7 @@ function subscribeForPushNotification(reg) {
             method: "post",
             body: JSON.stringify(sub)
         }).catch(error => error)
-    })
+    }).catch(error => console.log(`Error al suscribirse ${error}`))
 }
 
 function _run() {
@@ -50,7 +50,7 @@ function _run() {
                 subscribeForPushNotification(reg);
             }
         })
-    })
+    }).catch(erro => console.log(`Error al registrar el service worker ${error}`))
 
 
 }
