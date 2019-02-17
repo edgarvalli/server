@@ -15,4 +15,4 @@ const sub = {
     }
 }
 
-webpush.sendNotification(sub, {title: 'TlaCrm Notification', message:'Prueba de notificación'})
+webpush.sendNotification(sub, JSON.stringify({title: 'TlaCrm Notification', message:'Prueba de notificación'}))
