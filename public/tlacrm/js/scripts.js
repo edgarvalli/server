@@ -12,22 +12,18 @@ if ('Notification' in window) {
 
 const publicVapidKey = 'BH54HR9NEeTIQ36JskmMCoKMsM1EseYPAEv7O575VrgJ9xtXW3gh8nVO23PVwNWB8CDUCypLRBGU9jCiXkQVUZY';
 
-var BASE64_MARKER = ';base64,';
-function convertDataURIToBinary(dataURI) {
-    var base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
-    var base64 = dataURI.substring(base64Index);
-    var raw = window.atob(base64);
-    var rawLength = raw.length;
-    var array = new Uint8Array(new ArrayBuffer(rawLength));
-
-    for (i = 0; i < rawLength; i++) {
-        array[i] = raw.charCodeAt(i);
-    }
-    return array;
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/')
+        ;
+    const rawData = window.atob(base64);
+    return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
 }
 
 function subscribeForPushNotification(reg) {
-    const applicationServerKey = convertDataURIToBinary(publicVapidKey);
+    const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
     console.log(applicationCache)
     reg.pushManager.subscribe({
         userVisibleOnly: true,
@@ -64,12 +60,12 @@ function _run() {
             }
 
             sw.addEventListener('statechange', function (e) {
-                if(e.target.state === "activated") {
-                // use pushManger for subscribing here.
-                console.log("Just now activated. now we can subscribe for push notification")
-                subscribeForPushNotification(reg);
-            }
+                if (e.target.state === "activated") {
+                    // use pushManger for subscribing here.
+                    console.log("Just now activated. now we can subscribe for push notification")
+                    subscribeForPushNotification(reg);
+                }
+            })
         })
-})
-        .catch (error => console.log(error))
+        .catch(error => console.log(error))
 }
