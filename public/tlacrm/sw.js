@@ -8,8 +8,7 @@ self.addEventListener('install', function (ev) {
                     '/tlacrm/index.html',
                     '/tlacrm/images/icons/icon_16x16.png'
                 ]
-            ),
-            self.registration.showNotification('Hello world!')
+            )
         })
     )
 
@@ -17,6 +16,9 @@ self.addEventListener('install', function (ev) {
 
 self.addEventListener('push', ev => {
     const data = ev.data.json();
+    ev.waitUntil(
+        self.registration.showNotification('Hello world!')
+    )
     self.registration.showNotification(data.title, {
         body: data.message
     })
