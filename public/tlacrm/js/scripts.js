@@ -9,7 +9,7 @@ if ('serviceWorker' in navigator) {
 
         
         sw.addEventListener('statechange', function (e) {
-            console.log(sw.state)
+            console.log(e.target.state)
             if (e.target.state === "activated") {
                 // use pushManger for subscribing here.
                 console.log("Just now activated. now we can subscribe for push notification");
