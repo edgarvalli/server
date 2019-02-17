@@ -62,8 +62,7 @@ function _run() {
                     // use pushManger for subscribing here.
                     console.log("Just now activated. now we can subscribe for push notification")
 
-                    reg.pushManager.getSubscription().then(s => console.log(s))
-
+                    console.log(reg.pushManager)
                     subscribeForPushNotification(reg);
                 }
             })
