@@ -1,7 +1,7 @@
 if ('serviceWorker' in navigator) {
 
     console.log('Registering service worker');
-
+    removeSw();
     navigator.serviceWorker.register('sw.tlacrm.js').then(reg => {
         let sw;
         if (reg.installing) sw = reg.installing;
@@ -27,8 +27,7 @@ if ('serviceWorker' in navigator) {
                     }).catch(error => error)
                 })
             } else if( e.target.state === 'redundant') {
-                console.log(e.target)
-                removeSw();
+                reg.update();
             }
         })
     }).catch(error => console.log(`Error al registrar el service worker ${error}`))
