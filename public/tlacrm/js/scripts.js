@@ -47,13 +47,13 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 function runServiceWorker() {
-    navigator.serviceWorker.register('serviceworker.tlacrm.js', { scope: '/tlacrm/' }).then(reg => {
+    navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' }).then(reg => {
         let sw;
         if (reg.installing) sw = reg.installing;
         if (reg.waiting) sw = reg.waiting;
         if (reg.active) sw = reg.active;
         console.log(`Service Worker is registered with status: ${sw.state}`)
-
+        sw.onerror = (error) => console.log(error)
         sw.addEventListener('statechange', ev => {
             console.log(`Service Worker change status to ${ev.target.state}`)
             // if (ev.target.state === 'activated') {
