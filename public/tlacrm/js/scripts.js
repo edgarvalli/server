@@ -1,5 +1,11 @@
 if ('serviceWorker' in navigator) {
     console.log('Registering service worker');
+
+
+    navigator.serviceWorker.getRegistrations().then(regs => {
+        console.log(regs)
+    })
+
     navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' }).then(reg => {
         let sw;
         if (reg.installing) sw = reg.installing;
