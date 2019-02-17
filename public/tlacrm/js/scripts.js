@@ -61,6 +61,7 @@ async function runServiceWorker() {
 
 async function removeOldServiceWorkers() {
     const regs = await navigator.serviceWorker.getRegistrations();
+    console.log(regs)
     if(regs.length > 0) {
         for(let reg in regs) {
             reg.unregister();
