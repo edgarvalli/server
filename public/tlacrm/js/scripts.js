@@ -26,6 +26,21 @@ function convertDataURIToBinary(dataURI) {
     return array;
 }
 
+function pushManagerFun(reg) {
+    reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: convertDataURIToBinary(publicVapidKey)
+    })
+        .then(sub => {
+            fetch('https://ev-server.ddns.net/api/users/subscribe', {
+                headers: { "Content-Type": "application/json" },
+                method: "post",
+                body: JSON.stringify(sub)
+            })
+        })
+        .catch(error => console.error("Ocurrio un error: " + error));
+}
+
 function _run() {
 
     navigator.serviceWorker.register('/tlacrm/sw.js', { scope: '/tlacrm/' })
@@ -36,18 +51,7 @@ function _run() {
                 console.log('Service worker installed');
             } else if (reg.active) {
                 console.log('Service worker active');
-                reg.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: convertDataURIToBinary(publicVapidKey)
-                })
-                    .then(sub => {
-                        fetch('https://ev-server.ddns.net/api/users/subscribe', {
-                            headers: { "Content-Type": "application/json" },
-                            method: "post",
-                            body: JSON.stringify(sub)
-                        })
-                    })
-                    .catch(error => console.error("Ocurrio un error: " + error));
+                pushManagerFun(reg)
             }
         })
         .catch(error => console.log(error))
