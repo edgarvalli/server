@@ -1,7 +1,7 @@
 if ('serviceWorker' in navigator) {
     console.log('Registering service worker');
 
-    _run().catch(error => console.log(error));
+    _run()
 }
 
 if ('Notification' in window) {
