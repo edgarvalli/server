@@ -41,7 +41,6 @@ function _run() {
 
     navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' })
         .then(reg => {
-            console.log(reg)
             let sw;
             if (reg.installing) {
                 console.log('Service worker installing');
@@ -62,6 +61,9 @@ function _run() {
                 if (e.target.state === "activated") {
                     // use pushManger for subscribing here.
                     console.log("Just now activated. now we can subscribe for push notification")
+
+                    console.log(reg.pushManager.getSubscription())
+
                     subscribeForPushNotification(reg);
                 }
             })
