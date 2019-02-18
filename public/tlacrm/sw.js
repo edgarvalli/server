@@ -1,5 +1,5 @@
 self.addEventListener('install', function (ev) {
-    console.log(ev.scope)
+    console.log(ev)
     ev.waitUntil(
         caches.open('tlacrm').then(cache => {
             return cache.addAll(
