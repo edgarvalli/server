@@ -11,7 +11,7 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 async function runServiceWorker() {
-    const reg = await navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' })
+    const reg = await navigator.serviceWorker.register('sw.js')
         .catch(error => console.log(`Service Worker failed to register, Error: ${error}`))
     const sub = await reg.pushManager.getSubscription();
     (sub === null) ? getPushSubscription() : console.log('You are subscribe to push notificaction')
