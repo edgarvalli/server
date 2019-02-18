@@ -13,6 +13,12 @@ self.addEventListener('install', function (ev) {
     )
 });
 
-self.addEventListener('activate', event => {
-    console.log(event)
+self.addEventListener('push', e => {
+    const n = e.data.json();
+    e.waitUntil(
+        self.registration.showNotification(n.title, {
+            body: n.message,
+            icon: n.icon
+        })
+    )
 })

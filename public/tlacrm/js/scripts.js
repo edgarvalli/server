@@ -13,31 +13,25 @@ function urlBase64ToUint8Array(base64String) {
 async function runServiceWorker() {
     const reg = await navigator.serviceWorker.register('sw.js')
         .catch(error => console.log(`Service Worker failed to register, Error: ${error}`))
-    let sw;
-    if (reg.installing) sw = reg.installing;
-    if (reg.waiting) sw = reg.waiting;
-    if (reg.active) sw = reg.active;
-
-    sw.addEventListener('statechange', event => {
-        if(event.target.state === 'redundant') {
-            console.log(reg)
-        }
-    })
+    const sub = await reg.pushManager.getSubscription();
+    (sub === null) ? getPushSubscription() : console.log('You are subscribe to push notificaction')
 }
 
-async function removeOldServiceWorkers() {
-    const regs = await navigator.serviceWorker.getRegistrations();
-    console.log(regs)
-    if (regs.length > 0) {
-        for (let reg in regs) {
-            reg.unregister();
-        }
+async function getPushSubscription() {
+    if (Notification.permission === 'granted') {
+        const applicationServerKey = urlBase64ToUint8Array(publicVapidKey);
+        const url = 'https://ev-server.ddns.net/api/tlacrm/users/subscribe';
+        const reg = await navigator.serviceWorker.ready;
+        const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey })
+        await fetch(url, {
+            headers: { "Content-Type": "Application/Json" },
+            method: "post",
+            body: JSON.stringify(sub)
+        })
     }
 }
 
-if ('serviceWorker' in navigator) {
-    runServiceWorker();
-}
+if ('serviceWorker' in navigator) runServiceWorker();
 
 if ('Notification' in window) {
     if (Notification.permission !== 'granted') {
