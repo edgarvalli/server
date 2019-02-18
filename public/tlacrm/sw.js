@@ -17,6 +17,10 @@ self.addEventListener('install', function (ev) {
     )
 });
 
+self.addEventListener('fetch', e => {
+    console.log(e)
+})
+
 self.addEventListener('push', e => {
     const n = e.data.json();
     e.waitUntil(
