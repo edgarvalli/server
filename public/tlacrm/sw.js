@@ -22,3 +22,13 @@ self.addEventListener('push', e => {
         })
     )
 })
+
+self.addEventListener('notificationclick', function (e) {
+    const url = 'https://ev-server.ddns.net/tlacrm/';
+
+    e.notification.close();
+
+    if (clients.openWindow) {
+        return clients.openWindow(url);
+    }
+});
