@@ -19,7 +19,9 @@ async function runServiceWorker() {
     if (reg.active) sw = reg.active;
 
     sw.addEventListener('statechange', event => {
-        // console.log(reg)
+        if(event.target.state === 'redundant') {
+            console.log(reg)
+        }
     })
 }
 
