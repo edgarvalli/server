@@ -56,7 +56,7 @@ async function runServiceWorker() {
     if (reg.active) sw = reg.active;
 
     sw.addEventListener('statechange', event => {
-        console.log(event.target.state)
+        console.log(reg)
     })
 }
 
