@@ -18,7 +18,8 @@ self.addEventListener('push', e => {
     e.waitUntil(
         self.registration.showNotification(n.title, {
             body: n.message,
-            icon: n.icon
+            icon: n.icon,
+            badge: 'https://ev-server.ddns.net/tlacrm/images/icons/icon_16x16.png'
         })
     )
 })

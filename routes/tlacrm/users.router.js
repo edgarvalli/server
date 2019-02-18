@@ -37,7 +37,7 @@ router
         const payload = {
             title: "TlaCrm Notification",
             message: "Tu te has subscripto a las notificaciones",
-            icon: 'https://ev-server.ddns.net/tlacrm/images/icons/icon_16x16.png'
+            icon: 'https://ev-server.ddns.net/tlacrm/images/icons/icon_72x72.png'
         }
 
         sendNotification(subscription, payload)
