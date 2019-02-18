@@ -49,7 +49,8 @@ function urlBase64ToUint8Array(base64String) {
 
 async function runServiceWorker() {
     debugger;
-    const reg = await navigator.serviceWorker.register('https://ev-server.ddns.net/tlacrm/sw.js').catch(error => console.log(`Service Worker failed to register, Error: ${error}`))
+    const reg = await navigator.serviceWorker.register('sw.js', { scope: '/tlacrm/' })
+        .catch(error => console.log(`Service Worker failed to register, Error: ${error}`))
     let sw;
     if (reg.installing) sw = reg.installing;
     if (reg.waiting) sw = reg.waiting;
@@ -63,8 +64,8 @@ async function runServiceWorker() {
 async function removeOldServiceWorkers() {
     const regs = await navigator.serviceWorker.getRegistrations();
     console.log(regs)
-    if(regs.length > 0) {
-        for(let reg in regs) {
+    if (regs.length > 0) {
+        for (let reg in regs) {
             reg.unregister();
         }
     }
