@@ -4,13 +4,13 @@ self.addEventListener('install', function (ev) {
         caches.open('tlacrm').then(cache => {
             return cache.addAll(
                 [
-                    'js/bundle.js',
-                    'js/bundle.chunk.js',
-                    'index.html',
-                    'images/icons/icon_16x16.png',
-                    'css/styles.css',
-                    'css/roboto.css',
-                    'css/material-icons.css'
+                    './js/bundle.js',
+                    './js/bundle.chunk.js',
+                    './index.html',
+                    './images/icons/icon_16x16.png',
+                    './css/styles.css',
+                    './css/roboto.css',
+                    './css/material-icons.css'
                 ]
             )
         }).catch(error => console.log(error))
