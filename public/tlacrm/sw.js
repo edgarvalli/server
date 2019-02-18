@@ -5,6 +5,7 @@ self.addEventListener('install', function (ev) {
                 [
                     '/tlacrm/css/styles.css',
                     '/tlacrm/js/bundle.js',
+                    '/tlacrm/js/bundle.chunk.js',
                     '/tlacrm/index.html',
                     '/tlacrm/images/icons/icon_16x16.png'
                 ]
