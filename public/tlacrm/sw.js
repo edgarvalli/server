@@ -8,7 +8,7 @@ self.addEventListener('install', function (ev) {
                     '/tlacrm/js/bundle.js',
                     '/tlacrm/js/bundle.chunk.js',
                     '/tlacrm/images/icons/icon_16x16.png',
-                    '/tlacrm/css/styles.css',
+                    '/tlacrm/css/bundle-styles.css',
                     '/tlacrm/css/roboto.css',
                     '/tlacrm/css/material-icons.css'
                 ]
