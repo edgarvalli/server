@@ -32,3 +32,24 @@ workbox.routing.registerNavigationRoute("/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
+
+self.addEventListener('push', e => {
+  const n = e.data.json();
+  e.waitUntil(
+      self.registration.showNotification(n.title, {
+          body: n.message,
+          icon: n.icon,
+          badge: 'https://ev-server.ddns.net/tlacrm/images/icons/icon_16x16.png'
+      })
+  )
+})
+
+self.addEventListener('notificationclick', function (e) {
+  const url = 'https://ev-server.ddns.net/tlacrm/';
+
+  e.notification.close();
+
+  if (clients.openWindow) {
+      return clients.openWindow(url);
+  }
+});
