@@ -1,7 +1,9 @@
+const path = require("path");
 const router = require('express').Router();
 const evbase = require('./evbase.controller');
 
 router
-    .get('/fetch/:limit?/:skipt?', evbase.fetch)
+    .get("/console", (_, res) => res.sendFile(path.resolve(path.join(__dirname, "./console.html"))))
+    .get("/fetch/:module/:query", evbase.fetch)
 
 module.exports = router;
