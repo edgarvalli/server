@@ -4,7 +4,7 @@ const url = "mongodb://localhost:27017"
 
 module.exports = db => {
     return {
-        id: id => ObjectID(id),
+        ObjectID: id => ObjectID(id),
         string: (id) => ObjectID(id).toString(),
         async collection(collection) {
             const conn = await mongo.connect(url);
