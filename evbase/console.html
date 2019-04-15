@@ -1,37 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>EvBase Console</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>EvBase Console</h1>
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="form-group">
-                    <input type="text" class="form-control">
-                </div>
-                <button class="btn btn-primary" onclick="fetchData(this)">Enviar</button>
-            </div>
+      <div class="row">
+        <div class="form-group col-12">
+          <label for="user">Username</label>
+          <input
+            type="text"
+            id="user"
+            class="form-control"
+            placeholder="Username"
+            name="username"
+          />
         </div>
+        <div class="form-group col-12">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            placeholder="Password"
+            username="password"
+          />
+        </div>
+        <div class="col-12">
+          <button class="btn btn-success" type="submit" onclick="login()">
+            Login
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <input type="text" class="form-control" />
+          </div>
+          <button class="btn btn-primary" onclick="fetchData(this)">
+            Enviar
+          </button>
+        </div>
+      </div>
     </div>
     <script>
-    
-        const fetchData = async () => {
-            const params = JSON.stringify({
-                limit: 5,
-                skip: 0
-            })
+      const fetchData = async () => {
+        const params = JSON.stringify({
+          limit: 5,
+          skip: 0
+        });
 
-            const request = await fetch(`/api/evbase/fetch/clients/${params}`);
-            const response = await request.json();
-            console.log(response)
-        }
-    
+        const request = await fetch(`/api/evbase/fetch/clients/${params}`);
+        const response = await request.json();
+        console.log(response);
+      };
+
+      const login = async ev => {
+        const credentials = JSON.stringify({
+          username: document.querySelector("#username").target.value,
+          password: document.querySelector("#password").target.value
+        });
+
+        const request = await fetch("/api/evbase/login", {
+          headers: {
+            "Content-Type": "Application/Json",
+            Accept: "Applicaction/Json"
+          },
+          method: "post",
+          body: credentials
+        });
+
+        const response = await request.json();
+        console.log(response);
+      };
     </script>
-</body>
+  </body>
 </html>
