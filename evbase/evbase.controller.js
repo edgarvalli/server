@@ -1,13 +1,22 @@
 const mongo = require("./evbase.mongo");
 const bcrypt = require("bcrypt");
+const Model = require("./evbase.model");
+
 const { generateToken } = require("../helpers/handletoken");
 
-const handleError = (res, message) => res.json({ error: true, message });
+const decryptPassword = (cryptpass, pass) =>
+  new Promise(function(resolve, reject) {
+    bcrypt.compare(cryptpass, pass, function(error, success) {
+      if (error) reject(error);
+      success ? resolve(true) : resolve(false);
+    });
+  });
 
 module.exports = {
   middleware: function(req, _, next) {
     if (req.params.module) {
       req.evbaseQuery = {
+        db: req.params.db,
         module: req.params.module,
         params: JSON.parse(req.params.query)
       };
@@ -18,60 +27,45 @@ module.exports = {
   },
 
   login: async function(req, res) {
-    const { username, password } = req.evbaseQuery.credentials;
-    const user = await mongo("evbase")
-      .collection("users")
-      .catch(msg => handleError(res, msg));
-    const _user = await user
-      .findOne({ username }, { avatar: 0, password: 1 })
-      .catch(error => handleError(res, error));
-    if (!_user)
-      return res.json({ error: true, message: "Usuario no encontrado" });
+    try {
+      const { username, password, autoLogin } = req.evbaseQuery.credentials;
 
-    async function decryptPassword(error, success) {
-      if (error)
-        return res.json({
-          error: true,
-          message: "Ocurrio un error con la libreria"
-        });
+      const user = await Model.User(username);
+      if (!user)
+        return res.json({ error: true, message: "Usuario no encontrado" });
+        const success = await decryptPassword(password, user.password);
+        console.log(success)
       if (!success)
         return res.json({ error: true, message: "Contraseña incorrecta" });
 
-      delete _user.password;
+      delete user.password;
 
-      const profile = await mongo("evbase")
-        .collection("profiles")
-        .catch(msg => handleError(res, msg));
-        
-      const _profile = await profile
-        .findOne({ _id: mongo().ObjectID(_user.profileId) })
-        .catch(error => handleError(res, error));
-      if (!_profile)
+      const profile = await Model.Profile(user.profileId);
+      if (!profile)
         return res.json({
           error: true,
           message: "Ocurrio un error al seleccionar perfil"
         });
-      _user.profile = _profile;
 
+      user.profile = profile;
+      user.autoLogin = autoLogin;
+      
       res.json({
         error: false,
-        token: generateToken(_user),
-        userInformation: _user
+        token: generateToken(user),
+        userInformation: user
       });
+    } catch (message) {
+      res.json({ error: true, message });
     }
-
-    bcrypt.compare(password, _user.password, decryptPassword);
   },
 
   fetch: async function(req, res) {
-    const { params } = req.evbaseQuery;
-    const query = {};
-    for (var key in params.query)
-      query[key] = new RegExp(params.query[key], "i");
+    const { params, module, db } = req.evbaseQuery;
 
-    const instance = await mongo("tlacrm").collection(req.evbaseQuery.module);
+    const instance = await mongo(db).collection(module);
     const q = await instance
-      .find(query)
+      .find({})
       .sort(params.sort || { _id: -1 })
       .limit(params.limit || 0)
       .skip(params.skip || 0)

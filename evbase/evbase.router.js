@@ -6,7 +6,7 @@ router
   .get("/console", (_, res) =>
     res.sendFile(path.resolve(path.join(__dirname, "./console.html")))
   )
-  .get("/fetch/:module/:query", evbase.middleware, evbase.fetch)
+  .get("/fetch/:db/:module/:query", evbase.middleware, evbase.fetch)
   .post("/login", evbase.middleware, evbase.login);
 
 module.exports = router;
