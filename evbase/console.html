@@ -17,10 +17,10 @@
     <div class="container">
       <div class="row">
         <div class="form-group col-12">
-          <label for="user">Username</label>
+          <label for="username">Username</label>
           <input
             type="text"
-            id="user"
+            id="username"
             class="form-control"
             placeholder="Username"
             name="username"
@@ -66,9 +66,11 @@
       };
 
       const login = async ev => {
-        const credentials = JSON.stringify({
-          username: document.querySelector("#username").target.value,
-          password: document.querySelector("#password").target.value
+        const body = JSON.stringify({
+          credentials: {
+            username: document.querySelector("#username").value,
+            password: document.querySelector("#password").value
+          }
         });
 
         const request = await fetch("/api/evbase/login", {
@@ -77,7 +79,7 @@
             Accept: "Applicaction/Json"
           },
           method: "post",
-          body: credentials
+          body
         });
 
         const response = await request.json();

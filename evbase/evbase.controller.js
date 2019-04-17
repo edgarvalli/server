@@ -5,9 +5,8 @@ const { generateToken } = require("../helpers/handletoken");
 const handleError = (res, message) => res.json({ error: true, message });
 
 module.exports = {
-
   middleware: function(req, _, next) {
-    if (req.params) {
+    if (req.params.module) {
       req.evbaseQuery = {
         module: req.params.module,
         params: JSON.parse(req.params.query)
@@ -20,9 +19,11 @@ module.exports = {
 
   login: async function(req, res) {
     const { username, password } = req.evbaseQuery.credentials;
-    const user = await mongo("evbase").collection("users");
+    const user = await mongo("evbase")
+      .collection("users")
+      .catch(msg => handleError(res, msg));
     const _user = await user
-      .findOne({ username })
+      .findOne({ username }, { avatar: 0, password: 1 })
       .catch(error => handleError(res, error));
     if (!_user)
       return res.json({ error: true, message: "Usuario no encontrado" });
@@ -38,11 +39,13 @@ module.exports = {
 
       delete _user.password;
 
-      const profile = await mongo.collection("profiles");
+      const profile = await mongo("evbase")
+        .collection("profiles")
+        .catch(msg => handleError(res, msg));
+        
       const _profile = await profile
-        .findOne({ _id: mongo.ObjectID(_user.profileId) })
+        .findOne({ _id: mongo().ObjectID(_user.profileId) })
         .catch(error => handleError(res, error));
-      console.log(_profile);
       if (!_profile)
         return res.json({
           error: true,
