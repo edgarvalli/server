@@ -1,19 +1,32 @@
-const mongo = require("./evbase.mongo");
-const bcrypt = require("bcrypt");
+const mongo = require("./helpers/evbase.mongo");
+const decryptPassword = require("./helpers/decrypt.password");
 const Model = require("./evbase.model");
-
-const { generateToken } = require("../helpers/handletoken");
-
-const decryptPassword = (cryptpass, pass) =>
-  new Promise(function(resolve, reject) {
-    bcrypt.compare(cryptpass, pass, function(error, success) {
-      if (error) reject(error);
-      success ? resolve(true) : resolve(false);
-    });
-  });
+const sendNotification = require("./helpers/send.notificacion");
+const { generateToken, decodeToken } = require("./helpers/handle.token");
 
 module.exports = {
+  checkToken: async function(req, res, next) {
+    try {
+      const token = req.headers["ev-token"];
+      const decoded = await decodeToken(token);
+      req.user = decoded.user;
+      next();
+    } catch ({ message }) {
+      res.json({ error: true, tokenExpired: true, message });
+    }
+  },
   middleware: function(req, _, next) {
+
+    if(req.user) {
+      const allow = req.user.profile.modules.filter((m) => {
+        return m.key === req.params.module;
+      })
+  
+      if(allow.length > 0) {
+        
+      }
+    }
+
     if (req.params.module) {
       req.evbaseQuery = {
         db: req.params.db,
@@ -26,6 +39,24 @@ module.exports = {
     next();
   },
 
+  subscribe: async function(req, res) {
+    const subscription = req.body;
+    const payload = {
+      title: "TlaCrm Notification",
+      message: "Tu te has subscripto a las notificaciones",
+      icon: "https://ev-server.ddns.net/tlacrm/images/icons/icon_72x72.png"
+    };
+
+    const coll = await mongo("evbase").collection("users");
+    await coll.update(
+      { _id: mongo().ObjectID(req.user._id) },
+      { $push: { notificationEndPoint: subscription } }
+    );
+    sendNotification(subscription, payload);
+
+    res.json({ error: false });
+  },
+
   login: async function(req, res) {
     try {
       const { username, password, autoLogin } = req.evbaseQuery.credentials;
@@ -33,8 +64,7 @@ module.exports = {
       const user = await Model.User(username);
       if (!user)
         return res.json({ error: true, message: "Usuario no encontrado" });
-        const success = await decryptPassword(password, user.password);
-        console.log(success)
+      const success = await decryptPassword(password, user.password);
       if (!success)
         return res.json({ error: true, message: "Contraseña incorrecta" });
 
@@ -49,28 +79,48 @@ module.exports = {
 
       user.profile = profile;
       user.autoLogin = autoLogin;
-      
+
       res.json({
         error: false,
         token: generateToken(user),
         userInformation: user
       });
     } catch (message) {
+      console.log(message);
       res.json({ error: true, message });
     }
   },
 
   fetch: async function(req, res) {
-    const { params, module, db } = req.evbaseQuery;
+    try {
+      const { params, module, db } = req.evbaseQuery;
 
-    const instance = await mongo(db).collection(module);
-    const q = await instance
-      .find({})
-      .sort(params.sort || { _id: -1 })
-      .limit(params.limit || 0)
-      .skip(params.skip || 0)
-      .toArray();
+      const instance = await mongo(db).collection(module);
+      const data = await instance
+        .find({})
+        .sort(params.sort || { _id: -1 })
+        .limit(params.limit || 0)
+        .skip(params.skip || 0)
+        .toArray();
 
-    res.json(q);
+      res.json({ error: false, data });
+    } catch (message) {
+      res.json({ error: false, message });
+    }
+  },
+
+  search: async function(req, res) {
+    try {
+      const { params, module, db } = req.evbaseQuery;
+      const query = {};
+      for(let key in params.params) {
+        query[key] = new RegExp(params[key], "i");
+      }
+      const instance = await mongo(db).collection(module);
+      const data = await instance.find(query).toArray();
+      res.json({ error: false, data });
+    } catch (message) {
+      res.json({ error: false, message });
+    }
   }
 };

@@ -1,4 +1,4 @@
-const mongo = require("./evbase.mongo");
+const mongo = require("./helpers/evbase.mongo");
 const Connection = async coll => await mongo("evbase").collection(coll);
 module.exports = {
   User: async function(username) {
