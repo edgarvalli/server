@@ -36,7 +36,12 @@ module.exports = {
     } else {
       req.evbaseQuery = req.body;
     }
-    next();
+
+    if("module" in req.evbaseQuery || "db" in req.evbaseQuery || "params" in req.evbaseQuery) {
+      next();
+    } else {
+      res.json({error: true, message: "No envio los parametros suficientes"})
+    }
   },
 
   subscribe: async function(req, res) {
@@ -105,7 +110,7 @@ module.exports = {
 
       res.json({ error: false, data });
     } catch (message) {
-      res.json({ error: false, message });
+      res.json({ error: true, message });
     }
   },
 
@@ -119,6 +124,39 @@ module.exports = {
       const instance = await mongo(db).collection(module);
       const data = await instance.find(query).toArray();
       res.json({ error: false, data });
+    } catch (message) {
+      res.json({ error: false, message });
+    }
+  },
+
+  findOne: async function(req, res) {
+    try {
+      const { params, module, db } = req.evbaseQuery;
+      const instance = await mongo(db).collection(module);
+      const data = await instance.findOne({_id: mongo().ObjectID(params.id)});
+      res.json({error: false, data});
+    } catch (message) {
+      res.json({ error: true, message });
+    }
+  },
+
+  update: async function(req, res) {
+    try {
+      const { params, module, db } = req.evbaseQuery;
+      const instance = await mongo(db).collection(module);
+      const data = await instance.updateOne({_id: mongo().ObjectID(params.id)}, { $set: params.data });
+      res.json({error: false, data});
+    } catch (message) {
+      res.json({ error: false, message });
+    }
+  },
+
+  remove: async function(req, res) {
+    try {
+      const { params, module, db } = req.evbaseQuery;
+      const instance = await mongo(db).collection(module);
+      const data = await instance.remove({_id: mongo().ObjectID(params.id)});
+      res.json({error: false, data});
     } catch (message) {
       res.json({ error: false, message });
     }
