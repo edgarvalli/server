@@ -15,15 +15,13 @@ module.exports = {
       res.json({ error: true, tokenExpired: true, message });
     }
   },
-  middleware: function(req, _, next) {
-
-    if(req.user) {
-      const allow = req.user.profile.modules.filter((m) => {
+  middleware: function(req, res, next) {
+    if (req.user) {
+      const allow = req.user.profile.modules.filter(m => {
         return m.key === req.params.module;
-      })
-  
-      if(allow.length > 0) {
-        
+      });
+
+      if (allow.length > 0) {
       }
     }
 
@@ -37,10 +35,16 @@ module.exports = {
       req.evbaseQuery = req.body;
     }
 
-    if("module" in req.evbaseQuery || "db" in req.evbaseQuery || "params" in req.evbaseQuery) {
+    if ("credentials" in req.evbaseQuery) {
       next();
+    } else if (!req.evbaseQuery.module) {
+      res.json({ error: true, message: "No definio el modulo" });
+    } else if (!req.evbaseQuery.db) {
+      res.json({ error: true, message: "No definio la base de datos" });
+    } else if (!req.evbaseQuery.params) {
+      res.json({ error: true, message: "No definio los parametros" });
     } else {
-      res.json({error: true, message: "No envio los parametros suficientes"})
+      next();
     }
   },
 
@@ -117,9 +121,10 @@ module.exports = {
   search: async function(req, res) {
     try {
       const { params, module, db } = req.evbaseQuery;
-      const query = {};
-      for(let key in params.params) {
-        query[key] = new RegExp(params[key], "i");
+      const query = { $or: [] };
+      const _params = params.params
+      for (let key in _params) {
+        query.$or.push({ [key]: new RegExp(_params[key], "i") });
       }
       const instance = await mongo(db).collection(module);
       const data = await instance.find(query).toArray();
@@ -133,9 +138,10 @@ module.exports = {
     try {
       const { params, module, db } = req.evbaseQuery;
       const instance = await mongo(db).collection(module);
-      const data = await instance.findOne({_id: mongo().ObjectID(params.id)});
-      res.json({error: false, data});
+      const data = await instance.findOne({ _id: mongo().ObjectID(params.id) });
+      res.json({ error: false, data });
     } catch (message) {
+      console.log(req.evbaseQuery);
       res.json({ error: true, message });
     }
   },
@@ -144,8 +150,11 @@ module.exports = {
     try {
       const { params, module, db } = req.evbaseQuery;
       const instance = await mongo(db).collection(module);
-      const data = await instance.updateOne({_id: mongo().ObjectID(params.id)}, { $set: params.data });
-      res.json({error: false, data});
+      const data = await instance.updateOne(
+        { _id: mongo().ObjectID(params.id) },
+        { $set: params.data }
+      );
+      res.json({ error: false, data });
     } catch (message) {
       res.json({ error: false, message });
     }
@@ -155,8 +164,18 @@ module.exports = {
     try {
       const { params, module, db } = req.evbaseQuery;
       const instance = await mongo(db).collection(module);
-      const data = await instance.remove({_id: mongo().ObjectID(params.id)});
-      res.json({error: false, data});
+      const data = await instance.remove({ _id: mongo().ObjectID(params.id) });
+      res.json({ error: false, data });
+    } catch (message) {
+      res.json({ error: false, message });
+    }
+  },
+  add: async function(req, res) {
+    try {
+      const { params, module, db } = req.evbaseQuery;
+      const instance = await mongo(db).collection(module);
+      const data = await instance.insertOne(params);
+      res.json({ error: false, data });
     } catch (message) {
       res.json({ error: false, message });
     }
