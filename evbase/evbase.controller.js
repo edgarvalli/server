@@ -16,14 +16,14 @@ module.exports = {
     }
   },
   middleware: function(req, res, next) {
-    if (req.user) {
-      const allow = req.user.profile.modules.filter(m => {
-        return m.key === req.params.module;
-      });
+    // if (req.user) {
+    //   const allow = req.user.profile.modules.filter(m => {
+    //     return m.key === req.params.module;
+    //   });
 
-      if (allow.length > 0) {
-      }
-    }
+    //   if (allow.length > 0) {
+    //   }
+    // }
 
     if (req.params.module) {
       req.evbaseQuery = {
