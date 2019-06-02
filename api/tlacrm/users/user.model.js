@@ -42,6 +42,7 @@ module.exports = {
   UpdateUser: async (id, data) => {
     const _id = mongoClient().id(id);
     const client = await Connection("users");
+    if ("profileId" in data) data.profileId = mongoClient().id(data.profileId);
     const result = await client.updateOne({ _id }, { $set: data });
     return result;
   },
