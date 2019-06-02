@@ -19,7 +19,7 @@ module.exports = {
       const users = await client.aggregate([
         {
           $lookup: {
-            from: "users",
+            from: "profiles",
             localField: "profileId",
             foreignField: "_id",
             as: "profile"
