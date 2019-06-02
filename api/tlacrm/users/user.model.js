@@ -16,7 +16,16 @@ module.exports = {
   Users: async () => {
     try {
       const client = await Connection("users");
-      const users = await client.find({}).toArray();
+      const users = await client.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "profileId",
+            foreignField: "_id",
+            as: "profile"
+          }
+        }
+      ])
       return users;
     } catch (error) {
       return error;
