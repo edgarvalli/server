@@ -16,7 +16,7 @@ module.exports = {
   Users: async () => {
     try {
       const client = await Connection("users");
-      const users = await client.aggregate([
+      let users = await client.aggregate([
         {
           $lookup: {
             from: "profiles",
@@ -26,6 +26,12 @@ module.exports = {
           }
         }
       ]).toArray();
+
+      users = users.map(user => {
+        user.profile = user.profile[0];
+        return user;
+      })
+
       return users;
     } catch (error) {
       return error;
