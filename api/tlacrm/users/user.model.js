@@ -22,7 +22,7 @@ module.exports = {
             from: "profiles",
             localField: "profileId",
             foreignField: "_id",
-            as: "_profile"
+            as: "profile"
           }
         }
       ]).toArray();
