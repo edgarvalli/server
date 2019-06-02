@@ -25,7 +25,7 @@ module.exports = {
             as: "_profile"
           }
         }
-      ])
+      ]).toArray();
       return users;
     } catch (error) {
       return error;
