@@ -12,6 +12,7 @@ router.get("/", decodeToken, checkPermissions, Users.fetchAll);
 router.get("/getone/:id", decodeToken, checkPermissions, Users.getOne);
 router.get("/profiles", decodeToken, checkPermissions, Users.fetchProfiles);
 router.put("/update-password", decodeToken, checkPermissions, Users.updatePassword);
+router.put("/", decodeToken, Users.updateUser)
 router.post(
   "/upload-image",
   decodeToken,

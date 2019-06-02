@@ -4,7 +4,8 @@ const {
   Users,
   Profile,
   Profiles,
-  UpdateUserPassword
+  UpdateUser,
+  UpdateUserPassword,
 } = require("./user.model");
 
 module.exports = {
@@ -55,6 +56,15 @@ module.exports = {
     try {
       const profiles = await Profiles();
       res.json({ error: false, profiles });
+    } catch (message) {
+      res.json({ error: true, message });
+    }
+  },
+  updateUser: async (req, res) => {
+    try {
+      const { id, data } = req.body;
+      const result = await UpdateUser(id, data);
+      res.json({ error: false, result });
     } catch (message) {
       res.json({ error: true, message });
     }

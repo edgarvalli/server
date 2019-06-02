@@ -16,32 +16,40 @@ module.exports = {
   Users: async () => {
     try {
       const client = await Connection("users");
-      let users = await client.aggregate([
-        {
-          $lookup: {
-            from: "profiles",
-            localField: "profileId",
-            foreignField: "_id",
-            as: "profile"
+      let users = await client
+        .aggregate([
+          {
+            $lookup: {
+              from: "profiles",
+              localField: "profileId",
+              foreignField: "_id",
+              as: "profile"
+            }
           }
-        }
-      ]).toArray();
+        ])
+        .toArray();
 
       users = users.map(user => {
         user.profile = user.profile[0];
         return user;
-      })
+      });
 
       return users;
     } catch (error) {
       return error;
     }
   },
+  UpdateUser: async (id, data) => {
+    const _id = mongoClient().id(id);
+    const client = await Connection("users");
+    const result = await client.updateOne({ _id }, { $set: data });
+    return result;
+  },
   UpdateUserPassword: async (id, plainTextPassword) => {
     const _id = mongoClient().id(id);
     const password = bcrypt.hashSync(plainTextPassword, 10);
     const client = await Connection("users");
-    const result = await client.updateOne({ _id }, { $set: {  password } } );
+    const result = await client.updateOne({ _id }, { $set: { password } });
     return result;
   },
   Profile: async id => {
