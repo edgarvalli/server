@@ -1,7 +1,6 @@
 const mongo = require('../../helpers/mongo.client')("tlacrm");
 const fs = require("fs");
 const path = require("path");
-const sharp = require('sharp');
 const bcrypt = require("bcrypt");
 const { generateToken } = require('../../helpers/handletoken');
 
@@ -30,9 +29,6 @@ module.exports = {
 
             // Create an avatar picture from the last
             const avatar = `${req.client.user._id}_avatar.png`;
-            sharp(newDest)
-                .resize(73, 73)
-                .toFile('public/tlacrm/images/profiles/' + avatar)
 
             const _id = mongo.id(req.client.user._id);
             const users = await mongo.collection("users");

@@ -1,5 +1,3 @@
-const base64 = require("base64-img");
-const path = require("path");
 const { handleToken, decryptPassword } = require("../../../helpers");
 const {
   User,
