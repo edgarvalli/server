@@ -2,10 +2,11 @@ const { handleToken, decryptPassword } = require("../../../helpers");
 const {
   User,
   Users,
+  NewUser,
   Profile,
   Profiles,
   UpdateUser,
-  UpdateUserPassword,
+  UpdateUserPassword
 } = require("./user.model");
 
 module.exports = {
@@ -60,6 +61,14 @@ module.exports = {
       res.json({ error: true, message });
     }
   },
+  addUser: async (req, res) => {
+    try {
+      const result = await NewUser(req.body.user);
+      res, json({ error: false, result });
+    } catch (message) {
+      res.json({ error: true, message });
+    }
+  },
   updateUser: async (req, res) => {
     try {
       const { id, data } = req.body;
@@ -71,7 +80,11 @@ module.exports = {
   },
   uploadImageProfile: async (req, res) => {
     const base64Data = req.body.file.replace(/^data:image\/png;base64,/, "");
-    require("fs").writeFileSync(`./files/profiles/${req.body.filename}`, base64Data, 'base64');
+    require("fs").writeFileSync(
+      `./files/profiles/${req.body.filename}`,
+      base64Data,
+      "base64"
+    );
     res.json({ error: false });
   },
   updatePassword: async (req, res) => {

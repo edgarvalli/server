@@ -39,10 +39,21 @@ module.exports = {
       return error;
     }
   },
+  NewUser: async user => {
+    try {
+      user.createDate = new Date();
+      const client = await Connection("users");
+      const result = await client.insertOne(user);
+      return result;
+    } catch (error) {
+      return error;
+    }
+  },
   UpdateUser: async (id, data) => {
     const _id = mongoClient().id(id);
     const client = await Connection("users");
     if ("profileId" in data) data.profileId = mongoClient().id(data.profileId);
+    gi;
     const result = await client.updateOne({ _id }, { $set: data });
     return result;
   },
