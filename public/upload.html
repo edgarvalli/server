@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Upload</title>
+</head>
+<body>
+    <button id="test">Test</button>
+    <br>
+    <div id="progress">
+        Total
+    </div>
+    <script>
+        document.querySelector('#test').addEventListener('click', async () => {
+            const divResult = document.querySelector('#progress');
+            divResult.innerText = 'Making request';
+            const request = await fetch("/send-file-client");
+            const reader = await request.body.getReader();
+            const total = await request.headers.get('Content-Length');
+            divResult.innerText = 'Recived'
+            let recivedBytes = 0;
+            while(true) {
+                const { done, value } = await reader.read();
+                if(done) break;
+                recivedBytes += value.length;
+                divResult.innerText = `${recivedBytes} recibidos de ${total}`
+            }
+        })
+    </script>
+</body>
+</html>

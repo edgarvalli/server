@@ -13,7 +13,7 @@ module.exports = {
       return error;
     }
   },
-  Users: async () => {
+  Users: async (limit, skip) => {
     try {
       const client = await Connection("users");
       let users = await client
@@ -27,6 +27,8 @@ module.exports = {
             }
           }
         ])
+        .limit(limit)
+        .skip(skip)
         .toArray();
 
       users = users.map(user => {

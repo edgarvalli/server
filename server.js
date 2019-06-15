@@ -15,5 +15,10 @@ module.exports = function() {
     res.sendFile(`${__dirname}/files/profiles/${req.params.id}.png`)
   })
 
+  app.get('/send-file-client', (_, res) => {
+    console.log(__dirname)
+      setTimeout(() => res.sendFile(__dirname + '/wordpress.zip'), 5000)
+  })
+
   return app;
 };

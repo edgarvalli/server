@@ -36,9 +36,10 @@ module.exports = {
 
   fetchAll: async (_, res) => {
     try {
-      const users = await Users();
+      const { limit = "50", skip = "0" } = req.params;
+      const users = await Users(parseInt(limit), parseInt(skip));
       res.json({ error: false, users });
-    } catch (message) {
+    } catch ({ message }) {
       res.json({ error: true, message });
     }
   },
@@ -48,7 +49,7 @@ module.exports = {
       const user = await User({ _id: req.params.id });
       delete user.password;
       res.json({ error: false, user });
-    } catch (message) {
+    } catch ({ message }) {
       res.json({ error: true, message });
     }
   },
@@ -57,7 +58,7 @@ module.exports = {
     try {
       const profiles = await Profiles();
       res.json({ error: false, profiles });
-    } catch (message) {
+    } catch ({ message }) {
       res.json({ error: true, message });
     }
   },
@@ -65,7 +66,7 @@ module.exports = {
     try {
       const result = await NewUser(req.body.user);
       res, json({ error: false, result });
-    } catch (message) {
+    } catch ({ message }) {
       res.json({ error: true, message });
     }
   },
@@ -74,7 +75,7 @@ module.exports = {
       const { id, data } = req.body;
       const result = await UpdateUser(id, data);
       res.json({ error: false, result });
-    } catch (message) {
+    } catch ({ message }) {
       res.json({ error: true, message });
     }
   },
@@ -92,7 +93,7 @@ module.exports = {
       const { id, password } = req.body;
       const result = await UpdateUserPassword(id, password);
       res.json({ error: false, result });
-    } catch (message) {
+    } catch ({ message }) {
       res.json({ error: true, message });
     }
   }

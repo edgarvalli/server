@@ -1,5 +1,7 @@
 function Index(app) {
-  app.use("/api/tlacrm/users", require("./users/users.router"));
+  const route = "/api/tlacrm";
+  app.use(route + "/users", require("./users/users.router"));
+  app.use(route + "/clients", require("./clients/clients.router"));
 }
 
 module.exports = Index;
