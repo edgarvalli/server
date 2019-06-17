@@ -34,7 +34,7 @@ module.exports = {
     }
   },
 
-  fetchAll: async (_, res) => {
+  fetchAll: async (req, res) => {
     try {
       const { limit = "50", skip = "0" } = req.params;
       const users = await Users(parseInt(limit), parseInt(skip));
@@ -72,10 +72,21 @@ module.exports = {
   },
   updateUser: async (req, res) => {
     try {
-      const { id, data } = req.body;
+      const { id, data, avatar } = req.body;
+      
+      if (avatar !== "") {
+        const base64Data = avatar.replace(/^data:image\/png;base64,/, "");
+        require("fs").writeFileSync(
+          `./files/profiles/${id}.png`,
+          base64Data,
+          "base64"
+        );
+      }
+
       const result = await UpdateUser(id, data);
       res.json({ error: false, result });
     } catch ({ message }) {
+      
       res.json({ error: true, message });
     }
   },

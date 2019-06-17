@@ -4,8 +4,8 @@ const cors = require("cors");
 
 module.exports = function() {
   app
-    .use(express.urlencoded({ extended: false }))
-    .use(express.json())
+    .use(express.urlencoded({ extended: false, limit: '5mb' }))
+    .use(express.json({ limit: '5mb' }))
     .use(cors())
     .use(express.static("public"));
 
