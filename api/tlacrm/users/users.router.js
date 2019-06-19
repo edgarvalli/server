@@ -8,7 +8,7 @@ const checkPermissions = (req, res, next) => {
 };
 
 router.post("/login", Users.login);
-router.get("/:limit?/:skip?", decodeToken, checkPermissions, Users.fetchAll);
+router.get("/fetch/:limit?/:skip?", decodeToken, checkPermissions, Users.fetchAll);
 router.get("/getone/:id", decodeToken, checkPermissions, Users.getOne);
 router.get("/profiles", decodeToken, checkPermissions, Users.fetchProfiles);
 router.put(
