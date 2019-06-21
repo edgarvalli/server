@@ -1,16 +1,17 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const leadController = require('../../controllers/tlacrm/leads.controller');
+const LeadController = require("../../controllers/tlacrm/leads.controller");
 const { tokenExpiration } = require("../../middleware");
 
-router
-    .get('/fetch/:page',tokenExpiration,leadController.fetch)
-    .post('/add',tokenExpiration,leadController.add)
-    .post('/update',tokenExpiration,leadController.update)
-    .get('/remove/:id',tokenExpiration,leadController.remove)
-    .get('/getone/:id',tokenExpiration,leadController.getOne)
-    .get('/search/:value',tokenExpiration,leadController.search)
+const leadController = new LeadController();
 
-    // .get('/m', lead.addNewFields)
+router
+  .get("/find/:limit/:skip", leadController.Find)
+  .post("/add", tokenExpiration, leadController.Save)
+  .put("/update", tokenExpiration, leadController.Update)
+  .delete("/remove/:id", tokenExpiration, leadController.Remove)
+  .get("/search/:value", tokenExpiration, leadController.Search);
+
+// .get('/m', lead.addNewFields)
 
 module.exports = router;

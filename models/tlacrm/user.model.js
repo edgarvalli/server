@@ -1,4 +1,4 @@
-const { mongoClient } = require("../../../helpers/");
+const { mongoClient } = require("../../helpers");
 const bcrypt = require("bcrypt");
 
 const Connection = async coll => await mongoClient("tlacrm").collection(coll);

@@ -1,4 +1,4 @@
-const { handleToken, decryptPassword } = require("../../../helpers");
+const { handleToken, decryptPassword } = require("../../helpers");
 const {
   User,
   Users,
@@ -7,7 +7,7 @@ const {
   Profiles,
   UpdateUser,
   UpdateUserPassword
-} = require("./user.model");
+} = require("../../models/tlacrm/user.model");
 
 module.exports = {
   login: async (req, res) => {
@@ -28,8 +28,7 @@ module.exports = {
       user.autoLogin = autoLogin;
 
       res.json({ error: false, token: handleToken.generateToken(user), user });
-    } catch (message) {
-      console.log(message);
+    } catch ({message}) {
       res.json({ error: true, message });
     }
   },

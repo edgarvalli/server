@@ -1,16 +1,18 @@
-const { mongoClient } = require("../../../helpers");
-const mongo = mongoClient("tlacrm");
+const { mongoClient } = require("../helpers");
 
-function Client() {
+function MongoModel(database, collection) {
+  this.database = database;
+  this.collection = collection;
   this.db = null;
   this.onInit();
 }
 
-Client.prototype.onInit = async function() {
-  this.db = await mongo.collection("clients");
+MongoModel.prototype.onInit = async function() {
+  const mongo = mongoClient(this.database);
+  this.db = await mongo.collection(this.collection);
 };
 
-Client.prototype.Find = async function(limit, skip) {
+MongoModel.prototype.Find = async function(limit, skip) {
   try {
     const users = await this.db
       .find({})
@@ -23,7 +25,7 @@ Client.prototype.Find = async function(limit, skip) {
   }
 };
 
-Client.prototype.Search = async function(val) {
+MongoModel.prototype.Search = async function(val) {
   try {
     const users = await this.db.find({ name: new RegExp(val, "i") }).toArray();
     return users;
@@ -32,7 +34,7 @@ Client.prototype.Search = async function(val) {
   }
 };
 
-Client.prototype.Save = async function(client) {
+MongoModel.prototype.Save = async function(client) {
   try {
     client.createDate = new Date();
     const result = await this.db.save(client);
@@ -42,7 +44,7 @@ Client.prototype.Save = async function(client) {
   }
 };
 
-Client.prototype.Update = async function(id, data) {
+MongoModel.prototype.Update = async function(id, data) {
   try {
     data.updateDate = new Date();
     const _id = mongo.id(id);
@@ -53,4 +55,4 @@ Client.prototype.Update = async function(id, data) {
   }
 };
 
-module.exports = Client
+module.exports = MongoModel;

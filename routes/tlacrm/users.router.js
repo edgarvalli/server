@@ -1,48 +1,34 @@
-const router = require('express').Router();
-const userController = require('../../controllers/tlacrm/users.controllers');
-const { tokenExpiration } = require("../../middleware");
-const sendNotification = require('../../scripts/send_notification');
+const router = require("express").Router();
+const Users = require("../../controllers/tlacrm/users.controller");
+const decodeToken = require("../../middleware/token.expiration");
 
-const checkPermission = (req, res, next, action) => {
-    const user = req.client;
-    const { modules } = user.profile;
-    const module = modules.filter(m => m.key = 'users')[0];
-    if (module[action]) {
-        next()
-    } else {
-        res.json({ error: true, message: 'No tiene permisos para realizar esta ación' })
-    }
-}
+const checkPermissions = (req, res, next) => {
+  if (req.user.isAdmin) return next();
+  res.json({ error: true, message: "No tienes permisos de administrador" });
+};
 
-router
-    .post('/login', userController.login)
-    .post("/change-avatar", tokenExpiration, userController.changeAvatar)
-    .post('/change-name', tokenExpiration, userController.changeName)
-    .post('/change-password', tokenExpiration, userController.changePassword)
-    .get('/fetch-user-info/:id', tokenExpiration, userController.fetchUserInfo)
-    .get('/fetch', tokenExpiration, userController.fetchUsers)
-    .post('/add', tokenExpiration, userController.addUser)
-    .post('/reset-password', tokenExpiration, userController.resetPassword)
-
-    .get(
-        '/fetch/:limit',
-        tokenExpiration, (req, res, next) => checkPermission(req, res, next, 'read'),
-        userController.fetch
-    )
-
-    // .get('/m', lead.addNewFields)
-    .post('/subscribe', (req, res) => {
-        const subscription = req.body;
-        console.log(subscription)
-        const payload = {
-            title: "TlaCrm Notification",
-            message: "Tu te has subscripto a las notificaciones",
-            icon: 'https://ev-server.ddns.net/tlacrm/images/icons/icon_72x72.png'
-        }
-
-        sendNotification(subscription, payload)
-
-        res.json({ error: false })
-    })
+router.post("/login", Users.login);
+router.get(
+  "/fetch/:limit?/:skip?",
+  decodeToken,
+  checkPermissions,
+  Users.fetchAll
+);
+router.get("/getone/:id", decodeToken, checkPermissions, Users.getOne);
+router.get("/profiles", decodeToken, checkPermissions, Users.fetchProfiles);
+router.put(
+  "/update-password",
+  decodeToken,
+  checkPermissions,
+  Users.updatePassword
+);
+router.put("/", decodeToken, Users.updateUser);
+router.post("/add", decodeToken, checkPermissions, Users.addUser);
+router.post(
+  "/upload-image",
+  decodeToken,
+  checkPermissions,
+  Users.uploadImageProfile
+);
 
 module.exports = router;

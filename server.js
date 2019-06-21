@@ -9,8 +9,6 @@ module.exports = function() {
     .use(cors())
     .use(express.static("public"));
 
-  require("./api")(app);
-
   app.get("/image-profile/:id",(req, res) => {
     res.sendFile(`${__dirname}/files/profiles/${req.params.id}.png`)
   })

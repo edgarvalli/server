@@ -1,16 +1,14 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const controller = require('../../controllers/tlacrm/budgets.controllers');
+const BudgetModel = require("../../controllers/tlacrm/budgets.controllers");
 const { tokenExpiration } = require("../../middleware");
-
+const bm = new BudgetModel();
 
 router
-    .post('/add', tokenExpiration, controller.add)
-    .post('/update', tokenExpiration, controller.update)
-    .get('/fetch/:page', tokenExpiration, controller.fetch)
-    .get('/getone/:id', tokenExpiration, controller.getOne)
-    .get('/remove/:id', tokenExpiration, controller.remove)
-    .get('/search/:value', tokenExpiration, controller.search)
-    .post('/uploadfiles/', tokenExpiration, controller.uploadFiles)
+  .post("/save", tokenExpiration, bm.Save)
+  .put("/update", tokenExpiration, bm.Update)
+  .delete("/remove/:id", tokenExpiration, bm.Remove)
+  .get("/search/:value", tokenExpiration, bm.Search)
+  .get("/fetch/:limit/:skip", tokenExpiration, bm.Fetch);
 
 module.exports = router;
