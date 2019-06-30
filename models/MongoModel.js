@@ -9,6 +9,7 @@ function MongoModel(database, collection) {
 
 MongoModel.prototype.onInit = async function() {
   const mongo = mongoClient(this.database);
+  this.mongo = mongo;
   this.db = await mongo.collection(this.collection);
 };
 
@@ -50,7 +51,7 @@ MongoModel.prototype.Save = async function(client) {
 MongoModel.prototype.Update = async function(id, data) {
   try {
     data.updateDate = new Date();
-    const _id = mongo.id(id);
+    const _id = this.mongo.id(id);
     const result = await this.db.update({ _id }, { $set: data });
     return result;
   } catch (error) {
@@ -60,7 +61,7 @@ MongoModel.prototype.Update = async function(id, data) {
 
 MongoModel.prototype.DeleteOne = async function(id) {
   try {
-    const _id = mongo.id(id);
+    const _id = this.mongo.id(id);
     const result = await this.db.deleteOne({ _id });
     return result;
   } catch (error) {
