@@ -5,8 +5,8 @@ class BugetsController {
   async Fetch(req, res) {
     try {
       const { limit, skip } = req.params;
-      const leads = await mongo.Find(parseInt(limit), parseInt(skip));
-      res.json({ error: false, leads });
+      const budgets = await mongo.Find(parseInt(limit), parseInt(skip));
+      res.json({ error: false, budgets });
     } catch ({ message }) {
       res.json({ error: true, message });
     }
@@ -17,17 +17,44 @@ class BugetsController {
       const { budget } = req.body;
       budget.createDate = new Date();
       const result = await mongo.save(budget);
-      return result;
-    } catch (error) {
-      return error;
+      res.json({ error: false, result });
+    } catch ({ message }) {
+      res.json({ error: true, message });
     }
   }
 
-  async Update(req, res) {}
+  async Update(req, res) {
+    try {
+      const { id, data } = req.body;
+      const result = await mongo.Update(id, data);
+      res.json({ error: false, result });
+    } catch ({ message }) {
+      res.json({ error: true, message });
+    }
+  }
 
-  async Search(req, res) {}
+  async Search(req, res) {
+    try {
+      const { value } = req.params;
+      const budgets = await mongo.Search({
+        clientName: value,
+        budgetDescription: value
+      });
+      res.json({ error: false, budgets });
+    } catch ({ message }) {
+      res.json({ error: true, message });
+    }
+  }
 
-  async Remove(req, res) {}
+  async Remove(req, res) {
+    try {
+      const { id } = this.params;
+      const result = await mongo.DeleteOne(id);
+      res.json({ error: true, result });
+    } catch ({ message }) {
+      res.json({ error: true, message });
+    }
+  }
 }
 
 module.exports = BugetsController;

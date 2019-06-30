@@ -25,9 +25,12 @@ MongoModel.prototype.Find = async function(limit, skip) {
   }
 };
 
-MongoModel.prototype.Search = async function(val) {
+MongoModel.prototype.Search = async function(matches) {
   try {
-    const users = await this.db.find({ name: new RegExp(val, "i") }).toArray();
+    const params = Object.keys(matches).map(key => {
+      return { [key]: new RegExp(matches[key], "i") };
+    });
+    const users = await this.db.find({ $or: params }).toArray();
     return users;
   } catch (error) {
     return error;
@@ -49,6 +52,16 @@ MongoModel.prototype.Update = async function(id, data) {
     data.updateDate = new Date();
     const _id = mongo.id(id);
     const result = await this.db.update({ _id }, { $set: data });
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+MongoModel.prototype.DeleteOne = async function(id) {
+  try {
+    const _id = mongo.id(id);
+    const result = await this.db.deleteOne({ _id });
     return result;
   } catch (error) {
     return error;

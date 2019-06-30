@@ -9,6 +9,7 @@ router
   .put("/update", tokenExpiration, bm.Update)
   .delete("/remove/:id", tokenExpiration, bm.Remove)
   .get("/search/:value", tokenExpiration, bm.Search)
-  .get("/fetch/:limit/:skip", tokenExpiration, bm.Fetch);
+  .get("/fetch/:limit/:skip", tokenExpiration, bm.Fetch)
+  .delete("/remove/:id", tokenExpiration, bm.Remove);
 
 module.exports = router;

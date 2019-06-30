@@ -35,7 +35,7 @@ class ClientModel {
   async Search(req, res) {
     try {
       const { value } = req.params;
-      const clients = await _client.Search(value);
+      const clients = await _client.Search({ name: value });
       res.json({ error: false, clients });
     } catch ({ message }) {
       res.json({ error: true, message });
