@@ -69,4 +69,14 @@ MongoModel.prototype.DeleteOne = async function(id) {
   }
 };
 
+MongoModel.prototype.FindOne = async function(id) {
+  try {
+    const _id = this.mongo.id(id);
+    const result = await this.db.findOne({ _id });
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = MongoModel;

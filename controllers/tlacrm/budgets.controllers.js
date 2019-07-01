@@ -48,9 +48,19 @@ class BugetsController {
 
   async Remove(req, res) {
     try {
-      const { id } = this.params;
+      const { id } = req.params;
       const result = await mongo.DeleteOne(id);
       res.json({ error: true, result });
+    } catch ({ message }) {
+      res.json({ error: true, message });
+    }
+  }
+
+  async FindOne(req, res) {
+    try {
+      const { id } = req.params;
+      const budget = await mongo.FindOne(id);
+      res.json({ error: true, budget });
     } catch ({ message }) {
       res.json({ error: true, message });
     }
