@@ -24,7 +24,7 @@ router
     } else if (fs.existsSync(fileJpg)) {
       res.sendFile(fileJpg);
     } else {
-      res.json(fileDefault);
+      res.sendFile(fileDefault);
     }
   });
 
