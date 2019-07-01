@@ -10,7 +10,6 @@ module.exports = app => {
     const mongo = new MongoModel("tlacrm", room);
 
     socket.on("client_typing", data => {
-      console.log(data);
       socket.broadcast.to(room).emit("client_typing", data);
     });
 
@@ -20,6 +19,7 @@ module.exports = app => {
 
     socket.on("add_commnet", async ({ id, comment }) => {
       try {
+        console.log(id, comment);
         comment.createDate = new Date();
         await mongo.Update(id, {
           $push: { comments: comment }
