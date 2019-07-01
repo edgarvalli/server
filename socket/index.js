@@ -16,6 +16,7 @@ module.exports = app => {
     });
 
     socket.on("client_typing", data => {
+        console.log(data)
       socket.broadcast.to(room).emit("client_typing", data);
     });
 
