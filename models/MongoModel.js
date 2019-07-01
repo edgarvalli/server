@@ -62,7 +62,7 @@ MongoModel.prototype.Update = async function(id, data) {
 MongoModel.prototype.Push = async function(id, data) {
   try {
     const _id = this.mongo.id(id);
-    console.log(data)
+    console.log(_id)
     const result = await this.db.update({ _id }, { $push: data });
     return result;
   } catch (error) {
