@@ -20,13 +20,13 @@ module.exports = app => {
 
     socket.on("add_commnet", async ({ id, comment }) => {
       try {
-          
+
         comment.createDate = new Date();
         const result = await mongo.Update(id, {
           $push: { comments: comment }
         });
 
-        socket.emit("add_comment", result);
+        socket.emit("add_comment", comment);
       } catch (message) {
         console.log(message);
       }
