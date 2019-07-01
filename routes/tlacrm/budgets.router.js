@@ -11,6 +11,6 @@ router
   .get("/search/:value", tokenExpiration, bm.Search)
   .get("/fetch/:limit/:skip", tokenExpiration, bm.Fetch)
   .delete("/remove/:id", tokenExpiration, bm.Remove)
-  get("/find-one/:id", tokenExpiration, bm.FindOne)
+  .get("/find-one/:id", tokenExpiration, bm.FindOne)
 
 module.exports = router;
