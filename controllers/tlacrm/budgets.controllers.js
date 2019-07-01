@@ -60,7 +60,7 @@ class BugetsController {
     try {
       const { id } = req.params;
       const budget = await mongo.FindOne(id);
-      res.json({ error: true, budget });
+      res.json({ error: false, budget });
     } catch ({ message }) {
       res.json({ error: true, message });
     }
