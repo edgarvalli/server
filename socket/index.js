@@ -19,7 +19,6 @@ module.exports = app => {
 
     socket.on("add_commnet", async ({ id, comment }) => {
       try {
-        console.log(id, comment);
         comment.createDate = new Date();
         await mongo.Push(id, { comments: comment });
         socket.emit("add_comment", comment);
