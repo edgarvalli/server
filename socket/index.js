@@ -6,10 +6,8 @@ module.exports = app => {
   const io = require("socket.io")(http);
 
   io.of("/tlacrm").on("connection", socket => {
-    console.log("User connected");
     const { room } = socket.handshake.query;
     socket.join(room);
-    console.log(room)
 
     socket.on("add_child", data => {
       console.log(data);
