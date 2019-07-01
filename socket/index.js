@@ -1,5 +1,4 @@
-const mongo = require("../helpers/mongo.client")("tlacrm");
-const collection = "budgets";
+const MongoModel = require("../models/MongoModel");
 
 module.exports = app => {
   const http = require("http").Server(app);
@@ -8,13 +7,10 @@ module.exports = app => {
   io.of("/tlacrm").on("connection", socket => {
     const { room } = socket.handshake.query;
     socket.join(room);
-
-    socket.on("add_child", data => {
-      console.log(data);
-    });
+    const mongo = new MongoModel("tlacrm", room);
 
     socket.on("client_typing", data => {
-        console.log(data)
+      console.log(data);
       socket.broadcast.to(room).emit("client_typing", data);
     });
 
@@ -22,18 +18,15 @@ module.exports = app => {
       socket.broadcast.to(room).emit("client_stop_typing", data);
     });
 
-    socket.on("add_commnet", async data => {
+    socket.on("add_commnet", async ({ id, comment }) => {
       try {
-        const _id = mongo.id(data.id);
+          
+        comment.createDate = new Date();
+        const result = await mongo.Update(id, {
+          $push: { comments: comment }
+        });
 
-        const budget = data.budget;
-        budget.updateDate = new Date();
-
-        const db = await mongo.collection(collection);
-        await db.updateOne({ _id }, { $set: budget });
-
-        budget._id = data.id;
-        socket.emit("add_comment", budget);
+        socket.emit("add_comment", result);
       } catch (message) {
         console.log(message);
       }
