@@ -21,9 +21,7 @@ module.exports = app => {
       try {
         console.log(id, comment);
         comment.createDate = new Date();
-        await mongo.Update(id, {
-          $push: { comments: comment }
-        });
+        await mongo.Push(id, { comments: comment });
         socket.emit("add_comment", comment);
       } catch (message) {
         console.log(message);

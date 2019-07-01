@@ -59,6 +59,17 @@ MongoModel.prototype.Update = async function(id, data) {
   }
 };
 
+MongoModel.prototype.Push = async function(id, data) {
+  try {
+    data.updateDate = new Date();
+    const _id = this.mongo.id(id);
+    const result = await this.db.update({ _id }, { $push: data });
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
 MongoModel.prototype.DeleteOne = async function(id) {
   try {
     const _id = this.mongo.id(id);
