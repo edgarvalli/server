@@ -14,7 +14,7 @@ router
       path.join(__dirname, "../../files/profiles/" + id + ".png")
     );
     const fileJpg = path.join(
-      path.join(__dirname, "../../files/profiles/" + id + "jpg")
+      path.join(__dirname, "../../files/profiles/" + id + ".jpg")
     );
     const fileDefault = path.join(
       path.join(__dirname, "../../files/profiles/default_avatar.png")
