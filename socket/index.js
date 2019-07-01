@@ -22,7 +22,7 @@ module.exports = app => {
       try {
 
         comment.createDate = new Date();
-        const result = await mongo.Update(id, {
+        await mongo.Update(id, {
           $push: { comments: comment }
         });
 
