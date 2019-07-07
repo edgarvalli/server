@@ -21,7 +21,7 @@ module.exports = app => {
       try {
         comment.createDate = new Date();
         await mongo.Push(id, { comments: comment });
-        socket.broadcast.emit("add_commnet", comment);
+        io.sockets.in(room).emit("add_commnet", comment);
       } catch (message) {
         console.log(message);
       }
