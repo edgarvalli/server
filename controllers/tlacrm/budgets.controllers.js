@@ -16,7 +16,7 @@ class BugetsController {
     try {
       const { budget } = req.body;
       budget.createDate = new Date();
-      const result = await mongo.save(budget);
+      const result = await mongo.Save(budget);
       res.json({ error: false, result });
     } catch ({ message }) {
       res.json({ error: true, message });
