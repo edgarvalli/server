@@ -11,18 +11,17 @@ module.exports = app => {
 
     socket.on("client_typing", data => {
       socket.broadcast.to(room).emit("client_typing", data);
-      // io.sockets.in(room).emit("client_typing", data)
     });
 
     socket.broadcast.on("client_stop_typing", data => {
       socket.broadcast.to(room).emit("client_stop_typing", data);
     });
 
-    socket.on("add_comment", async ({ id, comment }) => {
+    socket.on("add_commnet", async ({ id, comment }) => {
       try {
         comment.createDate = new Date();
         await mongo.Push(id, { comments: comment });
-        io.to(room).emit("add_comment", comment);
+        io.to(room).emit("add_commnet", comment);
       } catch (message) {
         console.log(message);
       }
