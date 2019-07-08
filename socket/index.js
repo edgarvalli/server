@@ -11,7 +11,7 @@ module.exports = app => {
 
     socket.on("client_typing", data => {
       // socket.broadcast.to(room).emit("client_typing", data);
-      console.log(socket.rooms)
+      io.in(room).emit('big-announcement', 'the game will start soon');
     });
 
     socket.broadcast.on("client_stop_typing", data => {
