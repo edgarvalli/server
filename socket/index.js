@@ -11,7 +11,11 @@ module.exports = app => {
 
     socket.on("client_typing", data => {
       // socket.broadcast.to(room).emit("client_typing", data);
-      console.log(io.sockets.clients(room))
+      var roster = io.sockets.clients(room);
+
+      roster.forEach(function(client) {
+        console.log("Username: " + client.nickname);
+      });
       io.to(room).emit("client_typing", data);
     });
 
