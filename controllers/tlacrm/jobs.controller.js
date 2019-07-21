@@ -1,146 +1,161 @@
-const mongo = require('../../helpers/mongo.client')("tlacrm");
+const mongo = require("../../helpers/mongo.client")("tlacrm");
 const collection = "jobs";
 
 module.exports = {
+  async fetch(_, res) {
+    const c = await mongo.collection(collection);
+    const result = await c
+      .aggregate([
+        {
+          $lookup: {
+            from: "clients",
+            localField: "client_id",
+            foreignField: "_id",
+            as: "client"
+          }
+        },
+        { $limit: 50 },
+        { $match: { payment_out: false } },
+        { $sort: { update_date: -1 } }
+      ])
+      .toArray();
 
-    async fetch(_, res) {
-        const c = await mongo.collection(collection);
-        const result = await c.aggregate([
-            {
-                $lookup: {
-                    from: "clients",
-                    localField: "client_id",
-                    foreignField: "_id",
-                    as: "client"
-                }
-            }, { $limit: 50 }, { $match: { payment_out: false } }, { $sort: { update_date: -1 } }
-        ]).toArray();
+    // Format the result for only necesary fields
 
-        // Format the result for only necesary fields
+    const jobs = result.map(item => {
+      // Get weeks passed
+      const today = new Date();
+      const date = item.create_date;
+      let create_date = Math.ceil(Math.floor((today - date) / 86400000) / 7);
+      create_date > 1
+        ? (create_date = create_date + " semanas")
+        : (create_date = create_date + " semana");
 
-        const data = result.map(item => {
-            // Get weeks passed
-            const today = new Date();
-            const date = item.create_date;
-            let create_date = Math.ceil(Math.floor((today - date) / 86400000) / 7);
-            (create_date > 1)
-                ? create_date = create_date + ' semanas'
-                : create_date = create_date + ' semana'
+      item.create_date = create_date;
+      item.client = item.client[0];
+      return item;
+    });
 
-            item.create_date = create_date;
-            item.client = item.client[0]
-            return item;
-        })
+    res.json({ error: false, jobs });
+  },
 
+  async add(req, res) {
+    const { data } = req.body;
+    const { user } = req.client;
+    data.job.create_by = user._id;
+    data.job.client_id = mongo.id(data.job.client_id);
+    data.job.create_date = new Date();
+    data.job.update_date = new Date();
+    data.job.payments[0].create_date = new Date();
+    data.job.payment_out = false;
+    const c = await mongo.collection(collection);
+    await c
+      .insertOne(data.job)
+      .catch(message => res.json({ error: true, message }));
+    res.json({ error: false });
+  },
 
+  async getOne(req, res) {
+    const { id } = req.params;
+    const _id = mongo.id(id);
+    const c = await mongo.collection(collection);
+    const result = await c
+      .findOne({ _id })
+      .catch(message => res.json({ error: true, message }));
+    if (result === null)
+      return res.json({ error: true, msg: "No se encontro registro" });
+    // Push all the job name in the result array
+    let create_date = result.create_date;
+    let day = "0" + create_date.getDate();
+    if (day.length >= 3) day = create_date.getDate();
+    let month = "0" + (create_date.getMonth() + 1);
+    if (month.length >= 3) month = create_date.getMonth() + 1;
+    create_date = `${day}/${month}/${create_date.getFullYear()}`;
 
-        res.json({ error: false, data: { jobs: data } })
-    },
+    // Update date
+    let update_date = result.update_date;
+    day = "0" + update_date.getDate();
+    if (day.length >= 3) day = update_date.getDate();
+    month = "0" + (update_date.getMonth() + 1);
+    if (month.length >= 3) month = update_date.getMonth() + 1;
+    update_date = `${day}/${month}/${update_date.getFullYear()}`;
+    result.update_date = update_date;
+    result.create_date = create_date;
+    res.json({ error: false, data: { job: result } });
+  },
 
-    async add(req, res) {
-        const { data } = req.body;
-        const { user } = req.client;
-        data.job.create_by = user._id;
-        data.job.client_id = mongo.id(data.job.client_id);
-        data.job.create_date = new Date();
-        data.job.update_date = new Date();
-        data.job.payments[0].create_date = new Date();
-        data.job.payment_out = false;
-        const c = await mongo.collection(collection);
-        await c.insertOne(data.job).catch((message) => res.json({ error: true, message }));
-        res.json({ error: false })
-    },
+  async getAllJobsFromId(req, res) {
+    const id = req.params.id;
+    const _id = mongo.id(id);
+    const db = await mongo.collection("jobs");
+    const result = await db.find({ client_id: _id }).toArray();
+    // Format the result for only necesary fields
 
-    async getOne(req, res) {
-        const { id } = req.params;
-        const _id = mongo.id(id);
-        const c = await mongo.collection(collection);
-        const result = await c.findOne({ _id }).catch((message) => res.json({ error: true, message }));
-        if (result === null) return res.json({ error: true, msg: "No se encontro registro" })
-        // Push all the job name in the result array
-        let create_date = result.create_date;
-        let day = "0" + create_date.getDate();
-        if (day.length >= 3) day = create_date.getDate();
-        let month = "0" + (create_date.getMonth() + 1);
-        if (month.length >= 3) month = (create_date.getMonth() + 1);
-        create_date = `${day}/${month}/${create_date.getFullYear()}`
+    const data = result.map(item => {
+      // Get weeks passed
+      const today = new Date();
+      const date = item.create_date;
+      let create_date = Math.ceil(Math.floor((today - date) / 86400000) / 7);
+      create_date > 1
+        ? (create_date = create_date + " semanas")
+        : (create_date = create_date + " semana");
 
-        // Update date
-        let update_date = result.update_date;
-        day = "0" + update_date.getDate();
-        if (day.length >= 3) day = update_date.getDate();
-        month = "0" + (update_date.getMonth() + 1);
-        if (month.length >= 3) month = (update_date.getMonth() + 1);
-        update_date = `${day}/${month}/${update_date.getFullYear()}`
-        result.update_date = update_date;
-        result.create_date = create_date;
-        res.json({ error: false, data: { job: result } })
-    },
+      item.create_date = create_date;
+      return item;
+    });
 
-    async getAllJobsFromId(req, res) {
-        const id = req.params.id;
-        const _id = mongo.id(id);
-        const db = await mongo.collection("jobs");
-        const result = await db.find({ client_id: _id }).toArray();
-        // Format the result for only necesary fields
+    res.json({ error: false, data: { jobs: data } });
+  },
 
-        const data = result.map(item => {
-            // Get weeks passed
-            const today = new Date();
-            const date = item.create_date;
-            let create_date = Math.ceil(Math.floor((today - date) / 86400000) / 7);
-            (create_date > 1)
-                ? create_date = create_date + ' semanas'
-                : create_date = create_date + ' semana'
+  async addComment(req, res) {
+    const { id, data } = req.body;
+    data.date = new Date();
+    const _id = mongo.id(id);
+    const c = await mongo.collection(collection);
+    await c.updateOne({ _id }, { $push: { comments: data } });
+    const job = await c
+      .findOne({ _id })
+      .catch(message => res.json({ error: true, message }));
+    res.json({ error: false, comments: job.comments });
+  },
 
-            item.create_date = create_date;
-            return item;
-        })
+  async update(req, res) {
+    const { data } = req.body;
+    const _id = mongo.id(data.job._id);
+    delete data.job._id;
+    data.job.client_id = mongo.id(data.job.client_id);
+    const rest = parseFloat(data.job.total) - parseFloat(data.job.anticipo);
+    rest <= 0 ? (data.job.payment_out = true) : (data.job.payment_out = false);
+    data.job.update_date = new Date();
+    const c = await mongo.collection(collection);
+    c.updateOne({ _id }, { $set: data.job }).catch(error =>
+      res.json({ error: true, message: error })
+    );
+    res.json({ error: false });
+  },
 
-        res.json({ error: false, data: { jobs: data } });
+  async setAsPayed(req, res) {
+    const id = req.params.id;
+    const _id = mongo.id(id);
+    const db = await mongo.collection(collection);
+    const job = await db.findOne({ _id });
+    const payment = { create_date: new Date(), ajuste: true };
 
-    },
+    const paymentTotal = job.payments
+      .map(el => parseFloat(el.payment))
+      .reduce((a, b) => a + b);
+    payment.payment = parseFloat(job.total) - paymentTotal;
 
-    async addComment(req, res) {
-        const { id, data } = req.body;
-        data.date = new Date();
-        const _id = mongo.id(id);
-        const c = await mongo.collection(collection);
-        await c.updateOne({ _id }, { $push: { comments: data } });
-        const job = await c.findOne({ _id }).catch((message) => res.json({ error: true, message }));
-        res.json({ error: false, comments: job.comments });
-    },
+    await db
+      .updateOne(
+        { _id },
+        {
+          $set: { payment_out: true },
+          $push: { payments: payment }
+        }
+      )
+      .catch(msg => res.json({ error: true, msg }));
 
-    async update(req, res) {
-        const { data } = req.body;
-        const _id = mongo.id(data.job._id);
-        delete data.job._id;
-        data.job.client_id = mongo.id(data.job.client_id);
-        const rest = parseFloat(data.job.total) - parseFloat(data.job.anticipo);
-        (rest <= 0) ? data.job.payment_out = true : data.job.payment_out = false;
-        data.job.update_date = new Date();
-        const c = await mongo.collection(collection);
-        c.updateOne({ _id }, { $set: data.job }).catch(error => res.json({ error: true, message: error }))
-        res.json({ error: false })
-    },
-
-    async setAsPayed(req, res) {
-
-        const id = req.params.id;
-        const _id = mongo.id(id);
-        const db = await mongo.collection(collection);
-        const job = await db.findOne({ _id })
-        const payment = { create_date: new Date(), ajuste: true }
-
-        const paymentTotal = job.payments.map(el => parseFloat(el.payment)).reduce((a, b) => a + b);
-        payment.payment = parseFloat(job.total) - paymentTotal;
-
-        await db.updateOne({ _id }, {
-            $set: { "payment_out": true, },
-            $push: { payments: payment }
-        }).catch((msg) => res.json({ error: true, msg }));
-
-        res.json({ error: false })
-    }
-
-}
+    res.json({ error: false });
+  }
+};
