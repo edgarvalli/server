@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>EVBase</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <button id="btn">fetch</button>
     <div id="result"></div>
-
     <script>
-        const fetchData = () => {
-            const url = "https://ev-server.ddns.net/api/evbase/fetch/limit=1";
-            fetch(url, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "DBName": "tlacrm",
-                    "collection": "clients"
-                },
-                method: "get"
-            }).then(resp => resp.json())
-                .then(response => {
-                    console.log(response)
-                    document.querySelector("#result").innerHTML = "<p>" + JSON.stringify(response) + "</p>"
-                })
-        }
-        document.querySelector("#btn").onclick = fetchData
+      const fetchData = () => {
+        const url = "https://ev-server.ddns.net/api/evbase/fetch/limit=1";
+        fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            DBName: "tlacrm",
+            collection: "clients"
+          },
+          method: "get"
+        })
+          .then(resp => resp.json())
+          .then(response => {
+            console.log(response);
+            document.querySelector("#result").innerHTML =
+              "<p>" + JSON.stringify(response) + "</p>";
+          });
+      };
+      document.querySelector("#btn").onclick = fetchData;
     </script>
-
-</body>
-
+  </body>
 </html>
