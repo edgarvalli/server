@@ -28,7 +28,7 @@ module.exports = {
       user.autoLogin = autoLogin;
 
       res.json({ error: false, token: handleToken.generateToken(user), user });
-    } catch ({message}) {
+    } catch ({ message }) {
       res.json({ error: true, message });
     }
   },
@@ -72,7 +72,7 @@ module.exports = {
   updateUser: async (req, res) => {
     try {
       const { id, data, avatar } = req.body;
-      
+
       if (avatar !== "") {
         const base64Data = avatar.replace(/^data:image\/png;base64,/, "");
         require("fs").writeFileSync(
@@ -85,7 +85,6 @@ module.exports = {
       const result = await UpdateUser(id, data);
       res.json({ error: false, result });
     } catch ({ message }) {
-      
       res.json({ error: true, message });
     }
   },
